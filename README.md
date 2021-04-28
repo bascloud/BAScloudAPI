@@ -23,7 +23,7 @@ For accessing the raw response data of the REST API endpoints, the class BASClou
 
 ## Library Documentation
 
-See *link* for the C/C++ library code documentation.
+See [BASCloudAPI.github.io](https://BASCloudAPI.github.io) for the C/C++ library code documentation.
 
 
 
@@ -37,7 +37,7 @@ A complete documentation of the REST API endpoints of the BASCloud is available 
 
 ## Examples
 
-Complete demo examples for different use cases are located under ./examples. Further example code can be found under ./test.
+Complete demo examples for different use cases are located under [examples](/examples). Further example code can be found under [test](/test).
 
 ### Login
 
@@ -132,7 +132,7 @@ try {
 }
 ```
 
-**Note**: For accessing single readings, a different approach can be used. See ./examples.
+**Note**: For accessing single readings, a different approach can be used. See [examples](/examples).
 
 ## Compilation
 
@@ -172,7 +172,7 @@ BASCloudAPI_CODE_COVERAGE=OFF
 
 For API access tests, global variables for test login, server URL, and test UUIDs need to be defined first.
 
-See ./test/CMakeLists.txt.
+See [test/CMakeLists.txt](/test/CMakeLists.txt).
 
 ### Windows
 
@@ -192,12 +192,11 @@ Either copy the root files from a RaspberryPi image, or mount an existing filesy
 
 The ENV variable RASPBERRY_VERSION needs to be set to 1-4.
 
-See `crossbuild_rpi.sh`
+See [crossbuild_rpi.sh](crossbuild_rpi.sh)
 
 ### ESP
 
 Coming soon.
-
 
 
 ## Python
@@ -221,7 +220,7 @@ BCAPI = api.EntityContext("server url")
 BCAPI.authenticateWithUserLogin("user_email", "user_password")
 ```
 
-For complete examples see ./pyBASCloud/examples.
+For complete examples see [pyBASCloud/examples](pyBASCloud/examples).
 
 ### Building
 
