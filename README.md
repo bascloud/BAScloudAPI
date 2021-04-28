@@ -125,7 +125,7 @@ try {
      */
     EntityCollection<Reading> readings = BCAPI.getReadingsCollection(tenantUUID, paging, from_filter, until_filter, 
     	timestamp_filter, value_filter, deviceUUID_filter, [](std::exception& e, json& j) {
-            throw e;
+            // Do something with the error and data, or ignore it (errorHandler can be left empty)
         });
 } catch(std::exception& e) {
 
@@ -140,7 +140,7 @@ try {
 
 - C/C++ compiler (CLANG/GCC/MSVC)
 
-- CMake > 2.11
+- CMake >= 2.11
 
 - (Optional) Doxygen for documentation
 
