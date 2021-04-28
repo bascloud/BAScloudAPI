@@ -3,11 +3,13 @@ var annotated_dup =
     [ "Introduction", "index.html#intro", null ],
     [ "BASCloud API", "index.html#api_overview", null ],
     [ "Language Wrappers", "index.html#wrappers", null ],
-    [ "BASCloud API for C/C++", "index.html#c_cxx_api", null ],
+    [ "BASCloud API for C/C++", "index.html#c_cxx_api", [
+      [ "Login", "index.html#c_cxx_login", null ],
+      [ "Access Readings", "index.html#c_cxx_readings", null ]
+    ] ],
     [ "BASCloud API for Python", "index.html#python_api", null ],
     [ "BASCloud API for other platforms", "index.html#others_api", null ],
     [ "Using the BASCloud API Libary", "index.html#how_to", null ],
-    [ "Connecting to the BASCloud API", "index.html#how_to_connect", null ],
     [ "BASCloud", null, [
       [ "APIContext", "classBASCloud_1_1APIContext.html", "classBASCloud_1_1APIContext" ],
       [ "BadRequest", "classBASCloud_1_1BadRequest.html", "classBASCloud_1_1BadRequest" ],
