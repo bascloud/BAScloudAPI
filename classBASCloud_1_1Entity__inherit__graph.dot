@@ -1,0 +1,22 @@
+digraph "BASCloud::Entity"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="BASCloud::Entity",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="Base class modeling a BASCloud entity."];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="BASCloud::Connector",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBASCloud_1_1Connector.html",tooltip="A Connector entity represents a BASCloud Connector in a property/building."];
+  Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="BASCloud::Device",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBASCloud_1_1Device.html",tooltip="A device entity represents a sensor or actor in a property/building."];
+  Node1 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="BASCloud::Property",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBASCloud_1_1Property.html",tooltip="A Property entity represents a building or location in the BASCloud."];
+  Node1 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="BASCloud::Reading",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBASCloud_1_1Reading.html",tooltip="A Reading entity represents a reading from a sensor or actor (Device) in a building (Property)."];
+  Node1 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="BASCloud::SetPoint",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBASCloud_1_1SetPoint.html",tooltip="A SetPoint entity represents a future set point for a sensor or actor (Device) in a building (Propert..."];
+  Node1 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="BASCloud::Tenant",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBASCloud_1_1Tenant.html",tooltip="A Tenant entity represents a customer/tenant in the BASCloud."];
+  Node1 -> Node8 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node8 [label="BASCloud::User",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBASCloud_1_1User.html",tooltip="A User entity represents a API user of the BASCloud."];
+}
