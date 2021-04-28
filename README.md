@@ -204,7 +204,7 @@ Coming soon.
 
 The code for the Python binding of the BASCloudAPI library is available under pyBASCloudAPI.
 
-Pre-build packages for different platforms are provided under releases.
+Pre-build packages for different platforms are provided under [releases](https://github.com/bascloud/BASCloudAPI/releases).
 
 ### Installation
 
