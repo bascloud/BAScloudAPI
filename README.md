@@ -163,6 +163,7 @@ The following build parameter are used with their default values:
 
 ```
 BASCloudAPI_BUILD_TESTS=ON
+BASCloudAPI_EXAMPLES=OFF
 BASCloudAPI_BUILD_DOC=OFF
 BASCloudAPI_BUILD_PYTHON=ON
 BASCloudAPI_CODE_COVERAGE=OFF
