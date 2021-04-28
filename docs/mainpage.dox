@@ -1,0 +1,135 @@
+/*! @mainpage BASCloud API Library User's Guide
+
+@par Table of Contents
+
+- @ref index
+    - @ref intro
+    - @ref api_overview
+    - @ref wrappers
+        - @ref c_cxx_api
+        - @ref python_api
+        - @ref others_api
+    - @ref how_to
+        - @ref how_to_connect
+
+
+\subsection intro Introduction
+
+The BASCloud API Library is a C/C++ based library which wraps the BASCloud REST API endpoints into an interface for programmers 
+to easily use e.g. for GLT integrations or client implementations.
+
+The BASCloudAPI library provides a high-level abstraction of the BASCloud functions and entity data through an object-oriented concept.
+
+The class BASCloud::EntityContext is the basis for all high-level interaction with the BASCloud API. It provides wrapper functions for all 
+API endpoint functions and delivers the response data in entity class objects. Entity types of the BASCloud are adopted one to one into the classes 
+BASCloud::User, BASCloud::Tenant, BASCloud::Property, BASCloud::Connector, BASCloud::Device, BASCloud::Reading, BASCloud::SetPoint. 
+BASCloud::EntityContext further handles authentication, endpoint requests, response parsing, and errors.
+
+For accessing the raw response data of the REST API endpoints, the class BASCloud::APIContext provides a 1:1 implementation of the endpoints, without any additional handling
+of authentication, response parsing, or errors. 
+
+<b>It is recommended to use BASCloud::EntityContext for all interactions with the API.</b>
+
+
+\subsection api_overview BASCloud API
+
+A complete documentation of the REST API endpoints of the BASCloud is available under the following link.
+
+<a target="_blank" href="https://docs.bascloud.net/">BASCloud API Documentation</a> 
+
+
+\subsection wrappers Language Wrappers
+
+The BASCloud API Library is written in C/C++. For the Python programming language, additional bindings exist which wrap the C/C++ library.
+
+\subsection c_cxx_api BASCloud API for C/C++
+
+See BASCloud namespace under Data Structures for the class documentation of the C/C++ library classes and functions.
+The class BASCloud::EntityContext is the basis for all high-level interaction with the BASCloud API and should be used.
+
+
+\subsection python_api BASCloud API for Python
+
+The Python package pyBASCloudAPI can be compiled, or installed through a pre-build 
+packages provided for Windows/Linux/MacOS as wheel packages.
+
+After downloading the corresponding package for the platform, the package can be installed through:
+
+\code 
+python -m pip install pyBASCloudAPI-*.whl
+\endcode 
+
+After installation, the package can be imported and used like any Python package.
+
+\code 
+import pyBASCloudAPI as api 
+
+api.EntityContext(url)
+\endcode 
+
+
+Interface of the Python binding is nearly 1:1 to the C/C++ library. For class objects, their corresponding attributes are accessible directly 
+instead of getter methods e.g. instead of the C/C++ access:
+
+\code 
+user.getUUID();
+reading.getValue();
+\endcode 
+
+Python access:
+\code 
+user.uuid;
+reading.value;
+\endcode 
+
+For functions, Python supports named arguments, thus its possible to write 
+\code 
+entityContext.authenticateWithUserLogin(email="example@test.com", password="password")
+\endcode 
+
+
+Python example code using the binding is available under pyBASCloudAPI/examples.
+
+
+\subsection others_api BASCloud API for other platforms
+
+For other platforms and languages, Postman can be used to generate code in multiple languages for API endpoint calls.
+
+See <a target="_blank" href="https://bascloud-dev.postman.co/">BASCloud API Postman</a> 
+
+
+\subsection how_to Using the BASCloud API Libary
+
+Example code for C/C++ usage and corresponding CMake build files are provided in the directory /examples. Further integration tests providing 
+code for tests for nearly any API endpoint function are provided in the /test directory.
+
+For example usage of the Python binding, example code with use cases are provided in the directory /pyBASCloudAPI/examples.
+
+
+\subsection how_to_connect Connecting to the BASCloud API
+
+For connecting to the BASCloud API, a <b>server URL</b> and a user login are neccessary. Please contact your 
+BASCloud support for this information.
+
+Before accessing any API functions through the library, a user needs to be authenticated. Through the creation of a BASCloud::EntityContext object 
+given the server URL, a user can be logged in. The BASCloud::EntityContext object then holds a authentication token which is used for any further API request.
+
+
+
+\code 
+#include "EntityContext.h"
+
+using namespace BASCloud;
+
+int main (int argc, char *argv[]) {
+
+    EntityContext BCAPI("server URL");
+
+    BCAPI.authenticateWithUserLogin("user", "password");
+}
+\endcode 
+
+For a complete example and best practices, see the /examples directory.
+
+
+*/
