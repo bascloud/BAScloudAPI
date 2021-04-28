@@ -23,7 +23,7 @@ For accessing the raw response data of the REST API endpoints, the class BASClou
 
 ## Library Documentation
 
-See [https://bascloud.github.io/BASCloudAP](https://bascloud.github.io/BASCloudAPI/) for the C/C++ library code documentation.
+See [bascloud.github.io/BASCloudAPI](https://bascloud.github.io/BASCloudAPI/) for the C/C++ library code documentation.
 
 
 
