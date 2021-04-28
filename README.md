@@ -37,7 +37,9 @@ A complete documentation of the REST API endpoints of the BASCloud is available 
 
 ## Examples
 
-Complete demo examples for different use cases are located under [examples](/examples). Further example code can be found under [test](/test).
+Complete demo examples for different use cases are located under [examples](/examples). For building examples set `BASCloudAPI_EXAMPLES=ON` through cmake.
+
+Further example code can be found under [test](/test). For building tests set `BASCloudAPI_BUILD_TESTS=ON` through cmake.
 
 ### Login
 
