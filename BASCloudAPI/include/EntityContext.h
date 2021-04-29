@@ -166,6 +166,22 @@ class EntityContext {
     */
 	void authenticateWithUserLogin(std::string API_email, std::string API_password);
 
+  /**
+    * Authenticate a connector using a valid connector token.
+    *
+    * Given a valid connector token previusly requested from the BASCloud through a connector creation or 
+    * getNewConnectorAuthToken(). The connector token has no expiration date, getTokenExpirationDate() will return 
+    * std::numeric_limits<long>::max().
+    * 
+    * When a new connector token is requested for authenticating a connector in the future, authenticateWithConnectorToken 
+    * must be called again with the new token.
+    *
+    * @param API_connector_token Valid connector api token.
+	* 
+    */
+	void authenticateWithConnectorToken(std::string API_connector_token);
+
+
 	/**
 	 * Get the authentication token. 
 	 * 
@@ -175,8 +191,10 @@ class EntityContext {
 
 	/**
 	 * Get the expiration date of the authentication token.
+     * 
+     * When a connector token is used to authentication, the expiration date is never modelled by long::MAX.
 	 * 
-	 * @return UNIX timestamp of the expiration date.
+	 * @return UNIX timestamp of the expiration date or long::MAX for connector tokens (expires never).
 	 */
 	std::time_t getTokenExpirationDate();
 
@@ -865,7 +883,7 @@ class EntityContext {
     * 
     * @return API key token for the Connector entity. A Connector API key does not expire.
     */
-	std::string getNewConnectorAPIKey(std::string API_tenant_UUID, std::string API_connector_UUID);
+	std::string getNewConnectorAuthToken(std::string API_tenant_UUID, std::string API_connector_UUID);
 
 	// Device API endpoints
 

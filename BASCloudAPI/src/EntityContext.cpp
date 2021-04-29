@@ -152,6 +152,16 @@ void EntityContext::authenticateWithUserLogin(std::string API_email, std::string
     }
 }
 
+void EntityContext::authenticateWithConnectorToken(std::string API_connector_token) {
+    
+    API_login_email = "";
+    API_login_password = "";
+    
+    API_token = API_connector_token;
+    API_token_valid_until = std::numeric_limits<long>::max();
+}
+
+
 User EntityContext::createNewUser(std::string email, std::string password) {
 
     checkAndRenewAuthentication();
@@ -863,7 +873,7 @@ Connector EntityContext::updateConnector(std::string API_tenant_UUID, std::strin
 
 }
 
-std::string EntityContext::getNewConnectorAPIKey(std::string API_tenant_UUID, std::string API_connector_UUID) {
+std::string EntityContext::getNewConnectorAuthToken(std::string API_tenant_UUID, std::string API_connector_UUID) {
 
     validateUUID(API_tenant_UUID);
     validateUUID(API_connector_UUID);

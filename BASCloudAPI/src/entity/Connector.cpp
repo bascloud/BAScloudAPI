@@ -29,8 +29,8 @@ EntityCollection<Connector> Connector::getConnectors(std::string API_tenant_UUID
     return context->getConnectorsCollection(API_tenant_UUID, paging);  
 }
 
-void Connector::refreshAPIKey() {
-    api_key = context->getNewConnectorAPIKey(getTenantUUID(), getUUID());
+void Connector::refreshAuthToken() {
+    api_key = context->getNewConnectorAuthToken(getTenantUUID(), getUUID());
 }
 
 Property Connector::getAssociatedProperty() {

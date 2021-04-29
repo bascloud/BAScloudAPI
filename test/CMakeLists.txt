@@ -22,7 +22,7 @@ if(BASCLOUD_TEST_URL STREQUAL "")
 endif()
 
 
-if(CODE_COVERAGE)
+if(BASCloudAPI_BUILD_CODE_COVERAGE)
     add_code_coverage_all_targets(EXCLUDE build/* test/*)
 endif()
 
@@ -37,7 +37,7 @@ macro(add_api_test _TEST_NAME)
     add_test(NAME ${_TEST_NAME}_tests COMMAND ${_TEST_NAME}_tests)
     # Group under the "tests" project folder in IDEs such as Visual Studio.
     set_property(TARGET ${_TEST_NAME}_tests PROPERTY FOLDER "tests")
-    if(CODE_COVERAGE)
+    if(BASCloudAPI_BUILD_CODE_COVERAGE)
         target_code_coverage(${_TEST_NAME}_tests AUTO ALL EXCLUDE build/* test/* OBJECTS BASCloudAPI)
     endif()
 endmacro()

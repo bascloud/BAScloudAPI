@@ -43,6 +43,7 @@ Further example code can be found under [test](/test). For building tests set `B
 
 ### Login
 
+#### With User Login
 ```c++
 #include "EntityContext.h"
 
@@ -74,8 +75,25 @@ try {
 } catch(std::exception& e) {
 
 }
-```
 
+```
+#### With existing Connector token
+For creating readings or devices from a connector, a connector authentication can be performed by requesting a connector token from an initial user login.
+The connector token can be persisted locally on the connector as it never expires (only if the token is renewed).
+**Note**: Connector token has limited authority in the BASCloud (compared to the user). 
+```c++
+#include "EntityContext.h"
+
+using namespace BASCloud;
+
+EntityContext BCAPI("server_URL");
+
+/**
+ * Use a connector token saved on disk or requested previously. 
+ * 
+ */
+BCAPI.authenticateWithConnectorToken("connector_token");
+```
 
 
 ### Access Readings
@@ -164,11 +182,11 @@ make
 The following build parameter are used with their default values:
 
 ```
-BASCloudAPI_BUILD_TESTS=ON
-BASCloudAPI_EXAMPLES=OFF
-BASCloudAPI_BUILD_DOC=OFF
-BASCloudAPI_BUILD_PYTHON=ON
-BASCloudAPI_CODE_COVERAGE=OFF
+BASCloudAPI_BUILD_TESTS ON
+BASCloudAPI_BUILD_EXAMPLES OFF
+BASCloudAPI_BUILD_DOC OFF
+BASCloudAPI_BUILD_PYTHON ON
+BASCloudAPI_BUILD_CODE_COVERAGE OFF
 ```
 
 ### Tests

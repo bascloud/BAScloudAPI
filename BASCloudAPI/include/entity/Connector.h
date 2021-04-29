@@ -34,7 +34,7 @@ class Connector : public Entity, public EntityTenantMixin, public EntityDateMixi
    /**
     * API key of the Connector for accessing the BASCloud API. A Connector's API key never expires.
     * 
-    * The API key may not be available (empty), a new API key can be requested through refreshAPIKey().
+    * The API key may not be available (empty), a new API key can be requested through refreshAuthToken().
     * This request invalidates the previous API key.
     */
    std::string api_key;
@@ -69,8 +69,8 @@ class Connector : public Entity, public EntityTenantMixin, public EntityDateMixi
    /**
     * Get the Connector API key.
     * 
-    * This field may be empty if no current API key is available. User refreshAPIKey() to update the API key attribute.
-    * The refreshAPIKey() call invalidates all previous API keys. 
+    * This field may be empty if no current API key is available. User refreshAuthToken() to update the API key attribute.
+    * The refreshAuthToken() call invalidates all previous API keys. 
     * 
     * @return API key of the Connector.
     */
@@ -88,7 +88,7 @@ class Connector : public Entity, public EntityTenantMixin, public EntityDateMixi
     * A call to this function invalidates the previous API key.
     * 
     */
-   void refreshAPIKey();
+   void refreshAuthToken();
 
    /**
     * Get the associated Property entity of the Connector.

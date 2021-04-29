@@ -146,6 +146,9 @@ PYBIND11_MODULE(pyBASCloudAPI, m) {
         .def("authenticateWithUserLogin", &EntityContext::authenticateWithUserLogin, R"pbdoc(
                 Authenticate a user against the BASCloud API.
             )pbdoc", py::arg("email"), py::arg("password"))
+        .def("authenticateWithConnectorToken", &EntityContext::authenticateWithConnectorToken, R"pbdoc(
+                Authenticate a connector using a valid connector token.
+            )pbdoc", py::arg("connectorToken"))
 
         .def("getToken", &EntityContext::getToken, R"pbdoc(
                 Get the authentication token.
@@ -252,7 +255,7 @@ PYBIND11_MODULE(pyBASCloudAPI, m) {
         .def("updateConnector", &EntityContext::updateConnector, R"pbdoc(
                 Update an existing Connector in the BASCloud.
             )pbdoc", py::arg("tenantUUID"), py::arg("connectorUUID"), py::arg("name")="")
-        .def("getNewConnectorAPIKey", &EntityContext::getNewConnectorAPIKey, R"pbdoc(
+        .def("getNewConnectorAuthToken", &EntityContext::getNewConnectorAuthToken, R"pbdoc(
                 Requests a new API key for a Connector entity.
             )pbdoc", py::arg("tenantUUID"), py::arg("connectorUUID"))
 

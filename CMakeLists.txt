@@ -30,6 +30,7 @@ endif()
 #SET(OPENSSL_ROOT_DIR /Users/stefan/Documents/Development/openssl_x86_64)
 #SET(OPENSSL_ROOT_DIR /Users/stefan/opt/anaconda3/pkgs/openssl-1.1.1d-h1de35cc_4/lib)
 
+# Only for linux/macos systems with curl dependency openssl
 # Path for SSL certificates needs to be updated, path taken from "curl-config --ca"
 # CACHE INTERNAL "" FORCE seems to solve problem with bad cert path
 set(CURL_CA_BUNDLE "/etc/ssl/certs/ca-certificates.crt" CACHE INTERNAL "" FORCE)
@@ -43,13 +44,14 @@ set(CPR_BUILD_TESTS_SSL OFF)
 
 # Build options
 option(BASCloudAPI_BUILD_TESTS "Build library tests" ON)
-option(BASCloudAPI_EXAMPLES "Build examples" OFF)
+option(BASCloudAPI_BUILD_EXAMPLES "Build examples" OFF)
 option(BASCloudAPI_BUILD_DOC "Build documentation" OFF)
 option(BASCloudAPI_BUILD_PYTHON "Build library python bindings" ON)
-option(BASCloudAPI_CODE_COVERAGE "Build code-coverage" OFF)
+option(BASCloudAPI_BUILD_CODE_COVERAGE "Build code-coverage" OFF)
 
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+  set(BASCloudAPI_BUILD_CODE_COVERAGE OFF)
   set(CODE_COVERAGE OFF)
   set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
   # Bug in cmake? needs to be defined else cmake config fails
@@ -60,6 +62,7 @@ else()
   include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/code-coverage.cmake)
 endif()
 
+set(CODE_COVERAGE BASCloudAPI_BUILD_CODE_COVERAGE)
 
 include(FetchContent)
 
@@ -129,7 +132,7 @@ endif()
 
 add_subdirectory(BASCloudAPI)
 
-if(BASCloudAPI_EXAMPLES)
+if(BASCloudAPI_BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()
 
@@ -139,9 +142,7 @@ if(BASCloudAPI_BUILD_TESTS)
 endif()
 
 if(BASCloudAPI_BUILD_PYTHON)
-
   add_subdirectory(pybind11)
-
   pybind11_add_module(pyBASCloudAPI pyBASCloudAPI/src/main.cpp)
   
   target_link_libraries(pyBASCloudAPI PRIVATE BASCloudAPI 

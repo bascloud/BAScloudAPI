@@ -304,7 +304,7 @@ int main (int argc, char *argv[]) {
 
         std::cout << "\tRequesting new API key for created connector..." << std::endl;
 
-        std::string apiKey = BCAPI.getNewConnectorAPIKey(tenant.getUUID(), new_connector.getUUID());
+        std::string apiKey = BCAPI.getNewConnectorAuthToken(tenant.getUUID(), new_connector.getUUID());
         std::cout << "\t\tOK." << std::endl;
 
         std::cout << "\tConnector API Key: " << apiKey << std::endl;

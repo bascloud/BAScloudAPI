@@ -10,7 +10,6 @@
         - @ref python_api
         - @ref others_api
     - @ref how_to
-        - @ref how_to_connect
 
 
 \subsection intro Introduction
@@ -47,6 +46,134 @@ The BASCloud API Library is written in C/C++. For the Python programming languag
 See BASCloud namespace under Data Structures for the class documentation of the C/C++ library classes and functions.
 The class BASCloud::EntityContext is the basis for all high-level interaction with the BASCloud API and should be used.
 
+\subsubsection c_cxx_login Login 
+
+For connecting to the BASCloud API, a <b>server URL</b> and a user login are neccessary. Please contact your 
+BASCloud support for this information.
+
+Before accessing any API functions through the library, a user needs to be authenticated. Through the creation of a BASCloud::EntityContext object 
+given the server URL, a user can be logged in. The BASCloud::EntityContext object then holds a authentication token which is used for any further API request.
+
+
+\code 
+#include "EntityContext.h"
+
+using namespace BASCloud;
+
+/**
+ * Before accessing the BASCloud API, the correct API endpoint URL needs to be 
+ * defined (Note: no trailing symbols, must end with TLD identifier)
+ */
+EntityContext BCAPI("server_URL");
+
+/**
+ * All methods in the BASCloud API library potential throw different exceptions to signal a failure in the API request.
+ * 
+ * The following exceptions may be thrown:
+ * 
+ * ServerError: If the server returns an (unexpected) server error 500.
+ * ConnectionError: If the connection to the server could not be establised.
+ * BadRequest: If parameters given through the request were invalid e.g. invalid UUID.
+ * UnauthorizedRequest: If the currently authenticated user has no authority to access the API endpoint.
+ * NotFoundRequest: If the requested resource was not found e.g. no entity with the given UUID exists.
+ * InvalidResponse: If the response returned by the server was invalid e.g. invalid JSON was received or missing data.
+ * 
+ * Wherver to catch all exceptions together or individually is left up to the library user and may be use-case dependend.
+ * 
+ */
+try {
+    BCAPI.authenticateWithUserLogin("user_email", "user_password");
+} catch(std::exception& e) {
+
+}
+\endcode 
+
+Authentication is also possible using a previously requested connector authentication.
+For creating readings or devices from a connector, a connector authentication can be performed by requesting a connector token from an initial user login.
+The connector token can be persisted locally on the connector as it never expires (only if the token is renewed).
+
+Note: Connector token has limited authority in the BASCloud (compared to the user). 
+
+\code 
+```c++
+#include "EntityContext.h"
+
+using namespace BASCloud;
+
+EntityContext BCAPI("server_URL");
+
+/**
+ * Use a connector token saved on disk or requested previously. 
+ * 
+ */
+BCAPI.authenticateWithConnectorToken("connector_token");
+```
+\endcode
+
+\subsubsection c_cxx_readings Access Readings
+
+Collections can be accessed through paginated requests. See PagingOption.
+
+For functions returning a collection of entities (EntityCollection), optional filter values can be specified (See API documentation), also an optional error handler can be defined.
+This error handler is called for each entity failure in the response.
+
+\code 
+#include "EntityContext.h"
+
+using namespace BASCloud;
+
+// Previous login code...
+
+// For accessing a device, its associated tenant UUID is needed
+std::string tenantUUID = "";
+
+/**
+ * For requesting a collection of BASCloud readings, filters on their attributes can be applied.
+ * Readings in a corresponding time-span can be searched for, for a specific timestamp, a specific value, 
+ * and a corresponding device UUID.
+ * 
+ * Filter parameter are optional and can be ommitted, or left empty (default values)
+ */
+std::time_t from_filter = -1;
+std::time_t until_filter = -1;
+std::time_t timestamp_filter = -1;
+double value_filter = std::numeric_limits<double>::quiet_NaN();
+std::string deviceUUID_filter = {};
+
+/**
+ * For requesting a collection of BASCloud entities, pagination can be used for large collections.
+ * 
+ * PagingOption consists of:
+ * page_size: number of entries per page.
+ * direction: for navigating between pages, next, prev and none.
+ * page_pointer: for navigating between pages, points to the next/prev page.
+ * 
+ * Paging are optional and can be ommitted, or left empty ({})
+ */
+PagingOption paging = PagingOption(1000, PagingOption::Direction::NONE, {});
+
+try {
+    /** 
+     * Request a collection of devices from the BASCloud.
+     * Parameters are a tenant UUID under which the devices are grouped, 
+     * and optional paging and filters.
+     * 
+     * Each library method returning a collection supports an error handler function. This function 
+     * is called for each entity in the request response for which an error occured e.g. failed to parse due to missing or 
+     * invalid data.
+     * 
+     * The function is given the exception which was thrown and the json data which caused the error.
+     */
+    EntityCollection<Reading> readings = BCAPI.getReadingsCollection(tenantUUID, paging, from_filter, until_filter, 
+    	timestamp_filter, value_filter, deviceUUID_filter, [](std::exception& e, json& j) {
+            // Do something with the error and data, or ignore it (errorHandler can be left empty)
+        });
+} catch(std::exception& e) {
+
+}
+\endcode 
+
+See examples for complete executable code.
 
 \subsection python_api BASCloud API for Python
 
@@ -69,8 +196,9 @@ api.EntityContext(url)
 
 
 Interface of the Python binding is nearly 1:1 to the C/C++ library. For class objects, their corresponding attributes are accessible directly 
-instead of getter methods e.g. instead of the C/C++ access:
+instead of getter methods e.g.:
 
+C/C++ access:
 \code 
 user.getUUID();
 reading.getValue();
@@ -104,32 +232,5 @@ Example code for C/C++ usage and corresponding CMake build files are provided in
 code for tests for nearly any API endpoint function are provided in the /test directory.
 
 For example usage of the Python binding, example code with use cases are provided in the directory /pyBASCloudAPI/examples.
-
-
-\subsection how_to_connect Connecting to the BASCloud API
-
-For connecting to the BASCloud API, a <b>server URL</b> and a user login are neccessary. Please contact your 
-BASCloud support for this information.
-
-Before accessing any API functions through the library, a user needs to be authenticated. Through the creation of a BASCloud::EntityContext object 
-given the server URL, a user can be logged in. The BASCloud::EntityContext object then holds a authentication token which is used for any further API request.
-
-
-
-\code 
-#include "EntityContext.h"
-
-using namespace BASCloud;
-
-int main (int argc, char *argv[]) {
-
-    EntityContext BCAPI("server URL");
-
-    BCAPI.authenticateWithUserLogin("user", "password");
-}
-\endcode 
-
-For a complete example and best practices, see the /examples directory.
-
 
 */
