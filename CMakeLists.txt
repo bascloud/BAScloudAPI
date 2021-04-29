@@ -52,8 +52,8 @@ option(BASCloudAPI_BUILD_CODE_COVERAGE "Build code-coverage" OFF)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
   set(BASCloudAPI_BUILD_CODE_COVERAGE OFF)
-  set(CODE_COVERAGE OFF)
   set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+  add_definitions(-DNOMINMAX)
   # Bug in cmake? needs to be defined else cmake config fails
   set(CMAKE_SHARED_LINKER_FLAGS_THREADSAN "")
   set(CMAKE_SHARED_LINKER_FLAGS_ADDRSAN "")
