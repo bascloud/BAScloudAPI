@@ -241,7 +241,7 @@ BCAPI = api.EntityContext("server url")
 BCAPI.authenticateWithUserLogin("user_email", "user_password")
 ```
 
-For complete examples see [pyBASCloudAPI/examples](pyBASCloudAPI/examples).
+For complete examples see [pyBASCloud/examples](pyBASCloud/examples).
 
 ### Building
 

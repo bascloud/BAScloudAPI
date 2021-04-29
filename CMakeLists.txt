@@ -62,7 +62,11 @@ else()
   include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/code-coverage.cmake)
 endif()
 
-set(CODE_COVERAGE BASCloudAPI_BUILD_CODE_COVERAGE)
+if(BASCloudAPI_BUILD_CODE_COVERAGE)
+  set(CODE_COVERAGE ON)
+else()
+  set(CODE_COVERAGE ON)
+endif()
 
 include(FetchContent)
 

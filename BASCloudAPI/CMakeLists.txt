@@ -14,7 +14,7 @@ add_library(BASCloudAPI
     src/APIContext.cpp src/EntityContext.cpp src/entity/User.cpp src/entity/Tenant.cpp src/entity/Property.cpp 
     src/entity/Connector.cpp src/entity/Device.cpp src/entity/Reading.cpp src/entity/SetPoint.cpp)
 
-if(CODE_COVERAGE)
+if(BASCloudAPI_BUILD_CODE_COVERAGE)
     target_code_coverage(BASCloudAPI)
 endif()
 

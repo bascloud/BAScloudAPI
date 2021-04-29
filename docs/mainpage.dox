@@ -95,7 +95,6 @@ The connector token can be persisted locally on the connector as it never expire
 Note: Connector token has limited authority in the BASCloud (compared to the user). 
 
 \code 
-```c++
 #include "EntityContext.h"
 
 using namespace BASCloud;
@@ -107,7 +106,6 @@ EntityContext BCAPI("server_URL");
  * 
  */
 BCAPI.authenticateWithConnectorToken("connector_token");
-```
 \endcode
 
 \subsubsection c_cxx_readings Access Readings
