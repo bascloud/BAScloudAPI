@@ -133,6 +133,15 @@ Login</h3>
 <div class="line">} <span class="keywordflow">catch</span>(std::exception&amp; e) {</div>
 <div class="line"> </div>
 <div class="line">}</div>
+</div><!-- fragment --><p>Authentication is also possible using a previously requested connector authentication. For creating readings or devices from a connector, a connector authentication can be performed by requesting a connector token from an initial user login. The connector token can be persisted locally on the connector as it never expires (only if the token is renewed).</p>
+<p>Note: Connector token has limited authority in the BASCloud (compared to the user).</p>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &quot;EntityContext.h&quot;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">using namespace </span>BASCloud;</div>
+<div class="line"> </div>
+<div class="line"><a class="code" href="classBASCloud_1_1EntityContext.html">EntityContext</a> BCAPI(<span class="stringliteral">&quot;server_URL&quot;</span>);</div>
+<div class="line"> </div>
+<div class="line">BCAPI.authenticateWithConnectorToken(<span class="stringliteral">&quot;connector_token&quot;</span>);</div>
 </div><!-- fragment --><h3><a class="anchor" id="c_cxx_readings"></a>
 Access Readings</h3>
 <p>Collections can be accessed through paginated requests. See PagingOption.</p>

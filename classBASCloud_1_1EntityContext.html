@@ -102,6 +102,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a285391b7925bf03e95a6df9ada6ed3a4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBASCloud_1_1EntityContext.html#a285391b7925bf03e95a6df9ada6ed3a4">authenticateWithUserLogin</a> (std::string API_email, std::string API_password)</td></tr>
 <tr class="memdesc:a285391b7925bf03e95a6df9ada6ed3a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Authenticate a user against the BASCloud API.  <a href="classBASCloud_1_1EntityContext.html#a285391b7925bf03e95a6df9ada6ed3a4">More...</a><br /></td></tr>
 <tr class="separator:a285391b7925bf03e95a6df9ada6ed3a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af574e3efb9b8458e2ea7347ad48cfef0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBASCloud_1_1EntityContext.html#af574e3efb9b8458e2ea7347ad48cfef0">authenticateWithConnectorToken</a> (std::string API_connector_token)</td></tr>
+<tr class="memdesc:af574e3efb9b8458e2ea7347ad48cfef0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Authenticate a connector using a valid connector token.  <a href="classBASCloud_1_1EntityContext.html#af574e3efb9b8458e2ea7347ad48cfef0">More...</a><br /></td></tr>
+<tr class="separator:af574e3efb9b8458e2ea7347ad48cfef0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa3fdab7a92b1eed8e5672e221111656c"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBASCloud_1_1EntityContext.html#aa3fdab7a92b1eed8e5672e221111656c">getToken</a> ()</td></tr>
 <tr class="memdesc:aa3fdab7a92b1eed8e5672e221111656c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the authentication token.  <a href="classBASCloud_1_1EntityContext.html#aa3fdab7a92b1eed8e5672e221111656c">More...</a><br /></td></tr>
 <tr class="separator:aa3fdab7a92b1eed8e5672e221111656c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -198,9 +201,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a317b4f48e868538604a4e7ba33f1a106"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBASCloud_1_1Connector.html">Connector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBASCloud_1_1EntityContext.html#a317b4f48e868538604a4e7ba33f1a106">updateConnector</a> (std::string API_tenant_UUID, std::string API_connector_UUID, std::string name={})</td></tr>
 <tr class="memdesc:a317b4f48e868538604a4e7ba33f1a106"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update an existing <a class="el" href="classBASCloud_1_1Connector.html" title="A Connector entity represents a BASCloud Connector in a property/building.">Connector</a> in the BASCloud.  <a href="classBASCloud_1_1EntityContext.html#a317b4f48e868538604a4e7ba33f1a106">More...</a><br /></td></tr>
 <tr class="separator:a317b4f48e868538604a4e7ba33f1a106"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e702a5488abdedada0172facc83902f"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBASCloud_1_1EntityContext.html#a6e702a5488abdedada0172facc83902f">getNewConnectorAPIKey</a> (std::string API_tenant_UUID, std::string API_connector_UUID)</td></tr>
-<tr class="memdesc:a6e702a5488abdedada0172facc83902f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Requests a new API key for a <a class="el" href="classBASCloud_1_1Connector.html" title="A Connector entity represents a BASCloud Connector in a property/building.">Connector</a> entity.  <a href="classBASCloud_1_1EntityContext.html#a6e702a5488abdedada0172facc83902f">More...</a><br /></td></tr>
-<tr class="separator:a6e702a5488abdedada0172facc83902f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a507838bef2f639e20b92627faa5e0614"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBASCloud_1_1EntityContext.html#a507838bef2f639e20b92627faa5e0614">getNewConnectorAuthToken</a> (std::string API_tenant_UUID, std::string API_connector_UUID)</td></tr>
+<tr class="memdesc:a507838bef2f639e20b92627faa5e0614"><td class="mdescLeft">&#160;</td><td class="mdescRight">Requests a new API key for a <a class="el" href="classBASCloud_1_1Connector.html" title="A Connector entity represents a BASCloud Connector in a property/building.">Connector</a> entity.  <a href="classBASCloud_1_1EntityContext.html#a507838bef2f639e20b92627faa5e0614">More...</a><br /></td></tr>
+<tr class="separator:a507838bef2f639e20b92627faa5e0614"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a74f0cf016fdaf8a683c566dc46788bf6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBASCloud_1_1Device.html">Device</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBASCloud_1_1EntityContext.html#a74f0cf016fdaf8a683c566dc46788bf6">getDevice</a> (std::string API_tenant_UUID, std::string API_device_UUID)</td></tr>
 <tr class="memdesc:a74f0cf016fdaf8a683c566dc46788bf6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Request a single <a class="el" href="classBASCloud_1_1Device.html" title="A device entity represents a sensor or actor in a property/building.">Device</a> entity.  <a href="classBASCloud_1_1EntityContext.html#a74f0cf016fdaf8a683c566dc46788bf6">More...</a><br /></td></tr>
 <tr class="separator:a74f0cf016fdaf8a683c566dc46788bf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -330,6 +333,34 @@ Public Member Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">API_tenant_UUID</td><td><a class="el" href="classBASCloud_1_1Tenant.html" title="A Tenant entity represents a customer/tenant in the BASCloud.">Tenant</a> entity UUID to assign the users to. </td></tr>
     <tr><td class="paramname">API_user_UUIDs</td><td>Collection of <a class="el" href="classBASCloud_1_1User.html" title="A User entity represents a API user of the BASCloud.">User</a> entity objects that are to be assigned to the <a class="el" href="classBASCloud_1_1Tenant.html" title="A Tenant entity represents a customer/tenant in the BASCloud.">Tenant</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af574e3efb9b8458e2ea7347ad48cfef0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af574e3efb9b8458e2ea7347ad48cfef0">&#9670;&nbsp;</a></span>authenticateWithConnectorToken()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BASCloud::EntityContext::authenticateWithConnectorToken </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>API_connector_token</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Authenticate a connector using a valid connector token. </p>
+<p>Given a valid connector token previusly requested from the BASCloud through a connector creation or <a class="el" href="classBASCloud_1_1EntityContext.html#a507838bef2f639e20b92627faa5e0614" title="Requests a new API key for a Connector entity.">getNewConnectorAuthToken()</a>. The connector token has no expiration date, <a class="el" href="classBASCloud_1_1EntityContext.html#aa8ac8729cae1240478c9bf88fba6eab9" title="Get the expiration date of the authentication token.">getTokenExpirationDate()</a> will return std::numeric_limits&lt;long&gt;::max().</p>
+<p>When a new connector token is requested for authenticating a connector in the future, authenticateWithConnectorToken must be called again with the new token.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">API_connector_token</td><td>Valid connector api token. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1906,14 +1937,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a6e702a5488abdedada0172facc83902f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6e702a5488abdedada0172facc83902f">&#9670;&nbsp;</a></span>getNewConnectorAPIKey()</h2>
+<a id="a507838bef2f639e20b92627faa5e0614"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a507838bef2f639e20b92627faa5e0614">&#9670;&nbsp;</a></span>getNewConnectorAuthToken()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::string BASCloud::EntityContext::getNewConnectorAPIKey </td>
+          <td class="memname">std::string BASCloud::EntityContext::getNewConnectorAuthToken </td>
           <td>(</td>
           <td class="paramtype">std::string&#160;</td>
           <td class="paramname"><em>API_tenant_UUID</em>, </td>
@@ -2520,7 +2551,8 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Get the expiration date of the authentication token. </p>
-<dl class="section return"><dt>Returns</dt><dd>UNIX timestamp of the expiration date. </dd></dl>
+<p>When a connector token is used to authentication, the expiration date is never modelled by long::MAX.</p>
+<dl class="section return"><dt>Returns</dt><dd>UNIX timestamp of the expiration date or long::MAX for connector tokens (expires never). </dd></dl>
 
 </div>
 </div>

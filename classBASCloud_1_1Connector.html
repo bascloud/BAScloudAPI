@@ -122,9 +122,9 @@ Public Member Functions</h2></td></tr>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBASCloud_1_1Connector.html#ab6d2f6da49c12960f409a143ca881582">setAPIKey</a> (std::string newApiKey)</td></tr>
 <tr class="memdesc:ab6d2f6da49c12960f409a143ca881582"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the <a class="el" href="classBASCloud_1_1Connector.html" title="A Connector entity represents a BASCloud Connector in a property/building.">Connector</a> API key. <br /></td></tr>
 <tr class="separator:ab6d2f6da49c12960f409a143ca881582"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae27976cd51cba4d380eb21cf5f8381f3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBASCloud_1_1Connector.html#ae27976cd51cba4d380eb21cf5f8381f3">refreshAPIKey</a> ()</td></tr>
-<tr class="memdesc:ae27976cd51cba4d380eb21cf5f8381f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Refresh the <a class="el" href="classBASCloud_1_1Connector.html" title="A Connector entity represents a BASCloud Connector in a property/building.">Connector</a> API key from the BASCloud.  <a href="classBASCloud_1_1Connector.html#ae27976cd51cba4d380eb21cf5f8381f3">More...</a><br /></td></tr>
-<tr class="separator:ae27976cd51cba4d380eb21cf5f8381f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a8e7042e0d5d11bff5e85b30404f689"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBASCloud_1_1Connector.html#a6a8e7042e0d5d11bff5e85b30404f689">refreshAuthToken</a> ()</td></tr>
+<tr class="memdesc:a6a8e7042e0d5d11bff5e85b30404f689"><td class="mdescLeft">&#160;</td><td class="mdescRight">Refresh the <a class="el" href="classBASCloud_1_1Connector.html" title="A Connector entity represents a BASCloud Connector in a property/building.">Connector</a> API key from the BASCloud.  <a href="classBASCloud_1_1Connector.html#a6a8e7042e0d5d11bff5e85b30404f689">More...</a><br /></td></tr>
+<tr class="separator:a6a8e7042e0d5d11bff5e85b30404f689"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace4c614aebed4fa59e980225956a3d12"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBASCloud_1_1Property.html">Property</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBASCloud_1_1Connector.html#ace4c614aebed4fa59e980225956a3d12">getAssociatedProperty</a> ()</td></tr>
 <tr class="memdesc:ace4c614aebed4fa59e980225956a3d12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the associated <a class="el" href="classBASCloud_1_1Property.html" title="A Property entity represents a building or location in the BASCloud.">Property</a> entity of the <a class="el" href="classBASCloud_1_1Connector.html" title="A Connector entity represents a BASCloud Connector in a property/building.">Connector</a>.  <a href="classBASCloud_1_1Connector.html#ace4c614aebed4fa59e980225956a3d12">More...</a><br /></td></tr>
 <tr class="separator:ace4c614aebed4fa59e980225956a3d12"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -418,7 +418,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Get the <a class="el" href="classBASCloud_1_1Connector.html" title="A Connector entity represents a BASCloud Connector in a property/building.">Connector</a> API key. </p>
-<p>This field may be empty if no current API key is available. <a class="el" href="classBASCloud_1_1User.html" title="A User entity represents a API user of the BASCloud.">User</a> <a class="el" href="classBASCloud_1_1Connector.html#ae27976cd51cba4d380eb21cf5f8381f3" title="Refresh the Connector API key from the BASCloud.">refreshAPIKey()</a> to update the API key attribute. The <a class="el" href="classBASCloud_1_1Connector.html#ae27976cd51cba4d380eb21cf5f8381f3" title="Refresh the Connector API key from the BASCloud.">refreshAPIKey()</a> call invalidates all previous API keys.</p>
+<p>This field may be empty if no current API key is available. <a class="el" href="classBASCloud_1_1User.html" title="A User entity represents a API user of the BASCloud.">User</a> <a class="el" href="classBASCloud_1_1Connector.html#a6a8e7042e0d5d11bff5e85b30404f689" title="Refresh the Connector API key from the BASCloud.">refreshAuthToken()</a> to update the API key attribute. The <a class="el" href="classBASCloud_1_1Connector.html#a6a8e7042e0d5d11bff5e85b30404f689" title="Refresh the Connector API key from the BASCloud.">refreshAuthToken()</a> call invalidates all previous API keys.</p>
 <dl class="section return"><dt>Returns</dt><dd>API key of the <a class="el" href="classBASCloud_1_1Connector.html" title="A Connector entity represents a BASCloud Connector in a property/building.">Connector</a>. </dd></dl>
 
 </div>
@@ -649,14 +649,14 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="ae27976cd51cba4d380eb21cf5f8381f3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae27976cd51cba4d380eb21cf5f8381f3">&#9670;&nbsp;</a></span>refreshAPIKey()</h2>
+<a id="a6a8e7042e0d5d11bff5e85b30404f689"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a8e7042e0d5d11bff5e85b30404f689">&#9670;&nbsp;</a></span>refreshAuthToken()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void BASCloud::Connector::refreshAPIKey </td>
+          <td class="memname">void BASCloud::Connector::refreshAuthToken </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>

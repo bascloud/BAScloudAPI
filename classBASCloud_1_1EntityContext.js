@@ -2,6 +2,7 @@ var classBASCloud_1_1EntityContext =
 [
     [ "EntityContext", "classBASCloud_1_1EntityContext.html#a3768adb28e271faf78fe8d9a55c0fc5a", null ],
     [ "assignTenantUsers", "classBASCloud_1_1EntityContext.html#a227d9949c7c127fddd4d2dec02ec2719", null ],
+    [ "authenticateWithConnectorToken", "classBASCloud_1_1EntityContext.html#af574e3efb9b8458e2ea7347ad48cfef0", null ],
     [ "authenticateWithUserLogin", "classBASCloud_1_1EntityContext.html#a285391b7925bf03e95a6df9ada6ed3a4", null ],
     [ "createConnector", "classBASCloud_1_1EntityContext.html#a439bb1313f989408426fdb1293e41697", null ],
     [ "createDevice", "classBASCloud_1_1EntityContext.html#a9dc44ee91dbf283976a793e84ba1cd5e", null ],
@@ -29,7 +30,7 @@ var classBASCloud_1_1EntityContext =
     [ "getConnectorsCollection", "classBASCloud_1_1EntityContext.html#ad84c268808dc07eab31f6bbf18bab3a9", null ],
     [ "getDevice", "classBASCloud_1_1EntityContext.html#a74f0cf016fdaf8a683c566dc46788bf6", null ],
     [ "getDevicesCollection", "classBASCloud_1_1EntityContext.html#a9a44b18087b7339a5c047411fbbe590e", null ],
-    [ "getNewConnectorAPIKey", "classBASCloud_1_1EntityContext.html#a6e702a5488abdedada0172facc83902f", null ],
+    [ "getNewConnectorAuthToken", "classBASCloud_1_1EntityContext.html#a507838bef2f639e20b92627faa5e0614", null ],
     [ "getPropertiesCollection", "classBASCloud_1_1EntityContext.html#ad9553d73b8d0f15f8eca27f611f31a2a", null ],
     [ "getProperty", "classBASCloud_1_1EntityContext.html#a6a9cc25aaef7d7fe88070794edd782b9", null ],
     [ "getReading", "classBASCloud_1_1EntityContext.html#a7ea292a4c05a6dab5e62bb105cea64d5", null ],
