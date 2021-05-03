@@ -117,10 +117,10 @@ class CMakeBuild(build_ext):
 setup(
     name="pyBASCloudAPI",
     version="0.1.0",
-    author="Moritz Lode",
-    author_email="lode@accessec.com",
+    author="ProFM Facility & Project Management GmbH",
+    author_email="info@profm-gmbh.de",
     description="A Python package providing binding for the BASCloud API endpoints.",
-    long_description="",
+    long_description="pyBASCloudAPI is a Python packages which wraps the BASCloud REST API (v2.1) endpoints into an interface for programmers to easily use. Based on the C/C++ BASCloudAPI library.",
     ext_modules=[CMakeExtension("pyBASCloudAPI")],
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False
