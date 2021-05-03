@@ -56,7 +56,7 @@ class CMakeBuild(build_ext):
             "-DBASCloudAPI_BUILD_DOC=OFF",
             "-DBASCloudAPI_CODE_COVERAGE=OFF",
             "-DBASCloudAPI_EXAMPLES=OFF",
-            "--log-level=VERBOSE",
+            #"--log-level=VERBOSE",
         ]
 
         build_args = []
