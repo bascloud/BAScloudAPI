@@ -2,6 +2,7 @@
 requires = [
     "setuptools>=42",
     "wheel",
+    "cryptography",
     "ninja; sys_platform != 'win32'",
     "cmake>=3.12",
 ]
