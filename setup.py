@@ -116,7 +116,7 @@ class CMakeBuild(build_ext):
 # logic and declaration, and simpler if you include description/version in a file.
 setup(
     name="pyBASCloudAPI",
-    version="0.1.0",
+    version="0.1.1",
     author="ProFM Facility & Project Management GmbH",
     author_email="info@profm-gmbh.de",
     description="A Python package providing binding for the BASCloud API endpoints.",
