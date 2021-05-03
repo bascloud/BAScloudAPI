@@ -59,6 +59,7 @@ jobs:
         # Python 2.7 on Windows requires a workaround for C++11 support,
         # built separately below
         CIBW_SKIP: cp27-win*
+        CIBW_BEFORE_ALL_LINUX: apt-get -y install libssl-dev
 
     - name: Verify clean directory
       run: git diff --exit-code
