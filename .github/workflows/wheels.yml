@@ -61,6 +61,7 @@ jobs:
         # built separately below
         CIBW_SKIP: cp27-win*
         CIBW_BEFORE_ALL_LINUX: yum install -y openssl-devel
+        CIBW_BEFORE_ALL_MACOS: brew install openssl
 
     - name: Verify clean directory
       run: git diff --exit-code
