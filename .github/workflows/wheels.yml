@@ -59,6 +59,7 @@ jobs:
         # Python 2.7 on Windows requires a workaround for C++11 support,
         # built separately below
         CIBW_SKIP: cp27-win*
+        CIBW_BEFORE_BUILD: pip install cmake pybind11
 
     - name: Verify clean directory
       run: git diff --exit-code
@@ -93,6 +94,7 @@ jobs:
     - name: Build 64-bit wheel
       uses: joerick/cibuildwheel@v1.11.0
       env:
+        CIBW_BEFORE_BUILD: pip install cmake pybind11
         CIBW_BUILD: cp27-win_amd64
         DISTUTILS_USE_SDK: 1
         MSSdk: 1
@@ -104,6 +106,7 @@ jobs:
     - name: Build 32-bit wheel
       uses: joerick/cibuildwheel@v1.11.0
       env:
+        CIBW_BEFORE_BUILD: pip install cmake pybind11
         CIBW_BUILD: cp27-win32
         DISTUTILS_USE_SDK: 1
         MSSdk: 1
