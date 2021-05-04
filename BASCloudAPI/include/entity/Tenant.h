@@ -9,12 +9,12 @@
 #include "EntityCollection.h"
 
 
-namespace BASCloud {
+namespace BAScloud {
 
 class User;
 
 /** 
- * A Tenant entity represents a customer/tenant in the BASCloud.
+ * A Tenant entity represents a customer/tenant in the BAScloud.
  * 
  * A Tenant can have one or multiple associated User entities.
  * 
@@ -38,16 +38,16 @@ class Tenant : public Entity, public EntityDateMixin {
    /**
     * Tenant constructor
     *
-    * Creates a Tenant object representing a BASCloud API entity.
+    * Creates a Tenant object representing a BAScloud API entity.
     * 
-    * Note: Creating an entity object over its constructor does not automatically create the entity in the BASCloud. 
-    * For creation of a BASCloud entity use the static method of the corresponding object class Tenant::createTenant().
+    * Note: Creating an entity object over its constructor does not automatically create the entity in the BAScloud. 
+    * For creation of a BAScloud entity use the static method of the corresponding object class Tenant::createTenant().
     *
-    * @param API_UUID Universally unique identifier of the represented BASCloud Tenant.
+    * @param API_UUID Universally unique identifier of the represented BAScloud Tenant.
     * @param name Name of the Tenant.
     * @param urlName URL Name of the Tenant.
-    * @param createdAt Datetime describing the creation of the Tenant entity in the BASCloud.
-    * @param updatedAt Datetime describing the last update of the Tenant information in the BASCloud.
+    * @param createdAt Datetime describing the creation of the Tenant entity in the BAScloud.
+    * @param updatedAt Datetime describing the last update of the Tenant information in the BAScloud.
     * @param context EntityContext proving an abstracted context for accessing the API functions.
     */
    Tenant(std::string API_UUID, std::string name, std::string urlName, std::time_t createdAt, std::time_t updatedAt, EntityContext* context);
@@ -69,7 +69,7 @@ class Tenant : public Entity, public EntityDateMixin {
    /**
     * Request a single Tenant entity.
     * 
-    * A Tenant is uniquely identified by a BASCloud Tenant UUID.
+    * A Tenant is uniquely identified by a BAScloud Tenant UUID.
     * 
     * @throws ServerError
     * @throws ConnectionError
@@ -79,10 +79,10 @@ class Tenant : public Entity, public EntityDateMixin {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the BASCloud Tenant.
+    * @param API_tenant_UUID UUID of the BAScloud Tenant.
     * @param context EntityContext proving an abstracted context for accessing the API functions.
     * 
-    * @return A Tenant object representing the BASCloud Tenant with the specified UUID.
+    * @return A Tenant object representing the BAScloud Tenant with the specified UUID.
     */
    static Tenant getTenant(std::string API_tenant_UUID, EntityContext* context);
 
@@ -193,7 +193,7 @@ class Tenant : public Entity, public EntityDateMixin {
    void removeUsers(std::vector<User> users);
 
    /**
-    * Create a new Tenant entity in the BASCloud. [Admin] 
+    * Create a new Tenant entity in the BAScloud. [Admin] 
     * 
     * A new Tenant is created using the given Tenant parameter. This operation needs 
     * administration authority. 
@@ -210,14 +210,14 @@ class Tenant : public Entity, public EntityDateMixin {
     * @param API_user_UUID User entity UUID that is supposed to be associated with the new Tenant.
     * @param context EntityContext proving an abstracted context for accessing the API functions.
     * 
-    * @return Tenant entity object representing the newly created BASCloud Tenant.
+    * @return Tenant entity object representing the newly created BAScloud Tenant.
     */
    static Tenant createTenant(std::string name, std::string API_user_UUID, EntityContext* context);
 
   /**
-    * Deletes an existing Tenant in the BASCloud. [Admin] 
+    * Deletes an existing Tenant in the BAScloud. [Admin] 
     * 
-    * The request deletes a Tenant entity in the BASCloud based on the given Tenant UUID. 
+    * The request deletes a Tenant entity in the BAScloud based on the given Tenant UUID. 
     * This operation needs administration authority. 
     * 
     * @throws ServerError
@@ -228,13 +228,13 @@ class Tenant : public Entity, public EntityDateMixin {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the BASCloud Tenant.
+    * @param API_tenant_UUID UUID of the BAScloud Tenant.
     * @param context EntityContext proving an abstracted context for accessing the API functions.
     */
    static void deleteTenant(std::string API_tenant_UUID, EntityContext* context);
 
   /**
-    * Updates the information of a Tenant entity in the BASCloud. [Admin] 
+    * Updates the information of a Tenant entity in the BAScloud. [Admin] 
     * 
     * All parameters are optional. This operation needs administration authority. 
     * 
@@ -250,7 +250,7 @@ class Tenant : public Entity, public EntityDateMixin {
     * @param context EntityContext proving an abstracted context for accessing the API functions.
     * @param name Optional new value for the Tenant name.
     * 
-    * @return Tenant entity object representing the updated BASCloud Tenant.
+    * @return Tenant entity object representing the updated BAScloud Tenant.
     */
 	 static Tenant updateTenant(std::string API_tenant_UUID, EntityContext* context, std::string name={});
 

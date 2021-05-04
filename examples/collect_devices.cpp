@@ -7,13 +7,13 @@
 #include "error/Exceptions.h"
 
 
-using namespace BASCloud;
+using namespace BAScloud;
 
 int main (int argc, char *argv[]) {
 
     std::cout << "Initialising library..."<< std::endl;
 
-    // For accessing the BASCloud API, a API endpoint URL needs to be defined (Note: no trailing symbols, must end with TLD identifier)
+    // For accessing the BAScloud API, a API endpoint URL needs to be defined (Note: no trailing symbols, must end with TLD identifier)
     EntityContext BCAPI("server_URL");
     std::cout << "\tOK." << std::endl;
 
@@ -22,7 +22,7 @@ int main (int argc, char *argv[]) {
     std::cout << "1. - Authentication with user login" << std::endl;
 
     /**
-     * All methods in the BASCloud API library potential throw different exceptions to signal a failure in the API request.
+     * All methods in the BAScloud API library potential throw different exceptions to signal a failure in the API request.
      * 
      * The following exceptions may be thrown:
      * 
@@ -54,7 +54,7 @@ int main (int argc, char *argv[]) {
     std::string tenantUUID = "";
 
     /**
-     * For requesting a collection of BASCloud entities, filters on their attributes can be applied
+     * For requesting a collection of BAScloud entities, filters on their attributes can be applied
      * For devices, a corresponding AKS ID can be searched for, a device description, and unit.
      * 
      * Filter parameter are optional and can be ommitted, or left empty ({} or "")
@@ -64,7 +64,7 @@ int main (int argc, char *argv[]) {
     std::string unit_filter = {};
 
     /**
-     * For requesting a collection of BASCloud entities, pagination can be used for large collections.
+     * For requesting a collection of BAScloud entities, pagination can be used for large collections.
      * 
      * PagingOption consists of:
      * page_size: number of entries per page.
@@ -78,7 +78,7 @@ int main (int argc, char *argv[]) {
 
     try {
         /** 
-         * Request a collection of devices from the BASCloud 
+         * Request a collection of devices from the BAScloud 
          * Parameters are a tenant UUID under which the devices are grouped, 
          * and optional paging and filters.
          * 
@@ -127,7 +127,7 @@ int main (int argc, char *argv[]) {
 
     try {
         /** 
-         * Requests a single device from the BASCloud 
+         * Requests a single device from the BAScloud 
          * Parameters are a tenant UUID under which the device is grouped and the UUID of the device itself
          */
         std::cout << "\tDevice UUID: " << deviceUUID << std::endl;

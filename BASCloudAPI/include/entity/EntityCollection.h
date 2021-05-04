@@ -4,7 +4,7 @@
 #include "Paging.h"
 
 
-namespace BASCloud {
+namespace BAScloud {
 
 /** 
  * Type definition of a collection of entities returned by the API.

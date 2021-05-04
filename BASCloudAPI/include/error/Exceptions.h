@@ -3,15 +3,15 @@
 #include <string>
 
 
-namespace BASCloud {
+namespace BAScloud {
 
 // ML: We extend runtime_error as the base-class std::exception has no std::string message constructor.
 
 /** 
  * 500 server HTTP error.
  * 
- * While requesting the BASCloud API the server returned an server error. 
- * If the problem reoccurs please contact the BASCloud support.
+ * While requesting the BAScloud API the server returned an server error. 
+ * If the problem reoccurs please contact the BAScloud support.
  * 
  */
 class ServerError : public std::runtime_error {
@@ -29,7 +29,7 @@ class ServerError : public std::runtime_error {
 /** 
  * A connection error occured.
  * 
- * While requesting the BASCloud API an connection failure occured. Check
+ * While requesting the BAScloud API an connection failure occured. Check
  * for a working network connection and the correct endpoint URL.
  * 
  */
@@ -118,7 +118,7 @@ class UnauthorizedRequest : public std::runtime_error {
 };
 
 /** 
- * Invalid response received from the BASCloud API.
+ * Invalid response received from the BAScloud API.
  * 
  * There was an error while processing the API response e.g. missing attribute or invalid formated data. 
  * 

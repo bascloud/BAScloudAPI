@@ -51,11 +51,12 @@ class CMakeBuild(build_ext):
             "-DPYTHON_EXECUTABLE={}".format(sys.executable),
             "-DEXAMPLE_VERSION_INFO={}".format(self.distribution.get_version()),
             "-DCMAKE_BUILD_TYPE={}".format(cfg),  # not used on MSVC, but no harm
-            "-DBASCloudAPI_BUILD_PYTHON=ON",
-            "-DBASCloudAPI_BUILD_TESTS=OFF", # BASCloud configs, the following stuff we dont need for building the python package
-            "-DBASCloudAPI_BUILD_DOC=OFF",
-            "-DBASCloudAPI_CODE_COVERAGE=OFF",
-            "-DBASCloudAPI_EXAMPLES=OFF",
+            "-DBUILD_TESTING=OFF",
+            "-DBASCLOUDAPI_BUILD_PYTHON=ON",
+            "-DBASCLOUDAPI_BUILD_TESTS=OFF", # BAScloud configs, the following stuff we dont need for building the python package
+            "-DBASCLOUDAPI_BUILD_DOC=OFF",
+            "-DBASCLOUDAPI_BUILD_CODE_COVERAGE=OFF",
+            "-DBASCLOUDAPI_BUILD_EXAMPLES=OFF",
             #"--log-level=VERBOSE",
         ]
 
@@ -115,13 +116,13 @@ class CMakeBuild(build_ext):
 # The information here can also be placed in setup.cfg - better separation of
 # logic and declaration, and simpler if you include description/version in a file.
 setup(
-    name="pyBASCloudAPI",
-    version="0.1.1",
+    name="pyBAScloudAPI",
+    version="0.2.0",
     author="ProFM Facility & Project Management GmbH",
     author_email="info@profm-gmbh.de",
-    description="A Python package providing binding for the BASCloud API endpoints.",
-    long_description="pyBASCloudAPI is a Python packages which wraps the BASCloud REST API (v2.1) endpoints into an interface for programmers to easily use. Based on the C/C++ BASCloudAPI library.",
-    ext_modules=[CMakeExtension("pyBASCloudAPI")],
+    description="A Python package providing binding for the BAScloud API endpoints.",
+    long_description="pyBAScloudAPI is a Python packages which wraps the BAScloud REST API (v2.1) endpoints into an interface for programmers to easily use. Based on the C/C++ BAScloudAPI library.",
+    ext_modules=[CMakeExtension("pyBAScloudAPI")],
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False
 )

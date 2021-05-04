@@ -3,7 +3,7 @@
 #include <string>
 
 
-namespace BASCloud {
+namespace BAScloud {
 
 /** 
  * A Result structure representing API paging information.
@@ -52,9 +52,9 @@ struct PagingResult {
 };
 
 /** 
- * A User entity represents a API user of the BASCloud.
+ * A User entity represents a API user of the BAScloud.
  * 
- * A User can authenticate itself against the BASCloud API using an email and password combination.
+ * A User can authenticate itself against the BAScloud API using an email and password combination.
  * 
  * New User can be created using the static User method User::createUser().
  * 

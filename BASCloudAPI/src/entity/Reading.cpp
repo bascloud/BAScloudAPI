@@ -2,7 +2,7 @@
 #include "EntityContext.h"
 
 
-namespace BASCloud {
+namespace BAScloud {
 
 Reading::Reading(std::string API_UUID, std::string API_tenant_UUID, double value, std::time_t timestamp, std::time_t createdAt, std::time_t updatedAt, EntityContext* context) :
     Entity(API_UUID, context), EntityDateMixin(createdAt, updatedAt), EntityTenantMixin(API_tenant_UUID), value(value), timestamp(timestamp) {

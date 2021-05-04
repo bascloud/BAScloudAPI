@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.11-3.18)
 
 project(
-    BASCloudAPIProject
+    BAScloudAPIProject
     LANGUAGES CXX C)
 
 
@@ -38,20 +38,21 @@ set(CURL_CA_PATH "auto" CACHE INTERNAL "" FORCE)
 
 # Deactivate test building as tests are build for each cmake reconfigure due to FetchContent
 set(BUILD_TESTING OFF CACHE INTERNAL "" FORCE)
+set(CURL_DISABLE_TESTS ON)
 set(CPR_BUILD_TESTS OFF)
 set(CPR_BUILD_TESTS_SSL OFF)
 
 
 # Build options
-option(BASCloudAPI_BUILD_TESTS "Build library tests" ON)
-option(BASCloudAPI_BUILD_EXAMPLES "Build examples" OFF)
-option(BASCloudAPI_BUILD_DOC "Build documentation" OFF)
-option(BASCloudAPI_BUILD_PYTHON "Build library python bindings" ON)
-option(BASCloudAPI_BUILD_CODE_COVERAGE "Build code-coverage" OFF)
+option(BASCLOUDAPI_BUILD_TESTS "Build library tests" ON)
+option(BASCLOUDAPI_BUILD_EXAMPLES "Build examples" ON)
+option(BASCLOUDAPI_BUILD_DOC "Build documentation" OFF)
+option(BASCLOUDAPI_BUILD_PYTHON "Build library python bindings" ON)
+option(BASCLOUDAPI_BUILD_CODE_COVERAGE "Build code-coverage" OFF)
 
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-  set(BASCloudAPI_BUILD_CODE_COVERAGE OFF)
+  set(BASCLOUDAPI_BUILD_CODE_COVERAGE OFF)
   set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
   add_definitions(-DNOMINMAX)
   # Bug in cmake? needs to be defined else cmake config fails
@@ -62,7 +63,7 @@ else()
   include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/code-coverage.cmake)
 endif()
 
-if(BASCloudAPI_BUILD_CODE_COVERAGE)
+if(BASCLOUDAPI_BUILD_CODE_COVERAGE)
   set(CODE_COVERAGE ON)
 else()
   set(CODE_COVERAGE ON)
@@ -87,7 +88,7 @@ FetchContent_Declare(fmt
 FetchContent_MakeAvailable(fmt)
 
 # GTest configuration
-if(BASCloudAPI_BUILD_TESTS)
+if(BASCLOUDAPI_BUILD_TESTS)
   FetchContent_Declare(googletest
                         URL                    https://github.com/google/googletest/archive/release-1.10.0.tar.gz
                         URL_HASH               SHA256=9dc9157a9a1551ec7a7e43daea9a694a0bb5fb8bec81235d8a1e6ef64c716dcb # the file hash for release-1.10.0.tar.gz
@@ -134,22 +135,22 @@ if(NOT CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
   find_package(OpenSSL REQUIRED)
 endif()
 
-add_subdirectory(BASCloudAPI)
+add_subdirectory(BAScloudAPI)
 
-if(BASCloudAPI_BUILD_EXAMPLES)
+if(BASCLOUDAPI_BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()
 
-if(BASCloudAPI_BUILD_TESTS)
+if(BASCLOUDAPI_BUILD_TESTS)
     enable_testing()
-    add_subdirectory(test)
+    add_subdirectory(tests)
 endif()
 
-if(BASCloudAPI_BUILD_PYTHON)
+if(BASCLOUDAPI_BUILD_PYTHON)
   add_subdirectory(pybind11)
-  pybind11_add_module(pyBASCloudAPI pyBASCloudAPI/src/main.cpp)
+  pybind11_add_module(pyBAScloudAPI pyBAScloudAPI/src/main.cpp)
   
-  target_link_libraries(pyBASCloudAPI PRIVATE BASCloudAPI 
+  target_link_libraries(pyBAScloudAPI PRIVATE BAScloudAPI 
     fmt::fmt
     nlohmann_json::nlohmann_json 
     $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:OpenSSL::Crypto>

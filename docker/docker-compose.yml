@@ -1,0 +1,13 @@
+version: '3.2'
+services:
+  bascloud-notebook:
+    image: profm/bascloud-notebook
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile
+    ports:
+      - 8888:8888
+    volumes:
+      - user-notebooks:/notebook/persistent
+volumes:
+  user-notebooks:

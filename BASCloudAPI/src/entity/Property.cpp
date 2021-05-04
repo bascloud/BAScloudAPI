@@ -2,7 +2,7 @@
 #include "EntityContext.h"
 
 
-namespace BASCloud {
+namespace BAScloud {
 
 Property::Property(std::string API_UUID, std::string API_tenant_UUID, std::string name, std::string street, std::string postalCode, std::string city, std::string country, std::time_t createdAt, std::time_t updatedAt, EntityContext* context) : 
     Entity(API_UUID, context), EntityDateMixin(createdAt, updatedAt), EntityTenantMixin(API_tenant_UUID), name(name), street(street), postal_code(postalCode), city(city), country(country) {

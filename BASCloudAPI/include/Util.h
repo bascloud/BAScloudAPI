@@ -6,10 +6,10 @@
 #include <chrono>
 #include <iomanip>
 
-namespace BASCloud {
+namespace BAScloud {
 
     /** 
-     * Util class providing various utility functions for handling BASCloud request and responses.
+     * Util class providing various utility functions for handling BAScloud request and responses.
      */
     class Util {
 

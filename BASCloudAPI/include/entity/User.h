@@ -8,14 +8,14 @@
 #include "EntityCollection.h"
 
 
-namespace BASCloud {
+namespace BAScloud {
 
 class Tenant;
 
 /** 
- * A User entity represents a API user of the BASCloud.
+ * A User entity represents a API user of the BAScloud.
  * 
- * A User can authenticate itself against the BASCloud API using an email and password combination.
+ * A User can authenticate itself against the BAScloud API using an email and password combination.
  * 
  * New User can be created using the static User method User::createUser().
  * 
@@ -34,15 +34,15 @@ class User : public Entity, public EntityDateMixin {
 /**
   * User constructor
   *
-  * Creates a User object representing a BASCloud API entity.
+  * Creates a User object representing a BAScloud API entity.
   *
-  * Note: Creating an entity object over its constructor does not automatically create the entity in the BASCloud. 
-  * For creation of a BASCloud entity use the static method of the corresponding object class User::createUser().
+  * Note: Creating an entity object over its constructor does not automatically create the entity in the BAScloud. 
+  * For creation of a BAScloud entity use the static method of the corresponding object class User::createUser().
   *
-  * @param API_UUID Universally unique identifier of the represented BASCloud User.
+  * @param API_UUID Universally unique identifier of the represented BAScloud User.
   * @param email Email address of the User.
-  * @param createdAt Datetime describing the creation of the User entity in the BASCloud.
-  * @param updatedAt Datetime describing the last update of the User information in the BASCloud.
+  * @param createdAt Datetime describing the creation of the User entity in the BAScloud.
+  * @param updatedAt Datetime describing the last update of the User information in the BAScloud.
   * @param context EntityContext proving an abstracted context for accessing the API functions.
   */
   User(std::string API_UUID, std::string email, std::time_t createdAt, std::time_t updatedAt, EntityContext* context);
@@ -50,7 +50,7 @@ class User : public Entity, public EntityDateMixin {
 // /**
 //   * Incomplete User constructor
 //   *
-//   * Creates an incomplete User object representing a failed request result for a BASCloud API entity.
+//   * Creates an incomplete User object representing a failed request result for a BAScloud API entity.
 //   * 
 //   * CAUTION: All User attributes are empty, no context is available. Evoking methods on an incomplete entity object will throw
 //   * null pointer exception due to empty context. Check wherever an entity is incomplete through isIncomplete().
@@ -73,7 +73,7 @@ class User : public Entity, public EntityDateMixin {
    /**
     * Request a single User entity.
     * 
-    * A User is uniquely identified by a BASCloud Tenant UUID.
+    * A User is uniquely identified by a BAScloud Tenant UUID.
     * 
     * @throws ServerError
     * @throws ConnectionError
@@ -83,10 +83,10 @@ class User : public Entity, public EntityDateMixin {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_UUID UUID of the BASCloud User.
+    * @param API_UUID UUID of the BAScloud User.
     * @param context EntityContext proving an abstracted context for accessing the API functions.
     * 
-    * @return A User object representing the BASCloud User with the specified UUID.
+    * @return A User object representing the BAScloud User with the specified UUID.
     */
   static User getUser(std::string API_UUID, EntityContext* context);
 
@@ -124,14 +124,14 @@ class User : public Entity, public EntityDateMixin {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @return A Tenant object representing the BASCloud Tenant associated with the User.
+    * @return A Tenant object representing the BAScloud Tenant associated with the User.
     */
   Tenant getAssociatedTenant();
 
    /**
     * Request a password reset for the User.
     * 
-    * If the User exists in the BASCloud, an email is sent upon the request containing a reset token.
+    * If the User exists in the BAScloud, an email is sent upon the request containing a reset token.
     * The received token can then be used in User::updatePassword() to change the User password to a new value.
     * 
     * @throws ServerError
@@ -158,13 +158,13 @@ class User : public Entity, public EntityDateMixin {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param reset_token Valid reset token received from the BASCloud upon User::resetPassword() request.
+    * @param reset_token Valid reset token received from the BAScloud upon User::resetPassword() request.
     * @param new_password New password value for the User.
     */
   void updatePassword(std::string reset_token, std::string new_password);
   
   /**
-    * Create a new User entity in the BASCloud.
+    * Create a new User entity in the BAScloud.
     * 
     * A new User is created using the given email and password combination.
     * 
@@ -182,14 +182,14 @@ class User : public Entity, public EntityDateMixin {
     * @param password Password of the new User.
     * @param context EntityContext proving an abstracted context for accessing the API functions.
     * 
-    * @return User entity object representing the newly created BASCloud User.
+    * @return User entity object representing the newly created BAScloud User.
     */
   static User createUser(std::string email, std::string password, EntityContext* context);
 
   /**
-    * Deletes an existing User in the BASCloud. [Admin] 
+    * Deletes an existing User in the BAScloud. [Admin] 
     * 
-    * The request deletes a User entity in the BASCloud based on the given User UUID. 
+    * The request deletes a User entity in the BAScloud based on the given User UUID. 
     * This operation needs administration authority.
     * 
     * @throws ServerError
@@ -200,13 +200,13 @@ class User : public Entity, public EntityDateMixin {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_UUID UUID of the BASCloud User.
+    * @param API_UUID UUID of the BAScloud User.
     * @param context EntityContext proving an abstracted context for accessing the API functions.
     */
   static void deleteUser(std::string API_UUID, EntityContext* context);
 
   /**
-    * Updates the information of a User entity in the BASCloud. [Admin] 
+    * Updates the information of a User entity in the BAScloud. [Admin] 
     * 
     * All parameters are optional. This operation needs administration authority.
     * 
@@ -222,7 +222,7 @@ class User : public Entity, public EntityDateMixin {
     * @param context EntityContext proving an abstracted context for accessing the API functions.
     * @param email Optional new value for the User email.
     * 
-    * @return User entity object representing the updated BASCloud User.
+    * @return User entity object representing the updated BAScloud User.
     */
   static User updateUser(std::string API_UUID, EntityContext* context, std::string email={});
 

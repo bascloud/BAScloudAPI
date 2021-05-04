@@ -6,13 +6,13 @@
 #include "EntityContext.h"
 
 
-using namespace BASCloud;
+using namespace BAScloud;
 
 int main (int argc, char *argv[]) {
 
     std::cout << "Initialising library..."<< std::endl;
 
-    // Before accessing the BASCloud API, the correct API endpoint URL needs to be defined (Note: no trailing symbols, must end with TLD identifier)
+    // Before accessing the BAScloud API, the correct API endpoint URL needs to be defined (Note: no trailing symbols, must end with TLD identifier)
     EntityContext BCAPI("server_URL");
     std::cout << "\tOK." << std::endl;
 
@@ -20,7 +20,7 @@ int main (int argc, char *argv[]) {
     std::cout << "1. - Authentication with user login" << std::endl;
 
     /**
-     * All methods in the BASCloud API library potential throw different exceptions to signal a failure in the API request.
+     * All methods in the BAScloud API library potential throw different exceptions to signal a failure in the API request.
      * 
      * The following exceptions may be thrown:
      * 

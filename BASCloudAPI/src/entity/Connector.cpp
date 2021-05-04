@@ -2,7 +2,7 @@
 #include "EntityContext.h"
 
 
-namespace BASCloud {
+namespace BAScloud {
 
 Connector::Connector(std::string API_UUID, std::string API_tenant_UUID, std::string name, std::string apiKey, std::time_t createdAt, std::time_t updatedAt, EntityContext* context) : 
     Entity(API_UUID, context), EntityDateMixin(createdAt, updatedAt), EntityTenantMixin(API_tenant_UUID), name(name), api_key(apiKey) {

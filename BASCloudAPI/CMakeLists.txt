@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.11-3.18)
 
 
-project(BASCloudAPI
-        VERSION 0.1.1
-        DESCRIPTION "BASCloud API Library"
+project(BAScloudAPI
+        VERSION 0.2.0
+        DESCRIPTION "BAScloud API Library"
         LANGUAGES CXX C)
 
-add_library(BASCloudAPI 
+add_library(BAScloudAPI 
     include/APIContext.h include/EntityContext.h include/entity/Entity.h include/entity/EntityDateMixin.h 
     include/entity/EntityTenantMixin.h include/entity/SetPoint.h include/entity/Reading.h include/entity/Device.h 
     include/entity/Connector.h include/entity/Property.h include/entity/Tenant.h include/entity/User.h
@@ -14,11 +14,11 @@ add_library(BASCloudAPI
     src/APIContext.cpp src/EntityContext.cpp src/entity/User.cpp src/entity/Tenant.cpp src/entity/Property.cpp 
     src/entity/Connector.cpp src/entity/Device.cpp src/entity/Reading.cpp src/entity/SetPoint.cpp)
 
-if(BASCloudAPI_BUILD_CODE_COVERAGE)
-    target_code_coverage(BASCloudAPI)
+if(BAScloudAPI_BUILD_CODE_COVERAGE)
+    target_code_coverage(BAScloudAPI)
 endif()
 
-target_link_libraries(BASCloudAPI
+target_link_libraries(BAScloudAPI
     PRIVATE 
     $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:OpenSSL::Crypto>
     cpr::cpr
@@ -31,4 +31,4 @@ target_include_directories(${PROJECT_NAME}
 
 # Tell compiler to use C++20 features. The code doesn't actually use any of them.
 # ML: removed for now, needs cross platform handling
-target_compile_features(BASCloudAPI PUBLIC cxx_std_14)
+target_compile_features(BAScloudAPI PUBLIC cxx_std_14)

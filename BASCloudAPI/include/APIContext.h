@@ -9,12 +9,12 @@ using json = nlohmann::json;
 #include <cpr/cpr.h>
 
 
-namespace BASCloud {
+namespace BAScloud {
 
 /** 
- * BASCloud API context is a 1:1 implementation of the unabstracted API endpoints.
+ * BAScloud API context is a 1:1 implementation of the unabstracted API endpoints.
  * 
- * Methods in this class directly request the corresponding BASCloud API endpoint and 
+ * Methods in this class directly request the corresponding BAScloud API endpoint and 
  * return its unmodified response e.g. including error responses and raw JSON formatted response data.
  * 
  * It is recommended to use the abstracted class EntityContext which already handles error responses and JSON data parsing. 
@@ -26,7 +26,7 @@ class APIContext {
  private:
 
    /**
-	 * URL of the BASCloud API server. 
+	 * URL of the BAScloud API server. 
 	 * URL should include protocol defintions e.g. http:// or https://.
 	 */
  	std::string API_server_URL;
@@ -42,7 +42,7 @@ class APIContext {
    /**
 	 * API Endpoint URL paths.
 	 * 
-	 * Relative paths to the API_server_URL for the different resource endpoints of the BASCloud API.
+	 * Relative paths to the API_server_URL for the different resource endpoints of the BAScloud API.
 	 * 
 	 * Note: Adminstration resources are included which may not be possible to access without special authority.
 	 */
@@ -111,25 +111,25 @@ class APIContext {
 	/**
 	 * APIContext constructor
 	 *
-	 * Creates an APIContext object providing methods for accessing BASCloud API endpoints and their raw response data.
+	 * Creates an APIContext object providing methods for accessing BAScloud API endpoints and their raw response data.
 	 *
-	 * @param API_server_URL HTTP/S URL of the BASCloud API instance.
+	 * @param API_server_URL HTTP/S URL of the BAScloud API instance.
 	 */
 	APIContext(std::string API_server_URL);
 
 	/**
-	 * Set the URL of the BASCloud API instance.
+	 * Set the URL of the BAScloud API instance.
 	 *
 	 * URL should include protocol defintions e.g. http:// or https://.
 	 *
-	 * @param API_server_URL HTTP/S URL of the BASCloud API instance.
+	 * @param API_server_URL HTTP/S URL of the BAScloud API instance.
 	 */
 	void setAPIURL(std::string API_server_URL);
 
 	/**
-	 * Get the currently used URL of the BASCloud API instance.
+	 * Get the currently used URL of the BAScloud API instance.
 	 *
-	 * @return HTTP/S URL of the BASCloud API instance.
+	 * @return HTTP/S URL of the BAScloud API instance.
 	 */
 	std::string getAPIURL();
 
@@ -432,7 +432,7 @@ class APIContext {
    /**
     * Requests the creation a new property.
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant.
     * @param name Name of the property.
     * @param street Street of the property address.
     * @param postalCode Postal code of the property address.
@@ -446,8 +446,8 @@ class APIContext {
    /**
     * Requests the update an existing property.
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant of the property.
-    * @param API_property_UUID UUID of the existing BASCloud property that is supposed to be updated.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the property.
+    * @param API_property_UUID UUID of the existing BAScloud property that is supposed to be updated.
     * @param name Optional new value for the name of the Device.
     * @param street Optional new value for the street of the property address.
     * @param postalCode Optional new value for the postal code of the property address.
@@ -461,8 +461,8 @@ class APIContext {
    /**
     * Requests the deletion of an existing property.
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud tenant of the property.
-    * @param API_property_UUID UUID of the existing BASCloud property that is supposed to be deleted.
+    * @param API_tenant_UUID UUID of the associated BAScloud tenant of the property.
+    * @param API_property_UUID UUID of the existing BAScloud property that is supposed to be deleted.
 	* 
     */
 	cpr::Response requestDeleteProperty(std::string API_tenant_UUID, std::string API_property_UUID);
@@ -537,8 +537,8 @@ class APIContext {
    /**
     * Requests the creation a new connector.
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant.
-    * @param API_property_UUID UUID of the associated BASCloud property.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant.
+    * @param API_property_UUID UUID of the associated BAScloud property.
     * @param name Name of the connector.
     * 
     * @return cpr::Response object representing the raw request response.
@@ -548,8 +548,8 @@ class APIContext {
    /**
     * Requests the update of an existing connector.
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant.
-    * @param API_connector_UUID UUID of the BASCloud connector.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant.
+    * @param API_connector_UUID UUID of the BAScloud connector.
     * @param name Optional update of the name of the connector.
     * 
     * @return cpr::Response object representing the raw request response.
@@ -559,8 +559,8 @@ class APIContext {
    /**
     * Requests the deletion of an existing connector.
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud tenant of the property.
-    * @param API_connector_UUID UUID of the existing BASCloud connector that is supposed to be deleted.
+    * @param API_tenant_UUID UUID of the associated BAScloud tenant of the property.
+    * @param API_connector_UUID UUID of the existing BAScloud connector that is supposed to be deleted.
 	* 
     * @return cpr::Response object representing the raw request response.
     */
@@ -569,8 +569,8 @@ class APIContext {
    /**
     * Requests a new API key for a connector entity.
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud tenant.
-    * @param API_connector_UUID UUID of a BASCloud connector for which the API key is requested.
+    * @param API_tenant_UUID UUID of the associated BAScloud tenant.
+    * @param API_connector_UUID UUID of a BAScloud connector for which the API key is requested.
 	* 
     * @return cpr::Response object representing the raw request response.
     */

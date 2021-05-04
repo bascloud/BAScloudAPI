@@ -24,16 +24,16 @@
 
 namespace py = pybind11;
 
-using namespace BASCloud;
+using namespace BAScloud;
 
 
-PYBIND11_MODULE(pyBASCloudAPI, m) {
+PYBIND11_MODULE(pyBAScloudAPI, m) {
     m.doc() = R"pbdoc(
 
-        BASCloud API bindings
+        BAScloud API bindings
         -----------------------
 
-        .. currentmodule:: pyBASCloudAPI
+        .. currentmodule:: pyBAScloudAPI
 
         .. autosummary::
            :toctree: _generate
@@ -144,7 +144,7 @@ PYBIND11_MODULE(pyBASCloudAPI, m) {
                 EntityContext.
             )pbdoc", py::arg("apiServerURL"))
         .def("authenticateWithUserLogin", &EntityContext::authenticateWithUserLogin, R"pbdoc(
-                Authenticate a user against the BASCloud API.
+                Authenticate a user against the BAScloud API.
             )pbdoc", py::arg("email"), py::arg("password"))
         .def("authenticateWithConnectorToken", &EntityContext::authenticateWithConnectorToken, R"pbdoc(
                 Authenticate a connector using a valid connector token.
@@ -184,7 +184,7 @@ PYBIND11_MODULE(pyBASCloudAPI, m) {
                 Authenticate with user login.
             )pbdoc", py::arg("userUUID"), py::arg("email"))
         .def("deleteUser", &EntityContext::deleteUser, R"pbdoc(
-                Deletes an existing User in the BASCloud. [Admin] 
+                Deletes an existing User in the BAScloud. [Admin] 
             )pbdoc", py::arg("userUUID"))
 
         .def("getTenant", &EntityContext::getTenant, R"pbdoc(
@@ -197,13 +197,13 @@ PYBIND11_MODULE(pyBASCloudAPI, m) {
                 Get a collection of associated User entities of the Tenant.
             )pbdoc", py::arg("tenantUUID"), py::arg("paging")=PagingOption(), py::arg("errorHandler")=py::cpp_function([](std::exception& e, json& j){},py::arg("e"), py::arg("json")))
         .def("createTenant", &EntityContext::createTenant, R"pbdoc(
-                Creates a new Tenant entity in the BASCloud. [Admin] 
+                Creates a new Tenant entity in the BAScloud. [Admin] 
             )pbdoc", py::arg("name"), py::arg("userUUID"))
         .def("deleteTenant", &EntityContext::deleteTenant, R"pbdoc(
-                Deletes an existing Tenant in the BASCloud. [Admin] 
+                Deletes an existing Tenant in the BAScloud. [Admin] 
             )pbdoc", py::arg("tenantUUID"))
         .def("updateTenant", &EntityContext::updateTenant, R"pbdoc(
-                Updates the information of a Tenant entity in the BASCloud. [Admin] 
+                Updates the information of a Tenant entity in the BAScloud. [Admin] 
             )pbdoc", py::arg("tenantUUID"), py::arg("name")="")
         .def("assignTenantUsers", &EntityContext::assignTenantUsers, R"pbdoc(
                 Assigns a collection of User entities to a Tenant. [Admin] 
@@ -223,14 +223,14 @@ PYBIND11_MODULE(pyBASCloudAPI, m) {
                 Get a collection of associated Connector entities of a Property.
             )pbdoc", py::arg("tenantUUID"), py::arg("propertyUUID"), py::arg("paging")=PagingOption(), py::arg("errorHandler")=py::cpp_function([](std::exception& e, json& j){},py::arg("e"), py::arg("json")))
         .def("createProperty", &EntityContext::createProperty, R"pbdoc(
-                Create a new Property entity in the BASCloud.
+                Create a new Property entity in the BAScloud.
             )pbdoc", py::arg("tenantUUID"), py::arg("name"), py::arg("street"), 
             py::arg("postalCode"), py::arg("city"), py::arg("country"))
         .def("deleteProperty", &EntityContext::deleteProperty, R"pbdoc(
-                Deletes an existing Property in the BASCloud.
+                Deletes an existing Property in the BAScloud.
             )pbdoc", py::arg("tenantUUID"), py::arg("propertyUUID"))
         .def("updateProperty", &EntityContext::updateProperty, R"pbdoc(
-                Update an existing Property in the BASCloud.
+                Update an existing Property in the BAScloud.
             )pbdoc", py::arg("tenantUUID"), py::arg("propertyUUID"), py::arg("name")="", py::arg("street")="", 
             py::arg("postalCode")="", py::arg("city")="", py::arg("country")="")
 
@@ -247,13 +247,13 @@ PYBIND11_MODULE(pyBASCloudAPI, m) {
                 Get the associated Device entities of the Connector.
             )pbdoc", py::arg("tenantUUID"), py::arg("connectorUUID"), py::arg("paging")=PagingOption(), py::arg("errorHandler")=py::cpp_function([](std::exception& e, json& j){},py::arg("e"), py::arg("json")))
         .def("createConnector", &EntityContext::createConnector, R"pbdoc(
-                Create a new Connector entity in the BASCloud.
+                Create a new Connector entity in the BAScloud.
             )pbdoc", py::arg("tenantUUID"), py::arg("connectorUUID"), py::arg("name"))
         .def("deleteConnector", &EntityContext::deleteConnector, R"pbdoc(
-                Deletes an existing Connector in the BASCloud.
+                Deletes an existing Connector in the BAScloud.
             )pbdoc", py::arg("tenantUUID"), py::arg("connectorUUID"))
         .def("updateConnector", &EntityContext::updateConnector, R"pbdoc(
-                Update an existing Connector in the BASCloud.
+                Update an existing Connector in the BAScloud.
             )pbdoc", py::arg("tenantUUID"), py::arg("connectorUUID"), py::arg("name")="")
         .def("getNewConnectorAuthToken", &EntityContext::getNewConnectorAuthToken, R"pbdoc(
                 Requests a new API key for a Connector entity.
@@ -276,14 +276,14 @@ PYBIND11_MODULE(pyBASCloudAPI, m) {
                 Get a collection of associated Reading entities of the Device.
             )pbdoc", py::arg("tenantUUID"), py::arg("deviceUUID"), py::arg("paging")=PagingOption(), py::arg("errorHandler")=py::cpp_function([](std::exception& e, json& j){},py::arg("e"), py::arg("json")))
         .def("createDevice", &EntityContext::createDevice, R"pbdoc(
-                Create a new Device entity in the BASCloud.
+                Create a new Device entity in the BAScloud.
             )pbdoc", py::arg("tenantUUID"), py::arg("connectorUUID"), py::arg("aksID"), py::arg("description"), 
             py::arg("unit"))
         .def("deleteDevice", &EntityContext::deleteDevice, R"pbdoc(
-                Deletes an existing Device in the BASCloud.
+                Deletes an existing Device in the BAScloud.
             )pbdoc", py::arg("tenantUUID"), py::arg("deviceUUID"))
         .def("updateDevice", &EntityContext::updateDevice, R"pbdoc(
-                Update an existing Device in the BASCloud.
+                Update an existing Device in the BAScloud.
             )pbdoc", py::arg("tenantUUID"), py::arg("deviceUUID"), py::arg("aksID")="", py::arg("description")="", 
             py::arg("unit")="")
             
@@ -292,16 +292,16 @@ PYBIND11_MODULE(pyBASCloudAPI, m) {
             )pbdoc", py::arg("tenantUUID"), py::arg("readingUUID"))
         .def("getReadingsCollection", &EntityContext::getReadingsCollection, R"pbdoc(
                 Request a collection of Reading entities grouped under the given Tenant.
-            )pbdoc", py::arg("tenantUUID"), py::arg("paging")=PagingOption(), py::arg("from")=-1, py::arg("until")=-1, 
+            )pbdoc", py::arg("tenantUUID"), py::arg("paging")=PagingOption(), py::arg("from_")=-1, py::arg("until")=-1, 
             py::arg("timestamp")=-1, py::arg("value")=std::numeric_limits<double>::quiet_NaN(), py::arg("deviceUUID")="", py::arg("errorHandler")=py::cpp_function([](std::exception& e, json& j){},py::arg("e"), py::arg("json")))
         .def("getAssociatedDevice", &EntityContext::getAssociatedDevice, R"pbdoc(
                 Get the associated Device entity of the Reading.
             )pbdoc", py::arg("tenantUUID"), py::arg("readingUUID"))
         .def("createReading", &EntityContext::createReading, R"pbdoc(
-                Create a new Reading entity in the BASCloud.
+                Create a new Reading entity in the BAScloud.
             )pbdoc", py::arg("tenantUUID"), py::arg("deviceUUID"), py::arg("value"), py::arg("timestamp"))
         .def("deleteReading", &EntityContext::deleteReading, R"pbdoc(
-                Deletes an existing Reading in the BASCloud. [Admin] 
+                Deletes an existing Reading in the BAScloud. [Admin] 
             )pbdoc", py::arg("tenantUUID"), py::arg("readingUUID"))
             
         .def("getSetPoint", &EntityContext::getSetPoint, R"pbdoc(
@@ -309,10 +309,10 @@ PYBIND11_MODULE(pyBASCloudAPI, m) {
             )pbdoc", py::arg("tenantUUID"), py::arg("setpointUUID"))
         .def("getSetPointsCollection", &EntityContext::getSetPointsCollection, R"pbdoc(
                 Request a collection of SetPoint entities grouped under the given Tenant.
-            )pbdoc", py::arg("tenantUUID"), py::arg("paging")=PagingOption(), py::arg("from")=-1, py::arg("until")=-1, 
+            )pbdoc", py::arg("tenantUUID"), py::arg("paging")=PagingOption(), py::arg("from_")=-1, py::arg("until")=-1, 
             py::arg("timestamp")=-1, py::arg("currentTime")=-1, py::arg("deviceUUID")="", py::arg("errorHandler")=py::cpp_function([](std::exception& e, json& j){},py::arg("e"), py::arg("json")))
         .def("createSetPoint", &EntityContext::createSetPoint, R"pbdoc(
-                Create a new SetPoint entity in the BASCloud.
+                Create a new SetPoint entity in the BAScloud.
             )pbdoc", py::arg("tenantUUID"), py::arg("deviceUUID"), py::arg("value"), py::arg("timestamp"));
 
 
@@ -321,11 +321,11 @@ PYBIND11_MODULE(pyBASCloudAPI, m) {
                 APIContext constructor.
             )pbdoc", py::arg("apiServerURL"))
         .def("setAPIURL", &APIContext::setAPIURL, R"pbdoc(
-                Set the URL of the BASCloud API instance.
+                Set the URL of the BAScloud API instance.
             )pbdoc", py::arg("apiServerURL"))
 
         .def("getAPIURL", &APIContext::getAPIURL, R"pbdoc(
-                Get the currently used URL of the BASCloud API instance.
+                Get the currently used URL of the BAScloud API instance.
             )pbdoc")
         .def("setToken", &APIContext::setToken, R"pbdoc(
                 Set the authentication token.
@@ -413,10 +413,10 @@ PYBIND11_MODULE(pyBASCloudAPI, m) {
             )pbdoc", py::arg("tenantUUID"), py::arg("name"), py::arg("street"), 
             py::arg("postalCode"), py::arg("city"), py::arg("country"))
         .def("requestDeleteProperty", &APIContext::requestDeleteProperty, R"pbdoc(
-                Deletes an existing Property in the BASCloud.
+                Deletes an existing Property in the BAScloud.
             )pbdoc", py::arg("tenantUUID"), py::arg("propertyUUID"))
         .def("requestUpdateProperty", &APIContext::requestUpdateProperty, R"pbdoc(
-                Update an existing Property in the BASCloud.
+                Update an existing Property in the BAScloud.
             )pbdoc", py::arg("tenantUUID"), py::arg("propertyUUID"), py::arg("name")="", py::arg("street")="", 
             py::arg("postalCode")="", py::arg("city")="", py::arg("country")="")
 
@@ -493,7 +493,7 @@ PYBIND11_MODULE(pyBASCloudAPI, m) {
             )pbdoc", py::arg("tenantUUID"), py::arg("readingUUID"))
         .def("requestReadingCollection", &APIContext::requestReadingCollection, R"pbdoc(
                 Request a reading collection with optional filters.
-            )pbdoc", py::arg("tenantUUID"), py::arg("from")=-1, py::arg("until")=-1, 
+            )pbdoc", py::arg("tenantUUID"), py::arg("from_")=-1, py::arg("until")=-1, 
             py::arg("timestamp")=-1, py::arg("value")=std::numeric_limits<double>::quiet_NaN(), py::arg("deviceUUID")="", py::arg("pageSize")=-1, py::arg("pageBefore")="", py::arg("pageAfter")="")
         .def("requestReadingDeviceRelationship", &APIContext::requestReadingDeviceRelationship, R"pbdoc(
                 Request the device releationship of a given reading.
@@ -513,7 +513,7 @@ PYBIND11_MODULE(pyBASCloudAPI, m) {
             )pbdoc", py::arg("tenantUUID"), py::arg("setpointUUID"))
         .def("requestSetPointCollection", &APIContext::requestSetPointCollection, R"pbdoc(
                 Request a setpoint collection with optional filters.
-            )pbdoc", py::arg("tenantUUID"), py::arg("from")=-1, py::arg("until")=-1, 
+            )pbdoc", py::arg("tenantUUID"), py::arg("from_")=-1, py::arg("until")=-1, 
             py::arg("timestamp")=-1, py::arg("currentTime")=-1, py::arg("deviceUUID")="", py::arg("pageSize")=-1, py::arg("pageBefore")="", py::arg("pageAfter")="")
         .def("requestCreateSetPoint", &APIContext::requestCreateSetPoint, R"pbdoc(
                 Request the creation of a new setpoint entity given an associated device.
@@ -529,46 +529,48 @@ PYBIND11_MODULE(pyBASCloudAPI, m) {
             )pbdoc", py::arg("url"));
 
 
-    py::class_<ServerError>(m, "ServerError")
-        .def(py::init<const std::string&>(), R"pbdoc(
-                ServerError exception.
-            )pbdoc", py::arg("message"));
+    py::register_exception<ServerError>(m, "ServerError", PyExc_RuntimeError);
+    py::register_exception<ConnectionError>(m, "ConnectionError", PyExc_RuntimeError);
+    py::register_exception<NotFoundRequest>(m, "NotFoundRequest", PyExc_RuntimeError);
+    py::register_exception<BadRequest>(m, "BadRequest", PyExc_RuntimeError);
+    py::register_exception<ConflictRequest>(m, "ConflictRequest", PyExc_RuntimeError);
+    py::register_exception<UnauthorizedRequest>(m, "UnauthorizedRequest", PyExc_RuntimeError);
+    py::register_exception<InvalidResponse>(m, "InvalidResponse", PyExc_RuntimeError);
 
-    py::class_<ConnectionError>(m, "ConnectionError")
-        .def(py::init<const std::string&>(), R"pbdoc(
-                ConnectionError exception.
-            )pbdoc", py::arg("message"));
+    // py::class_<ServerError>(m, "ServerError")
+    //     .def(py::init<const std::string&>(), R"pbdoc(
+    //             ServerError exception.
+    //         )pbdoc", py::arg("message"));
 
-    py::class_<NotFoundRequest>(m, "NotFoundRequest")
-        .def(py::init<const std::string&>(), R"pbdoc(
-                NotFoundRequest exception.
-            )pbdoc", py::arg("message"));
+    // py::class_<ConnectionError>(m, "ConnectionError")
+    //     .def(py::init<const std::string&>(), R"pbdoc(
+    //             ConnectionError exception.
+    //         )pbdoc", py::arg("message"));
 
-    py::class_<BadRequest>(m, "BadRequest")
-        .def(py::init<const std::string&>(), R"pbdoc(
-                BadRequest exception.
-            )pbdoc", py::arg("message"));
+    // py::class_<NotFoundRequest>(m, "NotFoundRequest")
+    //     .def(py::init<const std::string&>(), R"pbdoc(
+    //             NotFoundRequest exception.
+    //         )pbdoc", py::arg("message"));
 
-    py::class_<ConflictRequest>(m, "ConflictRequest")
-        .def(py::init<const std::string&>(), R"pbdoc(
-                ConflictRequest exception.
-            )pbdoc", py::arg("message"));
+    // py::class_<BadRequest>(m, "BadRequest")
+    //     .def(py::init<const std::string&>(), R"pbdoc(
+    //             BadRequest exception.
+    //         )pbdoc", py::arg("message"));
 
-    py::class_<UnauthorizedRequest>(m, "UnauthorizedRequest")
-        .def(py::init<const std::string&>(), R"pbdoc(
-                UnauthorizedRequest exception.
-            )pbdoc", py::arg("message"));
+    // py::class_<ConflictRequest>(m, "ConflictRequest")
+    //     .def(py::init<const std::string&>(), R"pbdoc(
+    //             ConflictRequest exception.
+    //         )pbdoc", py::arg("message"));
 
-    py::class_<InvalidResponse>(m, "InvalidResponse")
-        .def(py::init<const std::string&>(), R"pbdoc(
-                InvalidResponse exception.
-            )pbdoc", py::arg("message"));
+    // py::class_<UnauthorizedRequest>(m, "UnauthorizedRequest")
+    //     .def(py::init<const std::string&>(), R"pbdoc(
+    //             UnauthorizedRequest exception.
+    //         )pbdoc", py::arg("message"));
 
-    // m.def("subtract", [](int i, int j) { return i - j; }, R"pbdoc(
-    //     Subtract two numbers
-
-    //     Some other explanation about the subtract function.
-    // )pbdoc");
+    // py::class_<InvalidResponse>(m, "InvalidResponse")
+    //     .def(py::init<const std::string&>(), R"pbdoc(
+    //             InvalidResponse exception.
+    //         )pbdoc", py::arg("message"));
 
 
 #ifdef VERSION_INFO

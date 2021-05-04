@@ -11,7 +11,7 @@
 #include "error/Exceptions.h"
 
 
-using namespace BASCloud;
+using namespace BAScloud;
 
 EntityContext BCAPI(BASCLOUD_TEST_URL);
 

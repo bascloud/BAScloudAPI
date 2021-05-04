@@ -2,7 +2,7 @@
 
 import datetime
 
-import pyBASCloudAPI as api
+import pyBAScloudAPI as api
 
 
 def printErrorHandler(exception, json):
@@ -23,13 +23,13 @@ print("Demo of library methods for BAScloud API endpoints.")
 
 print("Initialising library...")
 
-BCAPI = api.EntityContext("server_URL")
+BCAPI = api.EntityContext("https://basc-prd-apm-euw.azure-api.net/v2")
 
 print("\tOK.")
 
 print("1. - Authentication with user login")
 
-BCAPI.authenticateWithUserLogin(email="user_email", password="user_password")
+BCAPI.authenticateWithUserLogin(email="erhardt@profm-gmbh.de", password="Dont4get$1")
 print("\tOK.")
 print("\tAuthenticated: ", BCAPI.isAuthenticated())
 print("\tToken valid until: ", datetime.datetime.fromtimestamp(BCAPI.getTokenExpirationDate()))
@@ -260,10 +260,10 @@ print("\tNew connector UUID: ", new_connector.uuid)
 
 print("\tRequesting new API key for created connector...")
 
-apiKey = BCAPI.getNewConnectorAPIKey(tenant.uuid, new_connector.uuid)
+connectorToken = BCAPI.getNewConnectorAuthToken(tenant.uuid, new_connector.uuid)
 print("\t\tOK.")
 
-print("\tConnector API Key: ", apiKey)
+print("\tConnector Auth. Token: ", connectorToken)
 
 print("\tRequesting newly created connector with UUID...")
 

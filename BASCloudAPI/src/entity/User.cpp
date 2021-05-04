@@ -3,7 +3,7 @@
 #include "EntityContext.h"
 
 
-namespace BASCloud {
+namespace BAScloud {
 
 User::User(std::string API_UUID, std::string email, std::time_t createdAt, std::time_t updatedAt, EntityContext* context) : 
     Entity(API_UUID, context), EntityDateMixin(createdAt, updatedAt), email(email) {

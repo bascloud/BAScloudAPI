@@ -16,7 +16,7 @@
 
 /* Demo test application */
 
-using namespace BASCloud;
+using namespace BAScloud;
 
 int main (int argc, char *argv[]) {
 
@@ -25,14 +25,14 @@ int main (int argc, char *argv[]) {
 
     std::cout << "Initialising library..."<< std::endl;
 
-    EntityContext BCAPI("server_URL");
+    EntityContext BCAPI("https://basc-prd-apm-euw.azure-api.net/v2");
 
     std::cout << "\tOK." << std::endl;
 
 
     std::cout << "1. - Authentication with user login" << std::endl;
 
-        BCAPI.authenticateWithUserLogin("user_email", "user_password");
+        BCAPI.authenticateWithUserLogin("erhardt@profm-gmbh.de", "Dont4get$1");
         std::cout << "\tOK." << std::endl;
 
         std::cout << "\tAuthenticated: " << BCAPI.isAuthenticated() << std::endl;
@@ -304,10 +304,10 @@ int main (int argc, char *argv[]) {
 
         std::cout << "\tRequesting new API key for created connector..." << std::endl;
 
-        std::string apiKey = BCAPI.getNewConnectorAuthToken(tenant.getUUID(), new_connector.getUUID());
+        std::string connectorToken = BCAPI.getNewConnectorAuthToken(tenant.getUUID(), new_connector.getUUID());
         std::cout << "\t\tOK." << std::endl;
 
-        std::cout << "\tConnector API Key: " << apiKey << std::endl;
+        std::cout << "\tConnector Auth. Token: " << connectorToken << std::endl;
 
         std::cout << "\tRequesting newly created connector with UUID..." << std::endl;
 

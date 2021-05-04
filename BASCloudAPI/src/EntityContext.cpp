@@ -11,7 +11,7 @@
 #include "Util.h"
 
 
-namespace BASCloud {
+namespace BAScloud {
 
 EntityContext::EntityContext(std::string API_server_URL) : 
     api_context(APIContext(API_server_URL)), API_server_URL(API_server_URL), API_token(""), API_token_valid_until(-1) {
@@ -33,10 +33,10 @@ json EntityContext::parseResponse(cpr::Response response) {
         } catch (...) {
             if(response.text.find("Server Error") != std::string::npos) {
                 // May be possible the requests returns a server error, which is HTML, catch this here
-                throw ServerError("Server Error response received from the BASCloud API. Contact support if the error continues to occur.");
+                throw ServerError("Server Error response received from the BAScloud API. Contact support if the error continues to occur.");
             } else {
                 // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
-                std::throw_with_nested(InvalidResponse("Invalid response received from the BASCloud API. Response contained invalid JSON."));
+                std::throw_with_nested(InvalidResponse("Invalid response received from the BAScloud API. Response contained invalid JSON."));
             }
 
         }
@@ -48,18 +48,18 @@ json EntityContext::parseResponse(cpr::Response response) {
         // Throw predefined exceptions for error codes returned by the api
         switch(response.status_code) {
             case 400: 
-                throw BadRequest(fmt::format("400 Bad Request error response received from BASCloud API. {} {}", json_response["errors"][0]["title"], json_response["errors"][0]["detail"]));
+                throw BadRequest(fmt::format("400 Bad Request error response received from BAScloud API. {} {}", json_response["errors"][0]["title"], json_response["errors"][0]["detail"]));
             case 401: 
-                throw UnauthorizedRequest(fmt::format("401 Unauthorized error response received from BASCloud API. {}", json_response["errors"][0]["title"]));
+                throw UnauthorizedRequest(fmt::format("401 Unauthorized error response received from BAScloud API. {}", json_response["errors"][0]["title"]));
             case 404: 
                 if(json_response.contains("errors")) {
-                    throw NotFoundRequest(fmt::format("404 Not Found error response received from BASCloud API. {} {}", json_response["errors"][0]["title"], json_response["errors"][0]["detail"]));
+                    throw NotFoundRequest(fmt::format("404 Not Found error response received from BAScloud API. {} {}", json_response["errors"][0]["title"], json_response["errors"][0]["detail"]));
                 } else {
-                    throw NotFoundRequest("404 Not Found error response received from BASCloud API.");
+                    throw NotFoundRequest("404 Not Found error response received from BAScloud API.");
                 }
             case 409: 
-                throw ConflictRequest(fmt::format("409 Conflict error response received from BASCloud API. {} {}", json_response["errors"][0]["title"], json_response["errors"][0]["detail"]));
-            default: throw std::runtime_error(fmt::format("Unexpected HTTP error response received from the BASCloud API. Error: {} {}", response.status_code, HTTPCodeToPhrase(response.status_code)));
+                throw ConflictRequest(fmt::format("409 Conflict error response received from BAScloud API. {} {}", json_response["errors"][0]["title"], json_response["errors"][0]["detail"]));
+            default: throw std::runtime_error(fmt::format("Unexpected HTTP error response received from the BAScloud API. Error: {} {}", response.status_code, HTTPCodeToPhrase(response.status_code)));
         }
     } else {
         return json_response;
@@ -85,7 +85,7 @@ PagingResult EntityContext::parsePaging(json response) {
         }
     } catch (...) {
         // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
-        std::throw_with_nested(InvalidResponse("Invalid response received from the BASCloud API. Response did not contain expected paging data."));
+        std::throw_with_nested(InvalidResponse("Invalid response received from the BAScloud API. Response did not contain expected paging data."));
     }
 
     return pres;
@@ -144,11 +144,11 @@ void EntityContext::authenticateWithUserLogin(std::string API_email, std::string
             api_context.setToken(API_token);
         } catch (...) {
             // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
-            std::throw_with_nested(InvalidResponse("Invalid response received from the BASCloud API. Response did not contain expected data."));
+            std::throw_with_nested(InvalidResponse("Invalid response received from the BAScloud API. Response did not contain expected data."));
         }
     } else {
         // If no accesstoken is contained in the response data return invalid response
-        throw InvalidResponse("Invalid response received from the BASCloud API. Response did not contain an accesstoken.");
+        throw InvalidResponse("Invalid response received from the BAScloud API. Response did not contain an accesstoken.");
     }
 }
 
@@ -158,7 +158,9 @@ void EntityContext::authenticateWithConnectorToken(std::string API_connector_tok
     API_login_password = "";
     
     API_token = API_connector_token;
-    API_token_valid_until = std::numeric_limits<long>::max();
+    struct tm never = {};
+    never.tm_year=10000;
+    API_token_valid_until = mktime(&never);
 }
 
 
@@ -178,11 +180,11 @@ User EntityContext::createNewUser(std::string email, std::string password) {
             return user;
         } catch (...) {
             // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
-            std::throw_with_nested(InvalidResponse("Invalid response received from the BASCloud API. Response did not contain expected data."));
+            std::throw_with_nested(InvalidResponse("Invalid response received from the BAScloud API. Response did not contain expected data."));
         }
     } else {
         // If no user is contained in the response data return invalid response
-        throw InvalidResponse("Invalid response received from the BASCloud API. Response did not contain users data.");
+        throw InvalidResponse("Invalid response received from the BAScloud API. Response did not contain users data.");
     }
 }
 
@@ -224,11 +226,11 @@ User EntityContext::updateUser(std::string API_user_UUID, std::string email) {
             return user;
         } catch (...) {
             // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
-            std::throw_with_nested(InvalidResponse("Invalid response received from the BASCloud API. Response did not contain expected data."));
+            std::throw_with_nested(InvalidResponse("Invalid response received from the BAScloud API. Response did not contain expected data."));
         }
     } else {
         // If no user is contained in the response data return invalid response
-        throw InvalidResponse("Invalid response received from the BASCloud API. Response did not contain users data.");
+        throw InvalidResponse("Invalid response received from the BAScloud API. Response did not contain users data.");
     }
 }
 
@@ -261,11 +263,11 @@ User EntityContext::getUser(std::string API_user_UUID) {
             return user;
         } catch (...) {
             // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
-            std::throw_with_nested(InvalidResponse("Invalid response received from the BASCloud API. Response did not contain expected data."));
+            std::throw_with_nested(InvalidResponse("Invalid response received from the BAScloud API. Response did not contain expected data."));
         }
     } else {
         // If no user is contained in the response data return invalid response
-        throw InvalidResponse("Invalid response received from the BASCloud API. Response did not contain user data.");
+        throw InvalidResponse("Invalid response received from the BAScloud API. Response did not contain user data.");
     }
 }
 
@@ -310,11 +312,11 @@ Tenant EntityContext::getAssociatedTenant(std::string API_user_UUID) {
             return tenant;
         } catch (...) {
             // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
-            std::throw_with_nested(InvalidResponse("Invalid response received from the BASCloud API. Response did not contain expected data."));
+            std::throw_with_nested(InvalidResponse("Invalid response received from the BAScloud API. Response did not contain expected data."));
         }
     } else {
         // If no tenant is contained in the response data return invalid response
-        throw InvalidResponse("Invalid response received from the BASCloud API. Response did not contain tenant data.");
+        throw InvalidResponse("Invalid response received from the BAScloud API. Response did not contain tenant data.");
     }
 }
 
@@ -334,11 +336,11 @@ Tenant EntityContext::getTenant(std::string API_tenant_UUID) {
             return tenant;
         } catch (...) {
             // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
-            std::throw_with_nested(InvalidResponse("Invalid response received from the BASCloud API. Response did not contain expected data."));
+            std::throw_with_nested(InvalidResponse("Invalid response received from the BAScloud API. Response did not contain expected data."));
         }
     } else {
         // If no tenant is contained in the response data return invalid response
-        throw InvalidResponse("Invalid response received from the BASCloud API. Response did not contain user data.");
+        throw InvalidResponse("Invalid response received from the BAScloud API. Response did not contain user data.");
     }
 }
 
@@ -424,11 +426,11 @@ Tenant EntityContext::createTenant(std::string name, std::string API_user_UUID) 
             return tenant;
         } catch (...) {
             // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
-            std::throw_with_nested(InvalidResponse("Invalid response received from the BASCloud API. Response did not contain expected data."));
+            std::throw_with_nested(InvalidResponse("Invalid response received from the BAScloud API. Response did not contain expected data."));
         }
     } else {
         // If no tenant is contained in the response data return invalid response
-        throw InvalidResponse("Invalid response received from the BASCloud API. Response did not contain user data.");
+        throw InvalidResponse("Invalid response received from the BAScloud API. Response did not contain user data.");
     }
 }
 
@@ -460,11 +462,11 @@ Tenant EntityContext::updateTenant(std::string API_tenant_UUID, std::string name
             return tenant;
         } catch (...) {
             // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
-            std::throw_with_nested(InvalidResponse("Invalid response received from the BASCloud API. Response did not contain expected data."));
+            std::throw_with_nested(InvalidResponse("Invalid response received from the BAScloud API. Response did not contain expected data."));
         }
     } else {
         // If no tenant is contained in the response data return invalid response
-        throw InvalidResponse("Invalid response received from the BASCloud API. Response did not contain user data.");
+        throw InvalidResponse("Invalid response received from the BAScloud API. Response did not contain user data.");
     }
 }
 
@@ -517,11 +519,11 @@ Property EntityContext::getProperty(std::string API_tenant_UUID, std::string API
             return property;
         } catch (...) {
             // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
-            std::throw_with_nested(InvalidResponse("Invalid response received from the BASCloud API. Response did not contain expected data."));
+            std::throw_with_nested(InvalidResponse("Invalid response received from the BAScloud API. Response did not contain expected data."));
         }
     } else {
         // If no accesstoken is contained in the response data return invalid response
-        throw InvalidResponse("Invalid response received from the BASCloud API. Response did not contain user data.");
+        throw InvalidResponse("Invalid response received from the BAScloud API. Response did not contain user data.");
     }
 }
 
@@ -628,11 +630,11 @@ Property EntityContext::createProperty(std::string API_tenant_UUID, std::string 
             return prop;
         } catch (...) {
             // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
-            std::throw_with_nested(InvalidResponse("Invalid response received from the BASCloud API. Response did not contain expected data."));
+            std::throw_with_nested(InvalidResponse("Invalid response received from the BAScloud API. Response did not contain expected data."));
         }
     } else {
         // If no accesstoken is contained in the response data return invalid response
-        throw InvalidResponse("Invalid response received from the BASCloud API. Response did not contain user data.");
+        throw InvalidResponse("Invalid response received from the BAScloud API. Response did not contain user data.");
     }
 }
 
@@ -662,11 +664,11 @@ Property EntityContext::updateProperty(std::string API_tenant_UUID, std::string 
             return prop;
         } catch (...) {
             // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
-            std::throw_with_nested(InvalidResponse("Invalid response received from the BASCloud API. Response did not contain expected data."));
+            std::throw_with_nested(InvalidResponse("Invalid response received from the BAScloud API. Response did not contain expected data."));
         }
     } else {
         // If no accesstoken is contained in the response data return invalid response
-        throw InvalidResponse("Invalid response received from the BASCloud API. Response did not contain user data.");
+        throw InvalidResponse("Invalid response received from the BAScloud API. Response did not contain user data.");
     }
 }
 
@@ -688,11 +690,11 @@ Connector EntityContext::getConnector(std::string API_tenant_UUID, std::string A
             return conn;
         } catch (...) {
             // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
-            std::throw_with_nested(InvalidResponse("Invalid response received from the BASCloud API. Response did not contain expected data."));
+            std::throw_with_nested(InvalidResponse("Invalid response received from the BAScloud API. Response did not contain expected data."));
         }
     } else {
         // If no accesstoken is contained in the response data return invalid response
-        throw InvalidResponse("Invalid response received from the BASCloud API. Response did not contain user data.");
+        throw InvalidResponse("Invalid response received from the BAScloud API. Response did not contain user data.");
     }
 }
 
@@ -756,11 +758,11 @@ Property EntityContext::getAssociatedProperty(std::string API_tenant_UUID, std::
             return prop;
         } catch (...) {
             // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
-            std::throw_with_nested(InvalidResponse("Invalid response received from the BASCloud API. Response did not contain expected data."));
+            std::throw_with_nested(InvalidResponse("Invalid response received from the BAScloud API. Response did not contain expected data."));
         }
     } else {
         // If no accesstoken is contained in the response data return invalid response
-        throw InvalidResponse("Invalid response received from the BASCloud API. Response did not contain user data.");
+        throw InvalidResponse("Invalid response received from the BAScloud API. Response did not contain user data.");
     }
 }
 
@@ -825,11 +827,11 @@ Connector EntityContext::createConnector(std::string API_tenant_UUID, std::strin
             return conn;
         } catch (...) {
             // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
-            std::throw_with_nested(InvalidResponse("Invalid response received from the BASCloud API. Response did not contain expected data."));
+            std::throw_with_nested(InvalidResponse("Invalid response received from the BAScloud API. Response did not contain expected data."));
         }
     } else {
         // If no accesstoken is contained in the response data return invalid response
-        throw InvalidResponse("Invalid response received from the BASCloud API. Response did not contain user data.");
+        throw InvalidResponse("Invalid response received from the BAScloud API. Response did not contain user data.");
     }
 }
 
@@ -864,11 +866,11 @@ Connector EntityContext::updateConnector(std::string API_tenant_UUID, std::strin
             return conn;
         } catch (...) {
             // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
-            std::throw_with_nested(InvalidResponse("Invalid response received from the BASCloud API. Response did not contain expected data."));
+            std::throw_with_nested(InvalidResponse("Invalid response received from the BAScloud API. Response did not contain expected data."));
         }
     } else {
         // If no accesstoken is contained in the response data return invalid response
-        throw InvalidResponse("Invalid response received from the BASCloud API. Response did not contain user data.");
+        throw InvalidResponse("Invalid response received from the BAScloud API. Response did not contain user data.");
     }
 
 }
@@ -889,11 +891,11 @@ std::string EntityContext::getNewConnectorAuthToken(std::string API_tenant_UUID,
             return respond["data"]["attributes"]["token"];
         } catch (...) {
             // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
-            std::throw_with_nested(InvalidResponse("Invalid response received from the BASCloud API. Response did not contain expected data."));
+            std::throw_with_nested(InvalidResponse("Invalid response received from the BAScloud API. Response did not contain expected data."));
         }
     } else {
         // If no accesstoken is contained in the response data return invalid response
-        throw InvalidResponse("Invalid response received from the BASCloud API. Response did not contain user data.");
+        throw InvalidResponse("Invalid response received from the BAScloud API. Response did not contain user data.");
     }
 }
 
@@ -914,11 +916,11 @@ Device EntityContext::getDevice(std::string API_tenant_UUID, std::string API_dev
             return dev;
         } catch (...) {
             // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
-            std::throw_with_nested(InvalidResponse("Invalid response received from the BASCloud API. Response did not contain expected data."));
+            std::throw_with_nested(InvalidResponse("Invalid response received from the BAScloud API. Response did not contain expected data."));
         }
     } else {
         // If no accesstoken is contained in the response data return invalid response
-        throw InvalidResponse("Invalid response received from the BASCloud API. Response did not contain user data.");
+        throw InvalidResponse("Invalid response received from the BAScloud API. Response did not contain user data.");
     }
 }
 
@@ -983,11 +985,11 @@ Connector EntityContext::getAssociatedConnector(std::string API_tenant_UUID, std
             return conn;
         } catch (...) {
             // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
-            std::throw_with_nested(InvalidResponse("Invalid response received from the BASCloud API. Response did not contain expected data."));
+            std::throw_with_nested(InvalidResponse("Invalid response received from the BAScloud API. Response did not contain expected data."));
         }
     } else {
         // If no connector is contained in the response data return invalid response
-        throw InvalidResponse("Invalid response received from the BASCloud API. Response did not contain user data.");
+        throw InvalidResponse("Invalid response received from the BAScloud API. Response did not contain user data.");
     } 
 }
 
@@ -1096,11 +1098,11 @@ Device EntityContext::createDevice(std::string API_tenant_UUID, std::string API_
             return device;
         } catch (...) {
             // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
-            std::throw_with_nested(InvalidResponse("Invalid response received from the BASCloud API. Response did not contain expected data."));
+            std::throw_with_nested(InvalidResponse("Invalid response received from the BAScloud API. Response did not contain expected data."));
         }
     } else {
         // If no device is contained in the response data return invalid response
-        throw InvalidResponse("Invalid response received from the BASCloud API. Response did not contain user data.");
+        throw InvalidResponse("Invalid response received from the BAScloud API. Response did not contain user data.");
     }
 }
 
@@ -1121,11 +1123,11 @@ Device EntityContext::updateDevice(std::string API_tenant_UUID, std::string API_
             return device;
         } catch (...) {
             // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
-            std::throw_with_nested(InvalidResponse("Invalid response received from the BASCloud API. Response did not contain expected data."));
+            std::throw_with_nested(InvalidResponse("Invalid response received from the BAScloud API. Response did not contain expected data."));
         }
     } else {
         // If no device is contained in the response data return invalid response
-        throw InvalidResponse("Invalid response received from the BASCloud API. Response did not contain user data.");
+        throw InvalidResponse("Invalid response received from the BAScloud API. Response did not contain user data.");
     }
 }
 
@@ -1155,11 +1157,11 @@ Reading EntityContext::getReading(std::string API_tenant_UUID, std::string API_r
             return reading;
         } catch (...) {
             // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
-            std::throw_with_nested(InvalidResponse("Invalid response received from the BASCloud API. Response did not contain expected data."));
+            std::throw_with_nested(InvalidResponse("Invalid response received from the BAScloud API. Response did not contain expected data."));
         }
     } else {
         // If no reading is contained in the response data return invalid response
-        throw InvalidResponse("Invalid response received from the BASCloud API. Response did not contain user data.");
+        throw InvalidResponse("Invalid response received from the BAScloud API. Response did not contain user data.");
     }
 }
 
@@ -1224,11 +1226,11 @@ Device EntityContext::getAssociatedDevice(std::string API_tenant_UUID, std::stri
             return device;
         } catch (...) {
             // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
-            std::throw_with_nested(InvalidResponse("Invalid response received from the BASCloud API. Response did not contain expected data."));
+            std::throw_with_nested(InvalidResponse("Invalid response received from the BAScloud API. Response did not contain expected data."));
         }
     } else {
         // If no device is contained in the response data return invalid response
-        throw InvalidResponse("Invalid response received from the BASCloud API. Response did not contain user data.");
+        throw InvalidResponse("Invalid response received from the BAScloud API. Response did not contain user data.");
     }
 }
 
@@ -1249,11 +1251,11 @@ Reading EntityContext::createReading(std::string API_tenant_UUID, std::string AP
             return reading;
         } catch (...) {
             // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
-            std::throw_with_nested(InvalidResponse("Invalid response received from the BASCloud API. Response did not contain expected data."));
+            std::throw_with_nested(InvalidResponse("Invalid response received from the BAScloud API. Response did not contain expected data."));
         }
     } else {
         // If no reading is contained in the response data return invalid response
-        throw InvalidResponse("Invalid response received from the BASCloud API. Response did not contain user data.");
+        throw InvalidResponse("Invalid response received from the BAScloud API. Response did not contain user data.");
     }
 }
 
@@ -1288,11 +1290,11 @@ SetPoint EntityContext::getSetPoint(std::string API_tenant_UUID, std::string API
             return setpoint;
         } catch (...) {
             // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
-            std::throw_with_nested(InvalidResponse("Invalid response received from the BASCloud API. Response did not contain expected data."));
+            std::throw_with_nested(InvalidResponse("Invalid response received from the BAScloud API. Response did not contain expected data."));
         }
     } else {
         // If no setpoints is contained in the response data return invalid response
-        throw InvalidResponse("Invalid response received from the BASCloud API. Response did not contain user data.");
+        throw InvalidResponse("Invalid response received from the BAScloud API. Response did not contain user data.");
     }
 }
 
@@ -1357,11 +1359,11 @@ SetPoint EntityContext::createSetPoint(std::string API_tenant_UUID, std::string 
             return setpoint;
         } catch (...) {
             // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
-            std::throw_with_nested(InvalidResponse("Invalid response received from the BASCloud API. Response did not contain expected data."));
+            std::throw_with_nested(InvalidResponse("Invalid response received from the BAScloud API. Response did not contain expected data."));
         }
     } else {
         // If no setpoint is contained in the response data return invalid response
-        throw InvalidResponse("Invalid response received from the BASCloud API. Response did not contain user data.");
+        throw InvalidResponse("Invalid response received from the BAScloud API. Response did not contain user data.");
     }
 }
 

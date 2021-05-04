@@ -2,7 +2,7 @@
 #include "EntityContext.h"
 
 
-namespace BASCloud {
+namespace BAScloud {
 
 Device::Device(std::string API_UUID, std::string API_tenant_UUID, std::string aksID, std::string description, std::string unit, std::time_t createdAt, std::time_t updatedAt, EntityContext* context) : 
     Entity(API_UUID, context), EntityDateMixin(createdAt, updatedAt), EntityTenantMixin(API_tenant_UUID), aks_ID(aksID), description(description), unit(unit) {

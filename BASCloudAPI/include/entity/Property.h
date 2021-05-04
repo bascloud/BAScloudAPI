@@ -11,12 +11,12 @@
 #include "EntityCollection.h"
 
 
-namespace BASCloud {
+namespace BAScloud {
 
 class Connector;
 
 /** 
- * A Property entity represents a building or location in the BASCloud.
+ * A Property entity represents a building or location in the BAScloud.
  * 
  * Each Property has an associated Tenant parent and relations to multiple associated Connectors.
  * 
@@ -55,20 +55,20 @@ class Property : public Entity, public EntityTenantMixin, public EntityDateMixin
    /**
     * Property constructor
     *
-    * Creates a Property object representing a BASCloud API entity.
+    * Creates a Property object representing a BAScloud API entity.
     *
-    * Note: Creating an entity object over its constructor does not automatically create the entity in the BASCloud. 
-    * For creation of a BASCloud entity use the static method of the corresponding object class Property::createProperty().
+    * Note: Creating an entity object over its constructor does not automatically create the entity in the BAScloud. 
+    * For creation of a BAScloud entity use the static method of the corresponding object class Property::createProperty().
     * 
-    * @param API_UUID Universally unique identifier of the represented BASCloud Property.
-    * @param API_tenant_UUID Universally unique identifier of the represented BASCloud Property.
+    * @param API_UUID Universally unique identifier of the represented BAScloud Property.
+    * @param API_tenant_UUID Universally unique identifier of the represented BAScloud Property.
     * @param name Name of the Property.
     * @param street Street of the Property address.
     * @param postalCode Postal code of the Property address.
     * @param city City of the Property address.
     * @param country Country of the Property address.
-    * @param createdAt Datetime describing the creation of the Property entity in the BASCloud.
-    * @param updatedAt Datetime describing the last update of the Property information in the BASCloud.
+    * @param createdAt Datetime describing the creation of the Property entity in the BAScloud.
+    * @param updatedAt Datetime describing the last update of the Property information in the BAScloud.
     * @param context EntityContext proving an abstracted context for accessing the API functions.
     */
    Property(std::string API_UUID, std::string API_tenant_UUID, std::string name, std::string street, std::string postalCode, std::string city, std::string country, std::time_t createdAt, std::time_t updatedAt, EntityContext* context);
@@ -138,18 +138,18 @@ class Property : public Entity, public EntityTenantMixin, public EntityDateMixin
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant of the Property.
-    * @param API_property_UUID UUID of the represented BASCloud Property.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the Property.
+    * @param API_property_UUID UUID of the represented BAScloud Property.
     * @param context EntityContext proving an abstracted context for accessing the API functions.
     * 
-    * @return A Property object representing the BASCloud Property with the specified UUID.
+    * @return A Property object representing the BAScloud Property with the specified UUID.
     */
    static Property getProperty(std::string API_tenant_UUID, std::string API_property_UUID, EntityContext* context);
 
    /**
     * Request a collection of Property entities grouped under the given Tenant.
     * 
-    * The request filters the BASCloud Property based on the given parameters and returns a collection 
+    * The request filters the BAScloud Property based on the given parameters and returns a collection 
     * of Property matching these values.
     * 
     * @throws ServerError
@@ -160,7 +160,7 @@ class Property : public Entity, public EntityTenantMixin, public EntityDateMixin
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant.
     * @param context EntityContext proving an abstracted context for accessing the API functions.
     * @param paging Optional PagingOption that is used for requesting paged API results.
     * @param name Optional filter for the name of the Device.
@@ -174,7 +174,7 @@ class Property : public Entity, public EntityTenantMixin, public EntityDateMixin
    static EntityCollection<Property> getProperties(std::string API_tenant_UUID, EntityContext* context, PagingOption paging={}, std::string name={}, std::string street={}, std::string postalCode={}, std::string city={}, std::string country={});
 
    /**
-    * Create a new Property entity in the BASCloud.
+    * Create a new Property entity in the BAScloud.
     * 
     * Given the associated Tenant a new Property is created using the given Property parameter.
     * 
@@ -186,7 +186,7 @@ class Property : public Entity, public EntityTenantMixin, public EntityDateMixin
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant.
     * @param name Name of the Property.
     * @param street Street of the Property address.
     * @param postalCode Postal code of the Property address.
@@ -194,14 +194,14 @@ class Property : public Entity, public EntityTenantMixin, public EntityDateMixin
     * @param country Country of the Property address.
     * @param context EntityContext proving an abstracted context for accessing the API functions.
     * 
-    * @return Property entity object representing the newly created BASCloud Property.
+    * @return Property entity object representing the newly created BAScloud Property.
     */
 	 static Property createProperty(std::string API_tenant_UUID, std::string name, std::string street, std::string postalCode, std::string city, std::string country, EntityContext* context);
       
    /**
-    * Update an existing Property in the BASCloud.
+    * Update an existing Property in the BAScloud.
     * 
-    * The request updates attributes of an existing BASCloud Property based on the given Property UUID and returns 
+    * The request updates attributes of an existing BAScloud Property based on the given Property UUID and returns 
     * a new Property object representing the updated entity.
     * 
     * @throws ServerError
@@ -212,8 +212,8 @@ class Property : public Entity, public EntityTenantMixin, public EntityDateMixin
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant of the Property.
-    * @param API_property_UUID UUID of the existing BASCloud Property that is supposed to be updated.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the Property.
+    * @param API_property_UUID UUID of the existing BAScloud Property that is supposed to be updated.
     * @param context EntityContext proving an abstracted context for accessing the API functions.
     * @param name Optional new value for the name of the Device.
     * @param street Optional new value for the street of the Property address.
@@ -221,15 +221,15 @@ class Property : public Entity, public EntityTenantMixin, public EntityDateMixin
     * @param city Optional new value for the city of the Property address.
     * @param country Optional new value for the country of the Property address.
     * 
-    * @return Property entity object representing the updated BASCloud Property.
+    * @return Property entity object representing the updated BAScloud Property.
     */
 	 static Property updateProperty(std::string API_tenant_UUID, std::string API_property_UUID, EntityContext* context, std::string name={}, std::string street={}, std::string postalCode={}, std::string city={}, std::string country={});
 
 	 
    /**
-    * Deletes an existing Property in the BASCloud.
+    * Deletes an existing Property in the BAScloud.
     * 
-    * The request deletes a Property entity in the BASCloud based on the given Property UUID.
+    * The request deletes a Property entity in the BAScloud based on the given Property UUID.
     * 
     * @throws ServerError
     * @throws ConnectionError
@@ -239,8 +239,8 @@ class Property : public Entity, public EntityTenantMixin, public EntityDateMixin
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant of the Property.
-    * @param API_property_UUID UUID of the existing BASCloud Property that is supposed to be deleted.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the Property.
+    * @param API_property_UUID UUID of the existing BAScloud Property that is supposed to be deleted.
     * @param context EntityContext proving an abstracted context for accessing the API functions.
     */
    static void deleteProperty(std::string API_tenant_UUID, std::string API_property_UUID, EntityContext* context);

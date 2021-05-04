@@ -3,12 +3,12 @@
 #include <chrono>
 
 
-namespace BASCloud {
+namespace BAScloud {
 
 /** 
  * Mixin class that adds datetime functionality and attributes.
  * 
- * Each entity retrieved from the BASCloud API includes datetime information about the creation and last update.
+ * Each entity retrieved from the BAScloud API includes datetime information about the creation and last update.
  */
 class EntityDateMixin {
 

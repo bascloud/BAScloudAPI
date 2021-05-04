@@ -7,13 +7,13 @@
 #include "error/Exceptions.h"
 
 
-using namespace BASCloud;
+using namespace BAScloud;
 
 int main (int argc, char *argv[]) {
 
     std::cout << "Initialising library..."<< std::endl;
 
-    // For accessing the BASCloud API, a API endpoint URL needs to be defined (Note: no trailing symbols, must end with TLD identifier)
+    // For accessing the BAScloud API, a API endpoint URL needs to be defined (Note: no trailing symbols, must end with TLD identifier)
     EntityContext BCAPI("server_URL");
     std::cout << "\tOK." << std::endl;
 
@@ -22,7 +22,7 @@ int main (int argc, char *argv[]) {
     std::cout << "1. - Authentication with user login" << std::endl;
 
     /**
-     * All methods in the BASCloud API library potential throw different exceptions to signal a failure in the API request.
+     * All methods in the BAScloud API library potential throw different exceptions to signal a failure in the API request.
      * 
      * The following exceptions may be thrown:
      * 
@@ -54,7 +54,7 @@ int main (int argc, char *argv[]) {
     std::string tenantUUID = "";
 
     /**
-     * For requesting a collection of BASCloud setpoints, filters on their attributes can be applied
+     * For requesting a collection of BAScloud setpoints, filters on their attributes can be applied
      * Readings in a corresponding time-span can be searched for, for a specific timestamp, a specific value, 
      * and a corresponding device UUID.
      * 
@@ -67,7 +67,7 @@ int main (int argc, char *argv[]) {
     std::string deviceUUID_filter = {};
 
     /**
-     * For requesting a collection of BASCloud entities, pagination can be used for large collections.
+     * For requesting a collection of BAScloud entities, pagination can be used for large collections.
      * 
      * PagingOption consists of:
      * page_size: number of entries per page.
@@ -81,7 +81,7 @@ int main (int argc, char *argv[]) {
 
     try {
         /** 
-         * Request a collection of setpoints from the BASCloud 
+         * Request a collection of setpoints from the BAScloud 
          * Parameters are a tenant UUID under which the setpoints are grouped, 
          * and optional paging and setpoint filters.
          * 
@@ -131,7 +131,7 @@ int main (int argc, char *argv[]) {
 
     try {
         /** 
-         * Requests a single setpoint from the BASCloud 
+         * Requests a single setpoint from the BAScloud 
          * Parameters are a tenant UUID under which the setpoint is grouped and the UUID of the setpoint itself
          */
         std::cout << "\tRequesting single Setpoint with UUID..." << std::endl;

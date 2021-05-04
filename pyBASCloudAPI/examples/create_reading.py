@@ -4,7 +4,7 @@ import sys
 import traceback
 
 # import the BAS Cloud API library using the name api
-import pyBASCloudAPI as api
+import pyBAScloudAPI as api
 
 # Error handler function which is given as a error callback to request functions
 def printErrorHandler(exception, json):
@@ -13,7 +13,7 @@ def printErrorHandler(exception, json):
 
 print("Initialising library...")
 
-# For accessing the BASCloud API, a API endpoint URL needs to be defined (Note: no trailing symbols, must end with TLD identifier)
+# For accessing the BAScloud API, a API endpoint URL needs to be defined (Note: no trailing symbols, must end with TLD identifier)
 BCAPI = api.EntityContext("server_URL")
 print("\tOK." )
 
@@ -22,7 +22,7 @@ print("\tOK." )
 print("1. - Authentication with user login" )
 
 # /**
-# * All methods in the BASCloud API library potential throw different exceptions to signal a failure in the API request.
+# * All methods in the BAScloud API library potential throw different exceptions to signal a failure in the API request.
 # * 
 # * The following exceptions may be thrown:
 # * 
@@ -95,7 +95,7 @@ value = 1234.56
 
 try:
     # /** 
-    # * Creates a new reading in the BASCloud 
+    # * Creates a new reading in the BAScloud 
     # * Parameters are a tenant UUID under which the device and reading is grouped, 
     # * a device UUID for which the reading was read, the readings value and current timestamp.
     # */

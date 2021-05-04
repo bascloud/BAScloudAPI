@@ -14,14 +14,14 @@
 #include "entity/Device.h"
 
 
-namespace BASCloud {
+namespace BAScloud {
 
 // Class that abstracts the APIContext and its api endpoint functions
 
 /** 
- * The EntityContext class provides a high-level abstraction to access the BASCloud API endpoint functions.
+ * The EntityContext class provides a high-level abstraction to access the BAScloud API endpoint functions.
  * 
- * BASCloud entites are modelled through object-classes and endpoint operations are abstracted as functions. For each function requesting an endpoint, response parsing 
+ * BAScloud entites are modelled through object-classes and endpoint operations are abstracted as functions. For each function requesting an endpoint, response parsing 
  * and error logic is handled by EntityContext. EntityContext also checks for valid authentication
  * token at each request and, if expired, renews the token automatically.
  * 
@@ -31,18 +31,18 @@ class EntityContext {
  private:
 
 	/**
-	 * APIContext object providing a low-level access to the BASCloud API.
+	 * APIContext object providing a low-level access to the BAScloud API.
 	 */
 	APIContext api_context;
 
 	/**
-	 * Authentication token received from the BASCloud after a successfull user login.
+	 * Authentication token received from the BAScloud after a successfull user login.
 	 * This may be empty if not authenticated yet.
 	 */
 	std::string API_token;
 
 	/**
-	 * HTTP/S URL for the BASCloud server. The URL should not end with any symbols e.g. /, ?.
+	 * HTTP/S URL for the BAScloud server. The URL should not end with any symbols e.g. /, ?.
 	 */
 	std::string API_server_URL;
 
@@ -104,7 +104,7 @@ class EntityContext {
     *
     * @throws std::invalid_argument
 	* 
-    * @param UUID BASCloud API entity UUID string.
+    * @param UUID BAScloud API entity UUID string.
 	* 
     */
     void validateUUID(std::string UUID);
@@ -134,18 +134,18 @@ class EntityContext {
    /**
     * EntityContext constructor
     *
-    * Creates a EntityContext given the server URL for the BASCloud API. 
+    * Creates a EntityContext given the server URL for the BAScloud API. 
     *
     * Note: For accessing methods annotated with [Admin], a backend server URL is 
-	* needed instead of gateway URL (Discuss this with the BASCloud provider).
+	* needed instead of gateway URL (Discuss this with the BAScloud provider).
 	* 
-    * @param API_server_URL BASCloud server URL, must end with the TLD identifier e.g. .com, .de etc. 
+    * @param API_server_URL BAScloud server URL, must end with the TLD identifier e.g. .com, .de etc. 
 	* (No end symbols allowed e.g. /, ?)
     */
 	EntityContext(std::string API_server_URL);
 
    /**
-    * Authenticate a user against the BASCloud API.
+    * Authenticate a user against the BAScloud API.
     *
     * Given a correct email password combination the API returns an bearer authentication token which is used
 	* for the upcoming requests. The token is accessible through getToken(). The token expires 
@@ -169,9 +169,11 @@ class EntityContext {
   /**
     * Authenticate a connector using a valid connector token.
     *
-    * Given a valid connector token previusly requested from the BASCloud through a connector creation or 
+    * Given a valid connector token previusly requested from the BAScloud through a connector creation or 
     * getNewConnectorAuthToken(). The connector token has no expiration date, getTokenExpirationDate() will return 
-    * std::numeric_limits<long>::max().
+    * a date long in the future (year > 10000).
+    * 
+    * Note: Previously date for no expiration date was set to long::max, however, this breaks localtime functions this a "real" date is used.
     * 
     * When a new connector token is requested for authenticating a connector in the future, authenticateWithConnectorToken 
     * must be called again with the new token.
@@ -212,7 +214,7 @@ class EntityContext {
    /**
     * Request a single User entity.
     * 
-    * A User is uniquely identified by a BASCloud Tenant UUID.
+    * A User is uniquely identified by a BAScloud Tenant UUID.
     * 
     * @throws ServerError
     * @throws ConnectionError
@@ -224,9 +226,9 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_user_UUID UUID of the BASCloud User.
+    * @param API_user_UUID UUID of the BAScloud User.
     * 
-    * @return A User object representing the BASCloud User with the specified UUID.
+    * @return A User object representing the BAScloud User with the specified UUID.
     */
 	User getUser(std::string API_user_UUID);
 
@@ -269,16 +271,16 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
 	* 
-    * @param API_user_UUID UUID of the BASCloud User.
+    * @param API_user_UUID UUID of the BAScloud User.
     * 
-    * @return A Tenant object representing the BASCloud Tenant associated with the User.
+    * @return A Tenant object representing the BAScloud Tenant associated with the User.
     */
 	Tenant getAssociatedTenant(std::string API_user_UUID);
 
    /**
     * Request a password reset for the User.
     * 
-    * If the User exists in the BASCloud, an email is sent upon the request containing a reset token.
+    * If the User exists in the BAScloud, an email is sent upon the request containing a reset token.
     * The received token can then be used in updateUserPassword() to change the User password to a new value.
     * 
     * @throws ServerError
@@ -312,15 +314,15 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_user_UUID UUID of the BASCloud User.
-    * @param reset_token Valid reset token received from the BASCloud upon requestUserPasswordReset() request.
+    * @param API_user_UUID UUID of the BAScloud User.
+    * @param reset_token Valid reset token received from the BAScloud upon requestUserPasswordReset() request.
     * @param new_password New password value for the User.
 	* 
     */
 	void updateUserPassword(std::string API_user_UUID, std::string reset_token, std::string new_password);
 
   /**
-    * Create a new User entity in the BASCloud.
+    * Create a new User entity in the BAScloud.
     * 
     * A new User is created using the given email and password combination.
     * 
@@ -339,12 +341,12 @@ class EntityContext {
     * @param email Email address of the new User.
     * @param password Password of the new User.
     * 
-    * @return User entity object representing the newly created BASCloud User.
+    * @return User entity object representing the newly created BAScloud User.
     */
 	User createNewUser(std::string email, std::string password);
 
   /**
-    * Updates the information of a User entity in the BASCloud. [Admin] 
+    * Updates the information of a User entity in the BAScloud. [Admin] 
     * 
     * All parameters are optional. This operation needs administration authority.
     * 
@@ -361,14 +363,14 @@ class EntityContext {
     * @param API_user_UUID User entity UUID that is supposed to be updated.
     * @param email Optional new value for the User email.
     * 
-    * @return User entity object representing the updated BASCloud User.
+    * @return User entity object representing the updated BAScloud User.
     */
 	User updateUser(std::string API_user_UUID, std::string email);
 
   /**
-    * Deletes an existing User in the BASCloud. [Admin] 
+    * Deletes an existing User in the BAScloud. [Admin] 
     * 
-    * The request deletes a User entity in the BASCloud based on the given User UUID. 
+    * The request deletes a User entity in the BAScloud based on the given User UUID. 
     * This operation needs administration authority.
     * 
     * @throws ServerError
@@ -381,7 +383,7 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_user_UUID UUID of the BASCloud User.
+    * @param API_user_UUID UUID of the BAScloud User.
 	* 
     */
 	void deleteUser(std::string API_user_UUID);
@@ -391,7 +393,7 @@ class EntityContext {
    /**
     * Request a single Tenant entity.
     * 
-    * A Tenant is uniquely identified by a BASCloud Tenant UUID.
+    * A Tenant is uniquely identified by a BAScloud Tenant UUID.
     * 
     * @throws ServerError
     * @throws ConnectionError
@@ -403,9 +405,9 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the BASCloud Tenant.
+    * @param API_tenant_UUID UUID of the BAScloud Tenant.
     * 
-    * @return A Tenant object representing the BASCloud Tenant with the specified UUID.
+    * @return A Tenant object representing the BAScloud Tenant with the specified UUID.
     */
 	Tenant getTenant(std::string API_tenant_UUID);
 
@@ -447,7 +449,7 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the BASCloud Tenant.
+    * @param API_tenant_UUID UUID of the BAScloud Tenant.
     * @param paging Optional PagingOption that is used for requesting paged API results.
     * @param errorHandler Optional callback function for handling errors in the request. Function gets occured exception and invalid data.
     * 
@@ -456,7 +458,7 @@ class EntityContext {
 	EntityCollection<User> getAssociatedUsers(std::string API_tenant_UUID, PagingOption paging={}, std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
 
    /**
-    * Creates a new Tenant entity in the BASCloud. [Admin] 
+    * Creates a new Tenant entity in the BAScloud. [Admin] 
     * 
     * A new Tenant is created using the given Tenant parameter. This operation needs 
     * administration authority. 
@@ -474,14 +476,14 @@ class EntityContext {
     * @param name Name of the new Tenant
     * @param API_user_UUID User entity UUID that is supposed to be associated with the new Tenant.
     * 
-    * @return Tenant entity object representing the newly created BASCloud Tenant.
+    * @return Tenant entity object representing the newly created BAScloud Tenant.
     */
 	Tenant createTenant(std::string name, std::string API_user_UUID);
 
   /**
-    * Deletes an existing Tenant in the BASCloud. [Admin] 
+    * Deletes an existing Tenant in the BAScloud. [Admin] 
     * 
-    * The request deletes a Tenant entity in the BASCloud based on the given Tenant UUID. 
+    * The request deletes a Tenant entity in the BAScloud based on the given Tenant UUID. 
     * This operation needs administration authority. 
     * 
     * @throws ServerError
@@ -494,13 +496,13 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the BASCloud Tenant.
+    * @param API_tenant_UUID UUID of the BAScloud Tenant.
 	* 
     */
 	void deleteTenant(std::string API_tenant_UUID);
 
   /**
-    * Updates the information of a Tenant entity in the BASCloud. [Admin] 
+    * Updates the information of a Tenant entity in the BAScloud. [Admin] 
     * 
     * All parameters are optional. This operation needs administration authority. 
     * 
@@ -517,7 +519,7 @@ class EntityContext {
     * @param API_tenant_UUID Tenant entity UUID that is supposed to be updated.
     * @param name Optional new value for the Tenant name.
     * 
-    * @return Tenant entity object representing the updated BASCloud Tenant.
+    * @return Tenant entity object representing the updated BAScloud Tenant.
     */
 	Tenant updateTenant(std::string API_tenant_UUID, std::string name={});
 
@@ -578,17 +580,17 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant of the Property.
-    * @param API_property_UUID UUID of the represented BASCloud Property.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the Property.
+    * @param API_property_UUID UUID of the represented BAScloud Property.
     * 
-    * @return A Property object representing the BASCloud Property with the specified UUID.
+    * @return A Property object representing the BAScloud Property with the specified UUID.
     */
 	Property getProperty(std::string API_tenant_UUID, std::string API_property_UUID);
 
    /**
     * Request a collection of Property entities grouped under the given Tenant.
     * 
-    * The request filters the BASCloud Property based on the given parameters and returns a collection 
+    * The request filters the BAScloud Property based on the given parameters and returns a collection 
     * of Property matching these values.
     * 
     * @throws ServerError
@@ -601,7 +603,7 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant.
     * @param paging Optional PagingOption that is used for requesting paged API results.
     * @param name Optional filter for the name of the Device.
     * @param street Optional filter for the street of the Property address.
@@ -628,8 +630,8 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant of the Property.
-    * @param API_property_UUID UUID of the BASCloud Property.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the Property.
+    * @param API_property_UUID UUID of the BAScloud Property.
     * @param paging Optional PagingOption that is used for requesting paged API results.
     * @param errorHandler Optional callback function for handling errors in the request. Function gets occured exception and invalid data.
     * 
@@ -639,7 +641,7 @@ class EntityContext {
         std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
 	
    /**
-    * Create a new Property entity in the BASCloud.
+    * Create a new Property entity in the BAScloud.
     * 
     * Given the associated Tenant a new Property is created using the given Property parameter.
     * 
@@ -653,21 +655,21 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant.
     * @param name Name of the Property.
     * @param street Street of the Property address.
     * @param postalCode Postal code of the Property address.
     * @param city City of the Property address.
     * @param country Country of the Property address.
     * 
-    * @return Property entity object representing the newly created BASCloud Property.
+    * @return Property entity object representing the newly created BAScloud Property.
     */
 	Property createProperty(std::string API_tenant_UUID, std::string name, std::string street, std::string postalCode, std::string city, std::string country);
 	
    /**
-    * Deletes an existing Property in the BASCloud.
+    * Deletes an existing Property in the BAScloud.
     * 
-    * The request deletes a Property entity in the BASCloud based on the given Property UUID.
+    * The request deletes a Property entity in the BAScloud based on the given Property UUID.
     * 
     * @throws ServerError
     * @throws ConnectionError
@@ -679,16 +681,16 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant of the Property.
-    * @param API_property_UUID UUID of the existing BASCloud Property that is supposed to be deleted.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the Property.
+    * @param API_property_UUID UUID of the existing BAScloud Property that is supposed to be deleted.
 	* 
     */
 	void deleteProperty(std::string API_tenant_UUID, std::string API_property_UUID);
 	
    /**
-    * Update an existing Property in the BASCloud.
+    * Update an existing Property in the BAScloud.
     * 
-    * The request updates attributes of an existing BASCloud Property based on the given Property UUID and returns 
+    * The request updates attributes of an existing BAScloud Property based on the given Property UUID and returns 
     * a new Property object representing the updated entity.
     * 
     * @throws ServerError
@@ -701,15 +703,15 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant of the Property.
-    * @param API_property_UUID UUID of the existing BASCloud Property that is supposed to be updated.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the Property.
+    * @param API_property_UUID UUID of the existing BAScloud Property that is supposed to be updated.
     * @param name Optional new value for the name of the Device.
     * @param street Optional new value for the street of the Property address.
     * @param postalCode Optional new value for the postal code of the Property address.
     * @param city Optional new value for the city of the Property address.
     * @param country Optional new value for the country of the Property address.
     * 
-    * @return Property entity object representing the updated BASCloud Property.
+    * @return Property entity object representing the updated BAScloud Property.
     */
 	Property updateProperty(std::string API_tenant_UUID, std::string API_property_UUID, std::string name={}, std::string street={}, 
 		std::string postalCode={}, std::string city={}, std::string country={});
@@ -731,10 +733,10 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant of the Connector.
-    * @param API_connector_UUID UUID of the represented BASCloud Connector.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the Connector.
+    * @param API_connector_UUID UUID of the represented BAScloud Connector.
     * 
-    * @return A Connector object representing the BASCloud Connector with the specified UUID.
+    * @return A Connector object representing the BAScloud Connector with the specified UUID.
     */
 	Connector getConnector(std::string API_tenant_UUID, std::string API_connector_UUID);
    	
@@ -751,7 +753,7 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant.
     * @param paging Optional PagingOption that is used for requesting paged API results.
     * @param errorHandler Optional callback function for handling errors in the request. Function gets occured exception and invalid data.
     * 
@@ -775,8 +777,8 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
 	* 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant of the Connector.
-    * @param API_connector_UUID UUID of the represented BASCloud Connector.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the Connector.
+    * @param API_connector_UUID UUID of the represented BAScloud Connector.
     * 
     * @return Associated Property entity object
     */
@@ -797,8 +799,8 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
 	* 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant of the Connector.
-    * @param API_connector_UUID UUID of the represented BASCloud Connector.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the Connector.
+    * @param API_connector_UUID UUID of the represented BAScloud Connector.
     * @param paging Optional PagingOption that is used for requesting paged API results.
     * @param errorHandler Optional callback function for handling errors in the request. Function gets occured exception and invalid data.
     * 
@@ -808,7 +810,7 @@ class EntityContext {
         std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
 	
    /**
-    * Create a new Connector entity in the BASCloud.
+    * Create a new Connector entity in the BAScloud.
     * 
     * Given the associated Tenant and Property a new Connector is created using the given Connector parameter.
     * 
@@ -822,18 +824,18 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant of the Connector.
-    * @param API_property_UUID UUID of the associated BASCloud Property of the Connector.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the Connector.
+    * @param API_property_UUID UUID of the associated BAScloud Property of the Connector.
     * @param name The name of the new Connector.
     * 
-    * @return Connector entity object representing the newly created BASCloud Connector.
+    * @return Connector entity object representing the newly created BAScloud Connector.
     */
 	Connector createConnector(std::string API_tenant_UUID, std::string API_property_UUID, std::string name);
 
    /**
-    * Deletes an existing Connector in the BASCloud.
+    * Deletes an existing Connector in the BAScloud.
     * 
-    * The request deletes a Connector entity in the BASCloud based on the given Connector UUID.
+    * The request deletes a Connector entity in the BAScloud based on the given Connector UUID.
     * 
     * @throws ServerError
     * @throws ConnectionError
@@ -845,16 +847,16 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant of the Connector.
-    * @param API_connector_UUID UUID of the existing BASCloud Connector that is supposed to be deleted.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the Connector.
+    * @param API_connector_UUID UUID of the existing BAScloud Connector that is supposed to be deleted.
 	* 
     */
 	void deleteConnector(std::string API_tenant_UUID, std::string API_connector_UUID);
 	
    /**
-    * Update an existing Connector in the BASCloud.
+    * Update an existing Connector in the BAScloud.
     * 
-    * The request updates attributes of an existing BASCloud Connector based on the given Connector UUID and returns 
+    * The request updates attributes of an existing BAScloud Connector based on the given Connector UUID and returns 
     * a new Connector object representing the updated entity.
     * 
     * @throws ServerError
@@ -867,19 +869,19 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant of the Connector.
-    * @param API_connector_UUID UUID of the existing BASCloud Connector that is supposed to be updated.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the Connector.
+    * @param API_connector_UUID UUID of the existing BAScloud Connector that is supposed to be updated.
     * @param name Optional new name of the new Connector.
     * 
-    * @return Connector entity object representing the updated BASCloud Connector.
+    * @return Connector entity object representing the updated BAScloud Connector.
     */	
 	Connector updateConnector(std::string API_tenant_UUID, std::string API_connector_UUID, std::string name={});
 	
    /**
     * Requests a new API key for a Connector entity.
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant of the Connector.
-    * @param API_connector_UUID UUID of a BASCloud Connector for which the API key is requested.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the Connector.
+    * @param API_connector_UUID UUID of a BAScloud Connector for which the API key is requested.
     * 
     * @return API key token for the Connector entity. A Connector API key does not expire.
     */
@@ -902,17 +904,17 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant of the Device.
-    * @param API_device_UUID UUID of the represented BASCloud Device.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the Device.
+    * @param API_device_UUID UUID of the represented BAScloud Device.
     * 
-    * @return A Device object representing the BASCloud Device with the specified UUID.
+    * @return A Device object representing the BAScloud Device with the specified UUID.
     */
 	Device getDevice(std::string API_tenant_UUID, std::string API_device_UUID);
 	
    /**
     * Request a collection of Device entities grouped under the given Tenant.
     * 
-    * The request filters the BASCloud Devices based on the given parameters and returns a collection 
+    * The request filters the BAScloud Devices based on the given parameters and returns a collection 
     * of Devices matching these values.
     * 
     * @throws ServerError
@@ -925,7 +927,7 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant.
     * @param paging Optional PagingOption that is used for requesting paged API results.
     * @param aksID Optional filter for the AKS ID of the Device.
     * @param description Optional filter for the Description of the Device.
@@ -952,8 +954,8 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
 	* 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant.
-    * @param API_device_UUID UUID of the BASCloud Device.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant.
+    * @param API_device_UUID UUID of the BAScloud Device.
     * 
     * @return Connector entity associated with the specified Device.
     */
@@ -972,8 +974,8 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant.
-    * @param API_device_UUID UUID of the BASCloud Device.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant.
+    * @param API_device_UUID UUID of the BAScloud Device.
     * @param paging Optional PagingOption that is used for requesting paged API results.
     * @param errorHandler Optional callback function for handling errors in the request. Function gets occured exception and invalid data.
     * 
@@ -995,8 +997,8 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant.
-    * @param API_device_UUID UUID of the BASCloud Device.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant.
+    * @param API_device_UUID UUID of the BAScloud Device.
     * @param paging Optional PagingOption that is used for requesting paged API results.
     * @param errorHandler Optional callback function for handling errors in the request. Function gets occured exception and invalid data.
     * 
@@ -1006,7 +1008,7 @@ class EntityContext {
         std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
 	
    /**
-    * Create a new Device entity in the BASCloud.
+    * Create a new Device entity in the BAScloud.
     * 
     * Given the associated Tenant and Connector a new Device is created using the given Device parameter.
     * 
@@ -1020,20 +1022,20 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant of the Device.
-    * @param API_connector_UUID UUID of the associated BASCloud Tenant of the Device.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the Device.
+    * @param API_connector_UUID UUID of the associated BAScloud Tenant of the Device.
     * @param aksID The AKS ID of the new Device.
     * @param description The Description of the new Device.
     * @param unit The measuring unit of the new Device.
     * 
-    * @return Device entity object representing the newly created BASCloud Device.
+    * @return Device entity object representing the newly created BAScloud Device.
     */
 	Device createDevice(std::string API_tenant_UUID, std::string API_connector_UUID, std::string aksID, std::string description, std::string unit);
 	
    /**
-    * Update an existing Device in the BASCloud.
+    * Update an existing Device in the BAScloud.
     * 
-    * The request updates attributes of an existing BASCloud Device based on the given Device UUID and returns 
+    * The request updates attributes of an existing BAScloud Device based on the given Device UUID and returns 
     * a new Device object representing the updated entity.
     * 
     * @throws ServerError
@@ -1046,20 +1048,20 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant of the Device.
-    * @param API_device_UUID UUID of the existing BASCloud Device that is supposed to be updated.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the Device.
+    * @param API_device_UUID UUID of the existing BAScloud Device that is supposed to be updated.
     * @param aksID Optional new value for the AKS ID of the Device.
     * @param description Optional new value for the Description of the Device.
     * @param unit Optional new value for the measuring unit of the Device.
     * 
-    * @return Device entity object representing the updated BASCloud Device.
+    * @return Device entity object representing the updated BAScloud Device.
     */
 	Device updateDevice(std::string API_tenant_UUID, std::string API_device_UUID, std::string aksID={}, std::string description={}, std::string unit={});
 	
    /**
-    * Deletes an existing Device in the BASCloud.
+    * Deletes an existing Device in the BAScloud.
     * 
-    * The request deletes a Device entity in the BASCloud based on the given Device UUID.
+    * The request deletes a Device entity in the BAScloud based on the given Device UUID.
     * 
     * @throws ServerError
     * @throws ConnectionError
@@ -1071,8 +1073,8 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant of the Device.
-    * @param API_device_UUID UUID of the existing BASCloud Device that is supposed to be deleted.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the Device.
+    * @param API_device_UUID UUID of the existing BAScloud Device that is supposed to be deleted.
     * 
     */
 	void deleteDevice(std::string API_tenant_UUID, std::string API_device_UUID);
@@ -1094,17 +1096,17 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant of the Reading.
-    * @param API_reading_UUID UUID of the represented BASCloud Reading.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the Reading.
+    * @param API_reading_UUID UUID of the represented BAScloud Reading.
     * 
-    * @return A Reading object representing the BASCloud Reading with the specified UUID.
+    * @return A Reading object representing the BAScloud Reading with the specified UUID.
     */
 	Reading getReading(std::string API_tenant_UUID, std::string API_reading_UUID);
 	
    /**
     * Request a collection of Reading entities grouped under the given Tenant.
     * 
-    * The request filters the BASCloud Reading based on the given parameters and returns a collection 
+    * The request filters the BAScloud Reading based on the given parameters and returns a collection 
     * of Reading matching these values.
     * 
     * @throws ServerError
@@ -1117,7 +1119,7 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant.
     * @param paging Optional PagingOption that is used for requesting paged API results.
     * @param from Optional filter defining the start time of a time-range the requested Readings should lie in.
     * @param until Optional filter defining the end time of a time-range the requested Readings should lie in.
@@ -1145,15 +1147,15 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-	* @param API_tenant_UUID UUID of the associated BASCloud Tenant.
+	* @param API_tenant_UUID UUID of the associated BAScloud Tenant.
 	* @param API_reading_UUID UUID of the Reading entity.
 	* 
-    * @return Device entity object of the associated BASCloud Device.
+    * @return Device entity object of the associated BAScloud Device.
     */
 	Device getAssociatedDevice(std::string API_tenant_UUID, std::string API_reading_UUID);
 	
    /**
-    * Create a new Reading entity in the BASCloud.
+    * Create a new Reading entity in the BAScloud.
     * 
     * Given the associated Tenant and Device entity, a new Reading is created using the given Reading parameter.
     * 
@@ -1167,19 +1169,19 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant of the Reading.
-    * @param API_device_UUID UUID of the associated BASCloud Device of the Reading.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the Reading.
+    * @param API_device_UUID UUID of the associated BAScloud Device of the Reading.
     * @param value Value of the reading
     * @param timestamp The time of the reading of the entity value.
     * 
-    * @return Reading entity object representing the newly created BASCloud Reading.
+    * @return Reading entity object representing the newly created BAScloud Reading.
     */
 	Reading createReading(std::string API_tenant_UUID, std::string API_device_UUID, double value, std::time_t timestamp);
 	
    /**
-    * Deletes an existing Reading in the BASCloud. [Admin] 
+    * Deletes an existing Reading in the BAScloud. [Admin] 
     * 
-    * The request deletes a Reading entity in the BASCloud based on the given Reading UUID.
+    * The request deletes a Reading entity in the BAScloud based on the given Reading UUID.
     * This operation needs administration authority. 
     * 
     * @throws ServerError
@@ -1192,8 +1194,8 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant of the Reading.
-    * @param API_reading_UUID UUID of the existing BASCloud Reading that is supposed to be deleted.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the Reading.
+    * @param API_reading_UUID UUID of the existing BAScloud Reading that is supposed to be deleted.
     */
 	void deleteReading(std::string API_tenant_UUID, std::string API_reading_UUID);
 
@@ -1214,17 +1216,17 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant of the SetPoint.
-    * @param API_setpoint_UUID UUID of the represented BASCloud SetPoint.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the SetPoint.
+    * @param API_setpoint_UUID UUID of the represented BAScloud SetPoint.
     * 
-    * @return A SetPoint object representing the BASCloud SetPoint with the specified UUID.
+    * @return A SetPoint object representing the BAScloud SetPoint with the specified UUID.
     */
 	SetPoint getSetPoint(std::string API_tenant_UUID, std::string API_setpoint_UUID);
 	
   /**
     * Request a collection of SetPoint entities grouped under the given Tenant.
     * 
-    * The request filters the BASCloud SetPoint based on the given parameters and returns a collection 
+    * The request filters the BAScloud SetPoint based on the given parameters and returns a collection 
     * of SetPoint matching these values.
     * 
     * @throws ServerError
@@ -1237,7 +1239,7 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant.
     * @param paging Optional PagingOption that is used for requesting paged API results.
     * @param from Optional filter defining the start time of a time-range the requested SetPoint should lie in.
     * @param until Optional filter defining the end time of a time-range the requested SetPoint should lie in.
@@ -1253,7 +1255,7 @@ class EntityContext {
         std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
 	
    /**
-    * Create a new SetPoint entity in the BASCloud.
+    * Create a new SetPoint entity in the BAScloud.
     * 
     * Given the associated Tenant and Device entity, a new SetPoint is created using the given SetPoint parameter.
     * 
@@ -1267,12 +1269,12 @@ class EntityContext {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant of the SetPoint.
-    * @param API_device_UUID UUID of the associated BASCloud Device of the SetPoint.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the SetPoint.
+    * @param API_device_UUID UUID of the associated BAScloud Device of the SetPoint.
     * @param value Value of the SetPoint
     * @param timestamp The time of the SetPoint value.
     * 
-    * @return SetPoint entity object representing the newly created BASCloud SetPoint.
+    * @return SetPoint entity object representing the newly created BAScloud SetPoint.
     */
 	SetPoint createSetPoint(std::string API_tenant_UUID, std::string API_device_UUID, double value, std::time_t timestamp);
 

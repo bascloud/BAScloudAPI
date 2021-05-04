@@ -7,7 +7,7 @@
 #include "APIContext.h"
 
 
-namespace BASCloud {
+namespace BAScloud {
 
 APIContext::APIContext(std::string API_server_URL) : 
     API_server_URL(API_server_URL) {

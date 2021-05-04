@@ -7,13 +7,13 @@
 #include "error/Exceptions.h"
 
 
-using namespace BASCloud;
+using namespace BAScloud;
 
 int main (int argc, char *argv[]) {
 
     std::cout << "Initialising library..."<< std::endl;
 
-    // For accessing the BASCloud API, a API endpoint URL needs to be defined (Note: no trailing symbols, must end with TLD identifier)
+    // For accessing the BAScloud API, a API endpoint URL needs to be defined (Note: no trailing symbols, must end with TLD identifier)
     EntityContext BCAPI("server_URL");
     std::cout << "\tOK." << std::endl;
 
@@ -22,7 +22,7 @@ int main (int argc, char *argv[]) {
     std::cout << "1. - Authentication with user login" << std::endl;
 
     /**
-     * All methods in the BASCloud API library potential throw different exceptions to signal a failure in the API request.
+     * All methods in the BAScloud API library potential throw different exceptions to signal a failure in the API request.
      * 
      * The following exceptions may be thrown:
      * 
@@ -64,7 +64,7 @@ int main (int argc, char *argv[]) {
 
     try {
         /** 
-         * Creates a new setpoint in the BASCloud 
+         * Creates a new setpoint in the BAScloud 
          * Parameters are a tenant UUID under which the device and setpoint is grouped, 
          * a device UUID for which the setpoint is set, the setpoint value and future timestamp.
          */

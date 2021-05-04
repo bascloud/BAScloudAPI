@@ -14,7 +14,7 @@ TEST(BasicTests, ParseURLParameterTest) {
 
     std::string url = "test.local/tenants/XXX/connectors/XXX/devices?page[size]=1&page[before]=Mzk5ZTM1MWYtNTI3OS00YzFhLTk0MmUtYTZiODBmMjFiYzVh";
 
-    std::map<std::string, std::string> params = BASCloud::Util::parseURLParameter(url);
+    std::map<std::string, std::string> params = BAScloud::Util::parseURLParameter(url);
 
     EXPECT_EQ(params.at("page[size]"), "1");
     EXPECT_EQ(params.at("page[before]"), "Mzk5ZTM1MWYtNTI3OS00YzFhLTk0MmUtYTZiODBmMjFiYzVh");
@@ -31,7 +31,7 @@ TEST(BasicTests, ParseCurrentDateTimeTest) {
 
     std::cerr <<"CURRENT DATETIME: "<<currentDateTimeString<<std::endl;
 
-    std::time_t parsedDateTime = BASCloud::Util::parseDateTimeString(currentDateTimeString);
+    std::time_t parsedDateTime = BAScloud::Util::parseDateTimeString(currentDateTimeString);
     std::string parsedDateTimeString = fmt::format("{:%FT%T.000Z}", fmt::localtime(parsedDateTime));
 
     std::cerr <<"PARSED DATETIME: "<<parsedDateTime<<std::endl;
@@ -47,7 +47,7 @@ TEST(BasicTests, ParseFixedDateTimeTest) {
 
     std::cerr <<"FIXED DATETIME: "<<fixedDateTimeString<<std::endl;
 
-    std::time_t parsedDateTime = BASCloud::Util::parseDateTimeString(fixedDateTimeString);
+    std::time_t parsedDateTime = BAScloud::Util::parseDateTimeString(fixedDateTimeString);
     std::string parsedDateTimeString = fmt::format("{:%FT%T.819Z}", fmt::localtime(parsedDateTime));
 
     std::cerr <<"PARSED DATETIME: "<<parsedDateTime<<std::endl;

@@ -3,7 +3,7 @@
 #include "EntityContext.h"
 
 
-namespace BASCloud {
+namespace BAScloud {
 
 Tenant::Tenant(std::string API_UUID, std::string name, std::string urlName, std::time_t createdAt, std::time_t updatedAt, EntityContext* context) : 
     Entity(API_UUID, context), EntityDateMixin(createdAt, updatedAt), name(name), url_name(urlName) {

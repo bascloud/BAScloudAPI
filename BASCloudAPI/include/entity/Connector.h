@@ -11,13 +11,13 @@
 #include "EntityCollection.h"
 
 
-namespace BASCloud {
+namespace BAScloud {
 
 class Property;
 class Device;
 
 /** 
- * A Connector entity represents a BASCloud Connector in a property/building. 
+ * A Connector entity represents a BAScloud Connector in a property/building. 
  * 
  * Each Connector is responsible for a particular set of Devices and its related entities (Readings, Setpoints).
  * 
@@ -32,7 +32,7 @@ class Connector : public Entity, public EntityTenantMixin, public EntityDateMixi
    std::string name;
 
    /**
-    * API key of the Connector for accessing the BASCloud API. A Connector's API key never expires.
+    * API key of the Connector for accessing the BAScloud API. A Connector's API key never expires.
     * 
     * The API key may not be available (empty), a new API key can be requested through refreshAuthToken().
     * This request invalidates the previous API key.
@@ -44,17 +44,17 @@ class Connector : public Entity, public EntityTenantMixin, public EntityDateMixi
    /**
     * Connector constructor
     *
-    * Creates a Connector object representing a BASCloud API entity.
+    * Creates a Connector object representing a BAScloud API entity.
     *
-    * Note: Creating an entity object over its constructor does not automatically create the entity in the BASCloud. 
-    * For creation of a BASCloud entity use the static method of the corresponding object class Connector::createConnector().
+    * Note: Creating an entity object over its constructor does not automatically create the entity in the BAScloud. 
+    * For creation of a BAScloud entity use the static method of the corresponding object class Connector::createConnector().
     * 
-    * @param API_UUID Universally unique identifier of the represented BASCloud Connector.
-    * @param API_tenant_UUID Universally unique identifier of the represented BASCloud Device.
+    * @param API_UUID Universally unique identifier of the represented BAScloud Connector.
+    * @param API_tenant_UUID Universally unique identifier of the represented BAScloud Device.
     * @param name Name for the Connector in the building.
-    * @param apiKey API key of the Connector for accessing the BASCloud API.
-    * @param createdAt Datetime describing the creation of the device entity in the BASCloud.
-    * @param updatedAt Datetime describing the last update of the device information in the BASCloud.
+    * @param apiKey API key of the Connector for accessing the BAScloud API.
+    * @param createdAt Datetime describing the creation of the device entity in the BAScloud.
+    * @param updatedAt Datetime describing the last update of the device information in the BAScloud.
     * @param context EntityContext proving an abstracted context for accessing the API functions.
     */
    Connector(std::string API_UUID, std::string API_tenant_UUID, std::string name, std::string apiKey, std::time_t createdAt, std::time_t updatedAt, EntityContext* context);
@@ -82,7 +82,7 @@ class Connector : public Entity, public EntityTenantMixin, public EntityDateMixi
    void setAPIKey(std::string newApiKey);
 
    /**
-    * Refresh the Connector API key from the BASCloud.
+    * Refresh the Connector API key from the BAScloud.
     * 
     * Requests a new API key for this Connector entity and updates its api_key attribute.
     * A call to this function invalidates the previous API key.
@@ -141,11 +141,11 @@ class Connector : public Entity, public EntityTenantMixin, public EntityDateMixi
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant of the Connector.
-    * @param API_connector_UUID UUID of the represented BASCloud Connector.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the Connector.
+    * @param API_connector_UUID UUID of the represented BAScloud Connector.
     * @param context EntityContext proving an abstracted context for accessing the API functions.
     * 
-    * @return A Connector object representing the BASCloud Connector with the specified UUID.
+    * @return A Connector object representing the BAScloud Connector with the specified UUID.
     */
    static Connector getConnector(std::string API_tenant_UUID, std::string API_connector_UUID, EntityContext* context);
 
@@ -160,7 +160,7 @@ class Connector : public Entity, public EntityTenantMixin, public EntityDateMixi
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant.
     * @param context EntityContext proving an abstracted context for accessing the API functions.
     * @param paging Optional PagingOption that is used for requesting paged API results.
     * 
@@ -169,7 +169,7 @@ class Connector : public Entity, public EntityTenantMixin, public EntityDateMixi
    static EntityCollection<Connector> getConnectors(std::string API_tenant_UUID, EntityContext* context, PagingOption paging={});
 
    /**
-    * Create a new Connector entity in the BASCloud.
+    * Create a new Connector entity in the BAScloud.
     * 
     * Given the associated Tenant and Property a new Connector is created using the given Connector parameter.
     * 
@@ -181,19 +181,19 @@ class Connector : public Entity, public EntityTenantMixin, public EntityDateMixi
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant of the Connector.
-    * @param API_property_UUID UUID of the associated BASCloud Property of the Connector.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the Connector.
+    * @param API_property_UUID UUID of the associated BAScloud Property of the Connector.
     * @param name The name of the new Connector.
     * @param context EntityContext proving an abstracted context for accessing the API functions.
     * 
-    * @return Connector entity object representing the newly created BASCloud Connector.
+    * @return Connector entity object representing the newly created BAScloud Connector.
     */
    static Connector createConnector(std::string API_tenant_UUID, std::string API_property_UUID, std::string name, EntityContext* context);
 
    /**
-    * Update an existing Connector in the BASCloud.
+    * Update an existing Connector in the BAScloud.
     * 
-    * The request updates attributes of an existing BASCloud Connector based on the given Connector UUID and returns 
+    * The request updates attributes of an existing BAScloud Connector based on the given Connector UUID and returns 
     * a new Connector object representing the updated entity.
     * 
     * @throws ServerError
@@ -204,19 +204,19 @@ class Connector : public Entity, public EntityTenantMixin, public EntityDateMixi
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant of the Connector.
-    * @param API_connector_UUID UUID of the existing BASCloud Connector that is supposed to be updated.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the Connector.
+    * @param API_connector_UUID UUID of the existing BAScloud Connector that is supposed to be updated.
     * @param context EntityContext proving an abstracted context for accessing the API functions.
     * @param name Optional new name of the new Connector.
     * 
-    * @return Connector entity object representing the updated BASCloud Connector.
+    * @return Connector entity object representing the updated BAScloud Connector.
     */
    static Connector updateConnector(std::string API_tenant_UUID, std::string API_connector_UUID, EntityContext* context, std::string name={});
 
    /**
-    * Deletes an existing Connector in the BASCloud.
+    * Deletes an existing Connector in the BAScloud.
     * 
-    * The request deletes a Connector entity in the BASCloud based on the given Connector UUID.
+    * The request deletes a Connector entity in the BAScloud based on the given Connector UUID.
     * 
     * @throws ServerError
     * @throws ConnectionError
@@ -226,8 +226,8 @@ class Connector : public Entity, public EntityTenantMixin, public EntityDateMixi
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant of the Connector.
-    * @param API_connector_UUID UUID of the existing BASCloud Connector that is supposed to be deleted.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the Connector.
+    * @param API_connector_UUID UUID of the existing BAScloud Connector that is supposed to be deleted.
     * @param context EntityContext proving an abstracted context for accessing the API functions.
     */
    static void deleteConnector(std::string API_tenant_UUID, std::string API_connector_UUID, EntityContext* context);

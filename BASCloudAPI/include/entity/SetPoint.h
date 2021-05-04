@@ -11,7 +11,7 @@
 #include "EntityCollection.h"
 
 
-namespace BASCloud {
+namespace BAScloud {
 
 /** 
  * A SetPoint entity represents a future set point for a sensor or actor (Device) in a building (Property).
@@ -38,17 +38,17 @@ class SetPoint : public Entity, public EntityTenantMixin, public EntityDateMixin
    /**
     * SetPoint constructor
     *
-    * Creates a SetPoint object representing a BASCloud API entity.
+    * Creates a SetPoint object representing a BAScloud API entity.
     *
-    * Note: Creating an entity object over its constructor does not automatically create the entity in the BASCloud. 
-    * For creation of a BASCloud entity use the static method of the corresponding object class SetPoint::createSetPoint().
+    * Note: Creating an entity object over its constructor does not automatically create the entity in the BAScloud. 
+    * For creation of a BAScloud entity use the static method of the corresponding object class SetPoint::createSetPoint().
     *
-    * @param API_UUID Universally unique identifier of the represented BASCloud SetPoint.
-    * @param API_tenant_UUID Universally unique identifier of the represented BASCloud SetPoint.
+    * @param API_UUID Universally unique identifier of the represented BAScloud SetPoint.
+    * @param API_tenant_UUID Universally unique identifier of the represented BAScloud SetPoint.
     * @param value Value of the SetPoint.
     * @param timestamp Timestamp of the SetPoint.
-    * @param createdAt Datetime describing the creation of the SetPoint entity in the BASCloud.
-    * @param updatedAt Datetime describing the last update of the SetPoint information in the BASCloud.
+    * @param createdAt Datetime describing the creation of the SetPoint entity in the BAScloud.
+    * @param updatedAt Datetime describing the last update of the SetPoint information in the BAScloud.
     * @param context EntityContext proving an abstracted context for accessing the API functions.
     */
    SetPoint(std::string API_UUID, std::string API_tenant_UUID, double value, std::time_t timestamp, std::time_t createdAt, std::time_t updatedAt, EntityContext* context);
@@ -80,18 +80,18 @@ class SetPoint : public Entity, public EntityTenantMixin, public EntityDateMixin
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant of the SetPoint.
-    * @param API_setpoint_UUID UUID of the represented BASCloud SetPoint.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the SetPoint.
+    * @param API_setpoint_UUID UUID of the represented BAScloud SetPoint.
     * @param context EntityContext proving an abstracted context for accessing the API functions.
     * 
-    * @return A SetPoint object representing the BASCloud SetPoint with the specified UUID.
+    * @return A SetPoint object representing the BAScloud SetPoint with the specified UUID.
     */
    static SetPoint getSetPoint(std::string API_tenant_UUID, std::string API_setpoint_UUID, EntityContext* context);
 
   /**
     * Request a collection of SetPoint entities grouped under the given Tenant.
     * 
-    * The request filters the BASCloud SetPoint based on the given parameters and returns a collection 
+    * The request filters the BAScloud SetPoint based on the given parameters and returns a collection 
     * of SetPoint matching these values.
     * 
     * @throws ServerError
@@ -102,7 +102,7 @@ class SetPoint : public Entity, public EntityTenantMixin, public EntityDateMixin
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant.
     * @param context EntityContext proving an abstracted context for accessing the API functions.
     * @param paging Optional PagingOption that is used for requesting paged API results.
     * @param from Optional filter defining the start time of a time-range the requested SetPoint should lie in.
@@ -116,7 +116,7 @@ class SetPoint : public Entity, public EntityTenantMixin, public EntityDateMixin
    static EntityCollection<SetPoint> getSetPoints(std::string API_tenant_UUID, EntityContext* context, PagingOption paging={}, std::time_t from=-1, std::time_t until=-1, std::time_t timestamp=-1, std::time_t currentTime=-1, std::string API_device_UUID={});
 
    /**
-    * Create a new SetPoint entity in the BASCloud.
+    * Create a new SetPoint entity in the BAScloud.
     * 
     * Given the associated Tenant and Device entity, a new SetPoint is created using the given SetPoint parameter.
     * 
@@ -128,13 +128,13 @@ class SetPoint : public Entity, public EntityTenantMixin, public EntityDateMixin
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param API_tenant_UUID UUID of the associated BASCloud Tenant of the SetPoint.
-    * @param API_device_UUID UUID of the associated BASCloud Device of the SetPoint.
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the SetPoint.
+    * @param API_device_UUID UUID of the associated BAScloud Device of the SetPoint.
     * @param value Value of the SetPoint
     * @param timestamp The time of the SetPoint value.
     * @param context EntityContext proving an abstracted context for accessing the API functions.
     * 
-    * @return SetPoint entity object representing the newly created BASCloud SetPoint.
+    * @return SetPoint entity object representing the newly created BAScloud SetPoint.
     */
    static SetPoint createSetPoint(std::string API_tenant_UUID, std::string API_device_UUID, double value, std::time_t timestamp, EntityContext* context);
 
