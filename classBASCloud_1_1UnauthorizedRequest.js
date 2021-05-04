@@ -1,4 +1,4 @@
-var classBASCloud_1_1UnauthorizedRequest =
+var classBAScloud_1_1UnauthorizedRequest =
 [
-    [ "UnauthorizedRequest", "classBASCloud_1_1UnauthorizedRequest.html#a4ba1d2501d8e518f6fd31b5210514fbd", null ]
+    [ "UnauthorizedRequest", "classBAScloud_1_1UnauthorizedRequest.html#a54ebc5bc99f3d112b7fb06d480c003f4", null ]
 ];

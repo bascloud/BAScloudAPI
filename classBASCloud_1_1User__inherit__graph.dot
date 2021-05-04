@@ -1,11 +1,11 @@
-digraph "BASCloud::User"
+digraph "BAScloud::User"
 {
  // LATEX_PDF_SIZE
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="BASCloud::User",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="A User entity represents a API user of the BASCloud."];
+  Node1 [label="BAScloud::User",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="A User entity represents a API user of the BAScloud."];
   Node2 -> Node1 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node2 [label="BASCloud::Entity",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBASCloud_1_1Entity.html",tooltip="Base class modeling a BASCloud entity."];
+  Node2 [label="BAScloud::Entity",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBAScloud_1_1Entity.html",tooltip="Base class modeling a BAScloud entity."];
   Node3 -> Node1 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node3 [label="BASCloud::EntityDateMixin",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBASCloud_1_1EntityDateMixin.html",tooltip="Mixin class that adds datetime functionality and attributes."];
+  Node3 [label="BAScloud::EntityDateMixin",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBAScloud_1_1EntityDateMixin.html",tooltip="Mixin class that adds datetime functionality and attributes."];
 }

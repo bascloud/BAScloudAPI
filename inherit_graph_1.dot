@@ -6,17 +6,17 @@ digraph "Graphical Class Hierarchy"
   rankdir="LR";
   Node2 [label="runtime_error",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
   Node2 -> Node0 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node0 [label="BASCloud::BadRequest",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBASCloud_1_1BadRequest.html",tooltip="400 Bad Request HTTP error."];
+  Node0 [label="BAScloud::BadRequest",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBAScloud_1_1BadRequest.html",tooltip="400 Bad Request HTTP error."];
   Node2 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node4 [label="BASCloud::ConflictRequest",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBASCloud_1_1ConflictRequest.html",tooltip="400 Conflict HTTP error."];
+  Node4 [label="BAScloud::ConflictRequest",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBAScloud_1_1ConflictRequest.html",tooltip="400 Conflict HTTP error."];
   Node2 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node5 [label="BASCloud::ConnectionError",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBASCloud_1_1ConnectionError.html",tooltip="A connection error occured."];
+  Node5 [label="BAScloud::ConnectionError",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBAScloud_1_1ConnectionError.html",tooltip="A connection error occured."];
   Node2 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node6 [label="BASCloud::InvalidResponse",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBASCloud_1_1InvalidResponse.html",tooltip="Invalid response received from the BASCloud API."];
+  Node6 [label="BAScloud::InvalidResponse",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBAScloud_1_1InvalidResponse.html",tooltip="Invalid response received from the BAScloud API."];
   Node2 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node7 [label="BASCloud::NotFoundRequest",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBASCloud_1_1NotFoundRequest.html",tooltip="404 Not Found HTTP error."];
+  Node7 [label="BAScloud::NotFoundRequest",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBAScloud_1_1NotFoundRequest.html",tooltip="404 Not Found HTTP error."];
   Node2 -> Node8 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node8 [label="BASCloud::ServerError",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBASCloud_1_1ServerError.html",tooltip="500 server HTTP error."];
+  Node8 [label="BAScloud::ServerError",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBAScloud_1_1ServerError.html",tooltip="500 server HTTP error."];
   Node2 -> Node9 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node9 [label="BASCloud::UnauthorizedRequest",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBASCloud_1_1UnauthorizedRequest.html",tooltip="401 Unauthorized HTTP error."];
+  Node9 [label="BAScloud::UnauthorizedRequest",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBAScloud_1_1UnauthorizedRequest.html",tooltip="401 Unauthorized HTTP error."];
 }

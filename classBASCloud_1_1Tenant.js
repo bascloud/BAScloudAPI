@@ -1,11 +1,11 @@
-var classBASCloud_1_1Tenant =
+var classBAScloud_1_1Tenant =
 [
-    [ "Tenant", "classBASCloud_1_1Tenant.html#a96f59a77ef49c0d1b8ae162746aa38ee", null ],
-    [ "assignUser", "classBASCloud_1_1Tenant.html#a4797162b63e254c85fcefa21dae18125", null ],
-    [ "assignUsers", "classBASCloud_1_1Tenant.html#a2b15245eb812a498d3a2669f18614245", null ],
-    [ "getAssociatedUsers", "classBASCloud_1_1Tenant.html#ae1d7a2f632bc2873543d6ed9eca22679", null ],
-    [ "getName", "classBASCloud_1_1Tenant.html#ad51c0bf9e7dde96527a9d40c86722853", null ],
-    [ "getUrlName", "classBASCloud_1_1Tenant.html#ac6efca693a90e23f28589ca12a1a08dc", null ],
-    [ "removeUser", "classBASCloud_1_1Tenant.html#afdb06da508f4110cebbffc457a218f7e", null ],
-    [ "removeUsers", "classBASCloud_1_1Tenant.html#a9cac4d68a508213d0cf73abd2025fc4c", null ]
+    [ "Tenant", "classBAScloud_1_1Tenant.html#a3e2cf16954a4efa2140043a4bf40e174", null ],
+    [ "assignUser", "classBAScloud_1_1Tenant.html#a1bfa2ad63863f05c30b375b8260ec8be", null ],
+    [ "assignUsers", "classBAScloud_1_1Tenant.html#a0265490df5208a1d7b94cd933852fff4", null ],
+    [ "getAssociatedUsers", "classBAScloud_1_1Tenant.html#a534f3ff11ea4918548ef44e76f1d27af", null ],
+    [ "getName", "classBAScloud_1_1Tenant.html#aab7d4f0a08c7350d1ee238b3cd86e8a0", null ],
+    [ "getUrlName", "classBAScloud_1_1Tenant.html#a0fa653467f26e4d8cbeeda958d4a3307", null ],
+    [ "removeUser", "classBAScloud_1_1Tenant.html#af0c032e7f3a1397cface94525a332d47", null ],
+    [ "removeUsers", "classBAScloud_1_1Tenant.html#a94fa39f85b9a91b75f2ffe0cc5553b74", null ]
 ];

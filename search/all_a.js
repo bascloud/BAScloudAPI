@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['servererror_160',['ServerError',['../classBASCloud_1_1ServerError.html',1,'BASCloud::ServerError'],['../classBASCloud_1_1ServerError.html#a906e434345b3bc77a17228509466f9d7',1,'BASCloud::ServerError::ServerError()']]],
-  ['setapikey_161',['setAPIKey',['../classBASCloud_1_1Connector.html#ab6d2f6da49c12960f409a143ca881582',1,'BASCloud::Connector']]],
-  ['setapiurl_162',['setAPIURL',['../classBASCloud_1_1APIContext.html#aa55e7424bd3661341b1f95d4e2bcf552',1,'BASCloud::APIContext']]],
-  ['setpoint_163',['SetPoint',['../classBASCloud_1_1SetPoint.html',1,'BASCloud::SetPoint'],['../classBASCloud_1_1SetPoint.html#ad48ec070d6951b8a1647cb07eedbc7c2',1,'BASCloud::SetPoint::SetPoint()']]],
-  ['settoken_164',['setToken',['../classBASCloud_1_1APIContext.html#a4b811b370a84d118282b1eb39d51e920',1,'BASCloud::APIContext']]]
+  ['servererror_160',['ServerError',['../classBAScloud_1_1ServerError.html',1,'BAScloud::ServerError'],['../classBAScloud_1_1ServerError.html#a6fb6f933a75ec61bd5694587da712c4a',1,'BAScloud::ServerError::ServerError()']]],
+  ['setapikey_161',['setAPIKey',['../classBAScloud_1_1Connector.html#ac8b17dd22db216049b2db907837b4969',1,'BAScloud::Connector']]],
+  ['setapiurl_162',['setAPIURL',['../classBAScloud_1_1APIContext.html#a39656ed34b667548fa99cbe241fb1116',1,'BAScloud::APIContext']]],
+  ['setpoint_163',['SetPoint',['../classBAScloud_1_1SetPoint.html',1,'BAScloud::SetPoint'],['../classBAScloud_1_1SetPoint.html#af5d9d340ae811a1ac19254577e69e078',1,'BAScloud::SetPoint::SetPoint()']]],
+  ['settoken_164',['setToken',['../classBAScloud_1_1APIContext.html#a90fcf757bc946eca3069ac7744e19ff0',1,'BAScloud::APIContext']]]
 ];

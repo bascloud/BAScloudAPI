@@ -1,9 +1,9 @@
-var structBASCloud_1_1PagingResult =
+var structBAScloud_1_1PagingResult =
 [
-    [ "count", "structBASCloud_1_1PagingResult.html#afabc18cbb28c717823f5ac8fa352988b", null ],
-    [ "currentPage", "structBASCloud_1_1PagingResult.html#acea9bad88d704360ef8104f6d482687c", null ],
-    [ "nextPagePointer", "structBASCloud_1_1PagingResult.html#a2fcb34178ced8d2e0dbc845ec2f6da5b", null ],
-    [ "pageSize", "structBASCloud_1_1PagingResult.html#aa6d7b4e368254f2f9bf4a4de9f1a299e", null ],
-    [ "previousPagePointer", "structBASCloud_1_1PagingResult.html#a45fbf33debb6b24980ed5a0216e250ab", null ],
-    [ "totalPages", "structBASCloud_1_1PagingResult.html#aae1968baccb042c67551bb9f26a977df", null ]
+    [ "count", "structBAScloud_1_1PagingResult.html#a905f2181c629353435426c909aee7617", null ],
+    [ "currentPage", "structBAScloud_1_1PagingResult.html#aa4bd4c0ccd523fae30344dcdc30a4433", null ],
+    [ "nextPagePointer", "structBAScloud_1_1PagingResult.html#a513204ec863a79ba9b4a9fc650450b24", null ],
+    [ "pageSize", "structBAScloud_1_1PagingResult.html#a68edeb568874d25369416a70038df7d2", null ],
+    [ "previousPagePointer", "structBAScloud_1_1PagingResult.html#a71afa43de13929ba37996d9c7a92e363", null ],
+    [ "totalPages", "structBAScloud_1_1PagingResult.html#ac16a46e1d296652c3e5e95a64ee29080", null ]
 ];

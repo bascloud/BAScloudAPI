@@ -1,4 +1,4 @@
-var classBASCloud_1_1ConflictRequest =
+var classBAScloud_1_1ConflictRequest =
 [
-    [ "ConflictRequest", "classBASCloud_1_1ConflictRequest.html#aea9cd8615b211c1df29f580f664952e6", null ]
+    [ "ConflictRequest", "classBAScloud_1_1ConflictRequest.html#aa99945ef27b54527413365d920e76662", null ]
 ];

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>BASCloud API Library: BASCloud API Library User&#39;s Guide</title>
+<title>BAScloud API Library: BAScloud API Library User&#39;s Guide</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -25,7 +25,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">BASCloud API Library
+   <div id="projectname">BAScloud API Library
    &#160;<span id="projectnumber">2.1</span>
    </div>
   </td>
@@ -83,50 +83,50 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 
 <div class="PageDoc"><div class="header">
   <div class="headertitle">
-<div class="title">BASCloud API Library User's Guide </div>  </div>
+<div class="title">BAScloud API Library User's Guide </div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><dl class="section user"><dt>Table of Contents</dt><dd></dd></dl>
 <ul>
-<li><a class="el" href="index.html">BASCloud API Library User's Guide</a><ul>
+<li><a class="el" href="index.html">BAScloud API Library User's Guide</a><ul>
 <li><a class="el" href="index.html#intro">Introduction</a></li>
-<li><a class="el" href="index.html#api_overview">BASCloud API</a></li>
+<li><a class="el" href="index.html#api_overview">BAScloud API</a></li>
 <li><a class="el" href="index.html#wrappers">Language Wrappers</a><ul>
-<li><a class="el" href="index.html#c_cxx_api">BASCloud API for C/C++</a></li>
-<li><a class="el" href="index.html#python_api">BASCloud API for Python</a></li>
-<li><a class="el" href="index.html#others_api">BASCloud API for other platforms</a></li>
+<li><a class="el" href="index.html#c_cxx_api">BAScloud API for C/C++</a></li>
+<li><a class="el" href="index.html#python_api">BAScloud API for Python</a></li>
+<li><a class="el" href="index.html#others_api">BAScloud API for other platforms</a></li>
 </ul>
 </li>
-<li><a class="el" href="index.html#how_to">Using the BASCloud API Libary</a></li>
+<li><a class="el" href="index.html#how_to">Using the BAScloud API Libary</a></li>
 </ul>
 </li>
 </ul>
 <h2><a class="anchor" id="intro"></a>
 Introduction</h2>
-<p>The BASCloud API Library is a C/C++ based library which wraps the BASCloud REST API endpoints into an interface for programmers to easily use e.g. for GLT integrations or client implementations.</p>
-<p>The BASCloudAPI library provides a high-level abstraction of the BASCloud functions and entity data through an object-oriented concept.</p>
-<p>The class <a class="el" href="classBASCloud_1_1EntityContext.html" title="The EntityContext class provides a high-level abstraction to access the BASCloud API endpoint functio...">BASCloud::EntityContext</a> is the basis for all high-level interaction with the BASCloud API. It provides wrapper functions for all API endpoint functions and delivers the response data in entity class objects. Entity types of the BASCloud are adopted one to one into the classes <a class="el" href="classBASCloud_1_1User.html" title="A User entity represents a API user of the BASCloud.">BASCloud::User</a>, <a class="el" href="classBASCloud_1_1Tenant.html" title="A Tenant entity represents a customer/tenant in the BASCloud.">BASCloud::Tenant</a>, <a class="el" href="classBASCloud_1_1Property.html" title="A Property entity represents a building or location in the BASCloud.">BASCloud::Property</a>, <a class="el" href="classBASCloud_1_1Connector.html" title="A Connector entity represents a BASCloud Connector in a property/building.">BASCloud::Connector</a>, <a class="el" href="classBASCloud_1_1Device.html" title="A device entity represents a sensor or actor in a property/building.">BASCloud::Device</a>, <a class="el" href="classBASCloud_1_1Reading.html" title="A Reading entity represents a reading from a sensor or actor (Device) in a building (Property).">BASCloud::Reading</a>, <a class="el" href="classBASCloud_1_1SetPoint.html" title="A SetPoint entity represents a future set point for a sensor or actor (Device) in a building (Propert...">BASCloud::SetPoint</a>. <a class="el" href="classBASCloud_1_1EntityContext.html" title="The EntityContext class provides a high-level abstraction to access the BASCloud API endpoint functio...">BASCloud::EntityContext</a> further handles authentication, endpoint requests, response parsing, and errors.</p>
-<p>For accessing the raw response data of the REST API endpoints, the class <a class="el" href="classBASCloud_1_1APIContext.html" title="BASCloud API context is a 1:1 implementation of the unabstracted API endpoints.">BASCloud::APIContext</a> provides a 1:1 implementation of the endpoints, without any additional handling of authentication, response parsing, or errors.</p>
-<p><b>It is recommended to use <a class="el" href="classBASCloud_1_1EntityContext.html" title="The EntityContext class provides a high-level abstraction to access the BASCloud API endpoint functio...">BASCloud::EntityContext</a> for all interactions with the API.</b></p>
+<p>The BAScloud API Library is a C/C++ based library which wraps the BAScloud REST API endpoints into an interface for programmers to easily use e.g. for GLT integrations or client implementations.</p>
+<p>The BAScloudAPI library provides a high-level abstraction of the BAScloud functions and entity data through an object-oriented concept.</p>
+<p>The class <a class="el" href="classBAScloud_1_1EntityContext.html" title="The EntityContext class provides a high-level abstraction to access the BAScloud API endpoint functio...">BAScloud::EntityContext</a> is the basis for all high-level interaction with the BAScloud API. It provides wrapper functions for all API endpoint functions and delivers the response data in entity class objects. Entity types of the BAScloud are adopted one to one into the classes <a class="el" href="classBAScloud_1_1User.html" title="A User entity represents a API user of the BAScloud.">BAScloud::User</a>, <a class="el" href="classBAScloud_1_1Tenant.html" title="A Tenant entity represents a customer/tenant in the BAScloud.">BAScloud::Tenant</a>, <a class="el" href="classBAScloud_1_1Property.html" title="A Property entity represents a building or location in the BAScloud.">BAScloud::Property</a>, <a class="el" href="classBAScloud_1_1Connector.html" title="A Connector entity represents a BAScloud Connector in a property/building.">BAScloud::Connector</a>, <a class="el" href="classBAScloud_1_1Device.html" title="A device entity represents a sensor or actor in a property/building.">BAScloud::Device</a>, <a class="el" href="classBAScloud_1_1Reading.html" title="A Reading entity represents a reading from a sensor or actor (Device) in a building (Property).">BAScloud::Reading</a>, <a class="el" href="classBAScloud_1_1SetPoint.html" title="A SetPoint entity represents a future set point for a sensor or actor (Device) in a building (Propert...">BAScloud::SetPoint</a>. <a class="el" href="classBAScloud_1_1EntityContext.html" title="The EntityContext class provides a high-level abstraction to access the BAScloud API endpoint functio...">BAScloud::EntityContext</a> further handles authentication, endpoint requests, response parsing, and errors.</p>
+<p>For accessing the raw response data of the REST API endpoints, the class <a class="el" href="classBAScloud_1_1APIContext.html" title="BAScloud API context is a 1:1 implementation of the unabstracted API endpoints.">BAScloud::APIContext</a> provides a 1:1 implementation of the endpoints, without any additional handling of authentication, response parsing, or errors.</p>
+<p><b>It is recommended to use <a class="el" href="classBAScloud_1_1EntityContext.html" title="The EntityContext class provides a high-level abstraction to access the BAScloud API endpoint functio...">BAScloud::EntityContext</a> for all interactions with the API.</b></p>
 <h2><a class="anchor" id="api_overview"></a>
-BASCloud API</h2>
-<p>A complete documentation of the REST API endpoints of the BASCloud is available under the following link.</p>
-<p><a href="https://docs.bascloud.net/" target="_blank">BASCloud API Documentation</a></p>
+BAScloud API</h2>
+<p>A complete documentation of the REST API endpoints of the BAScloud is available under the following link.</p>
+<p><a href="https://docs.bascloud.net/" target="_blank">BAScloud API Documentation</a></p>
 <h2><a class="anchor" id="wrappers"></a>
 Language Wrappers</h2>
-<p>The BASCloud API Library is written in C/C++. For the Python programming language, additional bindings exist which wrap the C/C++ library.</p>
+<p>The BAScloud API Library is written in C/C++. For the Python programming language, additional bindings exist which wrap the C/C++ library.</p>
 <h2><a class="anchor" id="c_cxx_api"></a>
-BASCloud API for C/C++</h2>
-<p>See BASCloud namespace under Data Structures for the class documentation of the C/C++ library classes and functions. The class <a class="el" href="classBASCloud_1_1EntityContext.html" title="The EntityContext class provides a high-level abstraction to access the BASCloud API endpoint functio...">BASCloud::EntityContext</a> is the basis for all high-level interaction with the BASCloud API and should be used.</p>
+BAScloud API for C/C++</h2>
+<p>See BAScloud namespace under Data Structures for the class documentation of the C/C++ library classes and functions. The class <a class="el" href="classBAScloud_1_1EntityContext.html" title="The EntityContext class provides a high-level abstraction to access the BAScloud API endpoint functio...">BAScloud::EntityContext</a> is the basis for all high-level interaction with the BAScloud API and should be used.</p>
 <h3><a class="anchor" id="c_cxx_login"></a>
 Login</h3>
-<p>For connecting to the BASCloud API, a <b>server URL</b> and a user login are neccessary. Please contact your BASCloud support for this information.</p>
-<p>Before accessing any API functions through the library, a user needs to be authenticated. Through the creation of a <a class="el" href="classBASCloud_1_1EntityContext.html" title="The EntityContext class provides a high-level abstraction to access the BASCloud API endpoint functio...">BASCloud::EntityContext</a> object given the server URL, a user can be logged in. The <a class="el" href="classBASCloud_1_1EntityContext.html" title="The EntityContext class provides a high-level abstraction to access the BASCloud API endpoint functio...">BASCloud::EntityContext</a> object then holds a authentication token which is used for any further API request.</p>
+<p>For connecting to the BAScloud API, a <b>server URL</b> and a user login are neccessary. Please contact your BAScloud support for this information.</p>
+<p>Before accessing any API functions through the library, a user needs to be authenticated. Through the creation of a <a class="el" href="classBAScloud_1_1EntityContext.html" title="The EntityContext class provides a high-level abstraction to access the BAScloud API endpoint functio...">BAScloud::EntityContext</a> object given the server URL, a user can be logged in. The <a class="el" href="classBAScloud_1_1EntityContext.html" title="The EntityContext class provides a high-level abstraction to access the BAScloud API endpoint functio...">BAScloud::EntityContext</a> object then holds a authentication token which is used for any further API request.</p>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;EntityContext.h&quot;</span></div>
 <div class="line"> </div>
-<div class="line"><span class="keyword">using namespace </span>BASCloud;</div>
+<div class="line"><span class="keyword">using namespace </span>BAScloud;</div>
 <div class="line"> </div>
-<div class="line"><a class="code" href="classBASCloud_1_1EntityContext.html">EntityContext</a> BCAPI(<span class="stringliteral">&quot;server_URL&quot;</span>);</div>
+<div class="line"><a class="code" href="classBAScloud_1_1EntityContext.html">EntityContext</a> BCAPI(<span class="stringliteral">&quot;server_URL&quot;</span>);</div>
 <div class="line"> </div>
 <div class="line"><span class="keywordflow">try</span> {</div>
 <div class="line">    BCAPI.authenticateWithUserLogin(<span class="stringliteral">&quot;user_email&quot;</span>, <span class="stringliteral">&quot;user_password&quot;</span>);</div>
@@ -134,12 +134,12 @@ Login</h3>
 <div class="line"> </div>
 <div class="line">}</div>
 </div><!-- fragment --><p>Authentication is also possible using a previously requested connector authentication. For creating readings or devices from a connector, a connector authentication can be performed by requesting a connector token from an initial user login. The connector token can be persisted locally on the connector as it never expires (only if the token is renewed).</p>
-<p>Note: Connector token has limited authority in the BASCloud (compared to the user).</p>
+<p>Note: Connector token has limited authority in the BAScloud (compared to the user).</p>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;EntityContext.h&quot;</span></div>
 <div class="line"> </div>
-<div class="line"><span class="keyword">using namespace </span>BASCloud;</div>
+<div class="line"><span class="keyword">using namespace </span>BAScloud;</div>
 <div class="line"> </div>
-<div class="line"><a class="code" href="classBASCloud_1_1EntityContext.html">EntityContext</a> BCAPI(<span class="stringliteral">&quot;server_URL&quot;</span>);</div>
+<div class="line"><a class="code" href="classBAScloud_1_1EntityContext.html">EntityContext</a> BCAPI(<span class="stringliteral">&quot;server_URL&quot;</span>);</div>
 <div class="line"> </div>
 <div class="line">BCAPI.authenticateWithConnectorToken(<span class="stringliteral">&quot;connector_token&quot;</span>);</div>
 </div><!-- fragment --><h3><a class="anchor" id="c_cxx_readings"></a>
@@ -148,7 +148,7 @@ Access Readings</h3>
 <p>For functions returning a collection of entities (EntityCollection), optional filter values can be specified (See API documentation), also an optional error handler can be defined. This error handler is called for each entity failure in the response.</p>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;EntityContext.h&quot;</span></div>
 <div class="line"> </div>
-<div class="line"><span class="keyword">using namespace </span>BASCloud;</div>
+<div class="line"><span class="keyword">using namespace </span>BAScloud;</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// Previous login code...</span></div>
 <div class="line"> </div>
@@ -161,7 +161,7 @@ Access Readings</h3>
 <div class="line"><span class="keywordtype">double</span> value_filter = std::numeric_limits&lt;double&gt;::quiet_NaN();</div>
 <div class="line">std::string deviceUUID_filter = {};</div>
 <div class="line"> </div>
-<div class="line"><a class="code" href="classBASCloud_1_1PagingOption.html">PagingOption</a> paging = <a class="code" href="classBASCloud_1_1PagingOption.html">PagingOption</a>(1000, PagingOption::Direction::NONE, {});</div>
+<div class="line"><a class="code" href="classBAScloud_1_1PagingOption.html">PagingOption</a> paging = <a class="code" href="classBAScloud_1_1PagingOption.html">PagingOption</a>(1000, PagingOption::Direction::NONE, {});</div>
 <div class="line"> </div>
 <div class="line"><span class="keywordflow">try</span> {</div>
 <div class="line">    EntityCollection&lt;Reading&gt; readings = BCAPI.getReadingsCollection(tenantUUID, paging, from_filter, until_filter, </div>
@@ -173,12 +173,12 @@ Access Readings</h3>
 <div class="line">}</div>
 </div><!-- fragment --><p>See examples for complete executable code.</p>
 <h2><a class="anchor" id="python_api"></a>
-BASCloud API for Python</h2>
-<p>The Python package pyBASCloudAPI can be compiled, or installed through a pre-build packages provided for Windows/Linux/MacOS as wheel packages.</p>
+BAScloud API for Python</h2>
+<p>The Python package pyBAScloudAPI can be compiled, or installed through a pre-build packages provided for Windows/Linux/MacOS as wheel packages.</p>
 <p>After downloading the corresponding package for the platform, the package can be installed through:</p>
-<div class="fragment"><div class="line">python -m pip install pyBASCloudAPI-*.whl</div>
+<div class="fragment"><div class="line">python -m pip install pyBAScloudAPI-*.whl</div>
 </div><!-- fragment --><p>After installation, the package can be imported and used like any Python package.</p>
-<div class="fragment"><div class="line"><span class="keyword">import</span> pyBASCloudAPI as api </div>
+<div class="fragment"><div class="line"><span class="keyword">import</span> pyBAScloudAPI as api </div>
 <div class="line"> </div>
 <div class="line">api.EntityContext(url)</div>
 </div><!-- fragment --><p>Interface of the Python binding is nearly 1:1 to the C/C++ library. For class objects, their corresponding attributes are accessible directly instead of getter methods e.g.:</p>
@@ -187,20 +187,20 @@ BASCloud API for Python</h2>
 </div><!-- fragment --><p>Python access: </p><div class="fragment"><div class="line">user.uuid;</div>
 <div class="line">reading.value;</div>
 </div><!-- fragment --><p>For functions, Python supports named arguments, thus its possible to write </p><div class="fragment"><div class="line">entityContext.authenticateWithUserLogin(email=<span class="stringliteral">&quot;example@test.com&quot;</span>, password=<span class="stringliteral">&quot;password&quot;</span>)</div>
-</div><!-- fragment --><p>Python example code using the binding is available under pyBASCloudAPI/examples.</p>
+</div><!-- fragment --><p>Python example code using the binding is available under pyBAScloudAPI/examples.</p>
 <h2><a class="anchor" id="others_api"></a>
-BASCloud API for other platforms</h2>
+BAScloud API for other platforms</h2>
 <p>For other platforms and languages, Postman can be used to generate code in multiple languages for API endpoint calls.</p>
-<p>See <a href="https://bascloud-dev.postman.co/" target="_blank">BASCloud API Postman</a></p>
+<p>See <a href="https://bascloud-dev.postman.co/" target="_blank">BAScloud API Postman</a></p>
 <h2><a class="anchor" id="how_to"></a>
-Using the BASCloud API Libary</h2>
+Using the BAScloud API Libary</h2>
 <p>Example code for C/C++ usage and corresponding CMake build files are provided in the directory /examples. Further integration tests providing code for tests for nearly any API endpoint function are provided in the /test directory.</p>
-<p>For example usage of the Python binding, example code with use cases are provided in the directory /pyBASCloudAPI/examples. </p>
+<p>For example usage of the Python binding, example code with use cases are provided in the directory /pyBAScloudAPI/examples. </p>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="aclassBASCloud_1_1PagingOption_html"><div class="ttname"><a href="classBASCloud_1_1PagingOption.html">BASCloud::PagingOption</a></div><div class="ttdoc">A User entity represents a API user of the BASCloud.</div><div class="ttdef"><b>Definition:</b> Paging.h:62</div></div>
-<div class="ttc" id="aclassBASCloud_1_1EntityContext_html"><div class="ttname"><a href="classBASCloud_1_1EntityContext.html">BASCloud::EntityContext</a></div><div class="ttdoc">The EntityContext class provides a high-level abstraction to access the BASCloud API endpoint functio...</div><div class="ttdef"><b>Definition:</b> EntityContext.h:29</div></div>
+<div class="ttc" id="aclassBAScloud_1_1PagingOption_html"><div class="ttname"><a href="classBAScloud_1_1PagingOption.html">BAScloud::PagingOption</a></div><div class="ttdoc">A User entity represents a API user of the BAScloud.</div><div class="ttdef"><b>Definition:</b> Paging.h:62</div></div>
+<div class="ttc" id="aclassBAScloud_1_1EntityContext_html"><div class="ttname"><a href="classBAScloud_1_1EntityContext.html">BAScloud::EntityContext</a></div><div class="ttdoc">The EntityContext class provides a high-level abstraction to access the BAScloud API endpoint functio...</div><div class="ttdef"><b>Definition:</b> EntityContext.h:29</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

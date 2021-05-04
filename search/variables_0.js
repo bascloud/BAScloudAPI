@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['context_363',['context',['../classBASCloud_1_1Entity.html#adf90fb07b6e8319c84563e9dabaff647',1,'BASCloud::Entity']]],
-  ['count_364',['count',['../structBASCloud_1_1PagingResult.html#afabc18cbb28c717823f5ac8fa352988b',1,'BASCloud::PagingResult']]],
-  ['currentpage_365',['currentPage',['../structBASCloud_1_1PagingResult.html#acea9bad88d704360ef8104f6d482687c',1,'BASCloud::PagingResult']]]
+  ['context_363',['context',['../classBAScloud_1_1Entity.html#ad63119b75aaf7b02b13574f211b1925e',1,'BAScloud::Entity']]],
+  ['count_364',['count',['../structBAScloud_1_1PagingResult.html#a905f2181c629353435426c909aee7617',1,'BAScloud::PagingResult']]],
+  ['currentpage_365',['currentPage',['../structBAScloud_1_1PagingResult.html#aa4bd4c0ccd523fae30344dcdc30a4433',1,'BAScloud::PagingResult']]]
 ];

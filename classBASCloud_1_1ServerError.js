@@ -1,4 +1,4 @@
-var classBASCloud_1_1ServerError =
+var classBAScloud_1_1ServerError =
 [
-    [ "ServerError", "classBASCloud_1_1ServerError.html#a906e434345b3bc77a17228509466f9d7", null ]
+    [ "ServerError", "classBAScloud_1_1ServerError.html#a6fb6f933a75ec61bd5694587da712c4a", null ]
 ];

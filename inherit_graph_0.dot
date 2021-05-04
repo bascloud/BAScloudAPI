@@ -4,5 +4,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node0 [label="BASCloud::APIContext",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBASCloud_1_1APIContext.html",tooltip="BASCloud API context is a 1:1 implementation of the unabstracted API endpoints."];
+  Node0 [label="BAScloud::APIContext",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBAScloud_1_1APIContext.html",tooltip="BAScloud API context is a 1:1 implementation of the unabstracted API endpoints."];
 }

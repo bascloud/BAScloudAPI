@@ -1,6 +1,6 @@
-var classBASCloud_1_1EntityDateMixin =
+var classBAScloud_1_1EntityDateMixin =
 [
-    [ "EntityDateMixin", "classBASCloud_1_1EntityDateMixin.html#af80db9f5cee2c7242615112b74c46c28", null ],
-    [ "getCreatedDate", "classBASCloud_1_1EntityDateMixin.html#afc89dcdd6ea443965e3ca8e5f448e11e", null ],
-    [ "getLastUpdatedDate", "classBASCloud_1_1EntityDateMixin.html#ad295fd1138851008c61c396142c724e9", null ]
+    [ "EntityDateMixin", "classBAScloud_1_1EntityDateMixin.html#a3059e079e331a6272bef80de780720aa", null ],
+    [ "getCreatedDate", "classBAScloud_1_1EntityDateMixin.html#a743ea41814f688cdab4ab79870b27b85", null ],
+    [ "getLastUpdatedDate", "classBAScloud_1_1EntityDateMixin.html#a959628fb1286d11f815b4271239c3491", null ]
 ];

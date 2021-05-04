@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['totalpages_372',['totalPages',['../structBASCloud_1_1PagingResult.html#aae1968baccb042c67551bb9f26a977df',1,'BASCloud::PagingResult']]]
+  ['totalpages_372',['totalPages',['../structBAScloud_1_1PagingResult.html#ac16a46e1d296652c3e5e95a64ee29080',1,'BAScloud::PagingResult']]]
 ];

@@ -22,8 +22,8 @@ for the JavaScript code in this file
 */
 var NAVTREE =
 [
-  [ "BASCloud API Library", "index.html", [
-    [ "BASCloud API Library User's Guide", "index.html", null ],
+  [ "BAScloud API Library", "index.html", [
+    [ "BAScloud API Library User's Guide", "index.html", null ],
     [ "Data Structures", "annotated.html", [
       [ "Data Structures", "annotated.html", "annotated_dup" ],
       [ "Data Structure Index", "classes.html", null ],

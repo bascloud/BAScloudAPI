@@ -1,6 +1,6 @@
-var classBASCloud_1_1SetPoint =
+var classBAScloud_1_1SetPoint =
 [
-    [ "SetPoint", "classBASCloud_1_1SetPoint.html#ad48ec070d6951b8a1647cb07eedbc7c2", null ],
-    [ "getTimestamp", "classBASCloud_1_1SetPoint.html#ac44d3d0cdf3223060069e6cc58234100", null ],
-    [ "getValue", "classBASCloud_1_1SetPoint.html#a2999720a22d2973eef77689b8c39063b", null ]
+    [ "SetPoint", "classBAScloud_1_1SetPoint.html#af5d9d340ae811a1ac19254577e69e078", null ],
+    [ "getTimestamp", "classBAScloud_1_1SetPoint.html#a0f148829b9bc0a0089e4d937b5985881", null ],
+    [ "getValue", "classBAScloud_1_1SetPoint.html#a6919982d6f9e6042ecc005a66063ebef", null ]
 ];

@@ -1,15 +1,15 @@
-digraph "BASCloud::Reading"
+digraph "BAScloud::Reading"
 {
  // LATEX_PDF_SIZE
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="BASCloud::Reading",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="A Reading entity represents a reading from a sensor or actor (Device) in a building (Property)."];
+  Node1 [label="BAScloud::Reading",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="A Reading entity represents a reading from a sensor or actor (Device) in a building (Property)."];
   Node2 -> Node1 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node2 [label="BASCloud::Entity",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBASCloud_1_1Entity.html",tooltip="Base class modeling a BASCloud entity."];
+  Node2 [label="BAScloud::Entity",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBAScloud_1_1Entity.html",tooltip="Base class modeling a BAScloud entity."];
   Node3 -> Node2 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" context" ,fontname="Helvetica"];
-  Node3 [label="BASCloud::EntityContext",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBASCloud_1_1EntityContext.html",tooltip="The EntityContext class provides a high-level abstraction to access the BASCloud API endpoint functio..."];
+  Node3 [label="BAScloud::EntityContext",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBAScloud_1_1EntityContext.html",tooltip="The EntityContext class provides a high-level abstraction to access the BAScloud API endpoint functio..."];
   Node4 -> Node1 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node4 [label="BASCloud::EntityTenantMixin",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBASCloud_1_1EntityTenantMixin.html",tooltip="Mixin class that adds functionality and attributes to associate a Tenant to a Entity object."];
+  Node4 [label="BAScloud::EntityTenantMixin",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBAScloud_1_1EntityTenantMixin.html",tooltip="Mixin class that adds functionality and attributes to associate a Tenant to a Entity object."];
   Node5 -> Node1 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node5 [label="BASCloud::EntityDateMixin",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBASCloud_1_1EntityDateMixin.html",tooltip="Mixin class that adds datetime functionality and attributes."];
+  Node5 [label="BAScloud::EntityDateMixin",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classBAScloud_1_1EntityDateMixin.html",tooltip="Mixin class that adds datetime functionality and attributes."];
 }

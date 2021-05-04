@@ -1,8 +1,8 @@
-var classBASCloud_1_1User =
+var classBAScloud_1_1User =
 [
-    [ "User", "classBASCloud_1_1User.html#a87451c03de1a918ea71c664a8d92af35", null ],
-    [ "getAssociatedTenant", "classBASCloud_1_1User.html#a3e48dacb0383868e1a1cd7d6c58935d5", null ],
-    [ "getEmail", "classBASCloud_1_1User.html#a7438f06a8747c1699cd23bf353f47044", null ],
-    [ "resetPassword", "classBASCloud_1_1User.html#a4020c1fa223384f02e40dd6cb94289d0", null ],
-    [ "updatePassword", "classBASCloud_1_1User.html#ac7e1139e498dde59b7c83011d1ede3be", null ]
+    [ "User", "classBAScloud_1_1User.html#aae37dbd41bda5e8588903d59d3ed1142", null ],
+    [ "getAssociatedTenant", "classBAScloud_1_1User.html#a97f99e4e87d6aeaa95917c39b525c785", null ],
+    [ "getEmail", "classBAScloud_1_1User.html#ad465df1543b4add3502edf564818bf54", null ],
+    [ "resetPassword", "classBAScloud_1_1User.html#a84e24c3c3a544c0e11a5777daa9cf92d", null ],
+    [ "updatePassword", "classBAScloud_1_1User.html#a69438871ca969330db2dea5eab677f62", null ]
 ];

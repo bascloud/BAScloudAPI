@@ -1,5 +1,5 @@
-var classBASCloud_1_1EntityTenantMixin =
+var classBAScloud_1_1EntityTenantMixin =
 [
-    [ "EntityTenantMixin", "classBASCloud_1_1EntityTenantMixin.html#a2f89021db588960036f3d229db14ea56", null ],
-    [ "getTenantUUID", "classBASCloud_1_1EntityTenantMixin.html#aceec9a49f7a12247150fed8d5d820716", null ]
+    [ "EntityTenantMixin", "classBAScloud_1_1EntityTenantMixin.html#ac42f64fcc976715f07111350a3e0a870", null ],
+    [ "getTenantUUID", "classBAScloud_1_1EntityTenantMixin.html#a469c6e194646bce356e8a51baa7daea1", null ]
 ];

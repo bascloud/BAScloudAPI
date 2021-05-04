@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['badrequest_205',['BadRequest',['../classBASCloud_1_1BadRequest.html#afc51bb23e149ac304118c5fc6bdbd216',1,'BASCloud::BadRequest']]]
+  ['badrequest_205',['BadRequest',['../classBAScloud_1_1BadRequest.html#a534dc2fa8ccb094eff5a1852ee85fb5c',1,'BAScloud::BadRequest']]]
 ];

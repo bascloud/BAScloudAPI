@@ -1,10 +1,10 @@
 var searchData=
 [
-  ['deleteconnector_217',['deleteConnector',['../classBASCloud_1_1Connector.html#a511db02523c4d8365eefc75bd7c79a10',1,'BASCloud::Connector::deleteConnector()'],['../classBASCloud_1_1EntityContext.html#a8f9e9d4bf14ad3c002e40840171e4a27',1,'BASCloud::EntityContext::deleteConnector()']]],
-  ['deletedevice_218',['deleteDevice',['../classBASCloud_1_1Device.html#a3459aa13fba7abc20f06bd50ac532ff9',1,'BASCloud::Device::deleteDevice()'],['../classBASCloud_1_1EntityContext.html#ac6b016b3705ae796bcfc48c0a6e282a1',1,'BASCloud::EntityContext::deleteDevice()']]],
-  ['deleteproperty_219',['deleteProperty',['../classBASCloud_1_1Property.html#aca578ff5410404500df9861d221cbf6a',1,'BASCloud::Property::deleteProperty()'],['../classBASCloud_1_1EntityContext.html#ac173289bd1810e7ba1af53e6c0ceec90',1,'BASCloud::EntityContext::deleteProperty()']]],
-  ['deletereading_220',['deleteReading',['../classBASCloud_1_1Reading.html#aff4be39931e0d96d3dff28b8d06c1221',1,'BASCloud::Reading::deleteReading()'],['../classBASCloud_1_1EntityContext.html#a63594a72026a624f2ed4df7aa81f33e2',1,'BASCloud::EntityContext::deleteReading()']]],
-  ['deletetenant_221',['deleteTenant',['../classBASCloud_1_1Tenant.html#afdee6839f219568a8311456fd460af57',1,'BASCloud::Tenant::deleteTenant()'],['../classBASCloud_1_1EntityContext.html#ab24af9460118e7df6fabf98f30e3cf22',1,'BASCloud::EntityContext::deleteTenant()']]],
-  ['deleteuser_222',['deleteUser',['../classBASCloud_1_1User.html#a3c355fc6c765e71c878262360c90338d',1,'BASCloud::User::deleteUser()'],['../classBASCloud_1_1EntityContext.html#ac87798803f6383cfde95056e31717fca',1,'BASCloud::EntityContext::deleteUser()']]],
-  ['device_223',['Device',['../classBASCloud_1_1Device.html#a2db8b63e5c0e9bef8548e447cf912178',1,'BASCloud::Device']]]
+  ['deleteconnector_217',['deleteConnector',['../classBAScloud_1_1Connector.html#a62629bcbe3cbbac6729831836fe471d1',1,'BAScloud::Connector::deleteConnector()'],['../classBAScloud_1_1EntityContext.html#a61b85c13d9182e582297e07c021df080',1,'BAScloud::EntityContext::deleteConnector()']]],
+  ['deletedevice_218',['deleteDevice',['../classBAScloud_1_1Device.html#a01ee59a0d776102d0c8c4915fac96c85',1,'BAScloud::Device::deleteDevice()'],['../classBAScloud_1_1EntityContext.html#a2e1c7881ee4e77bd315d7435e956959c',1,'BAScloud::EntityContext::deleteDevice()']]],
+  ['deleteproperty_219',['deleteProperty',['../classBAScloud_1_1Property.html#a7530db78cf6ac06976a531eed0d9e87d',1,'BAScloud::Property::deleteProperty()'],['../classBAScloud_1_1EntityContext.html#a353b1eaf6eb92939a34df7ed8960c68a',1,'BAScloud::EntityContext::deleteProperty()']]],
+  ['deletereading_220',['deleteReading',['../classBAScloud_1_1Reading.html#a873e5ef55417686f9404ef8e263b1a1c',1,'BAScloud::Reading::deleteReading()'],['../classBAScloud_1_1EntityContext.html#a8cea3964ae535092f222d33b434e37b6',1,'BAScloud::EntityContext::deleteReading()']]],
+  ['deletetenant_221',['deleteTenant',['../classBAScloud_1_1Tenant.html#a5908e31dd8bc1e6208db954f568aeef9',1,'BAScloud::Tenant::deleteTenant()'],['../classBAScloud_1_1EntityContext.html#ad30636f9364104d7b5eff4faf5cfb71c',1,'BAScloud::EntityContext::deleteTenant()']]],
+  ['deleteuser_222',['deleteUser',['../classBAScloud_1_1User.html#a58641ea08070b8c846b7592c24a02881',1,'BAScloud::User::deleteUser()'],['../classBAScloud_1_1EntityContext.html#ac9e3a69a254ab7ca6a882f89294a605e',1,'BAScloud::EntityContext::deleteUser()']]],
+  ['device_223',['Device',['../classBAScloud_1_1Device.html#ad94a2476eb47ce256cde387140c6ee65',1,'BAScloud::Device']]]
 ];
