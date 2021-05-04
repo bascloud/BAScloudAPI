@@ -4,11 +4,12 @@ on:
   workflow_dispatch:
   pull_request:
   push:
-    branches:
-     - master
     tags:
       - v*
-
+  release:
+    types:
+      - published
+      
 env:
 #  CIBW_TEST_COMMAND: python {project}/tests/test.py
    CIBW_REPAIR_WHEEL_COMMAND: ""
@@ -145,3 +146,22 @@ jobs:
           draft: true
           artifacts: wheelhouse/*
           token: ${{ secrets.GITHUB_TOKEN }}
+
+  upload_all:
+    name: Upload if release
+    needs: [build_wheels, build_win27_wheels, build_sdist]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release' && github.event.action == 'published'
+
+    steps:
+    - uses: actions/setup-python@v2
+
+    - uses: actions/download-artifact@v2
+      with:
+        name: artifact
+        path: wheelhouse
+
+    - uses: pypa/gh-action-pypi-publish@v1.4.2
+      with:
+        user: __token__
+        password: ${{ secrets.PYPI_PASSWORD }}
