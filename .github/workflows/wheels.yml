@@ -163,5 +163,6 @@ jobs:
 
     - uses: pypa/gh-action-pypi-publish@v1.4.2
       with:
+        packages_dir: wheelhouse/
         user: __token__
         password: ${{ secrets.PYPI_PASSWORD }}
