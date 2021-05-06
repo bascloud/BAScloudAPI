@@ -12,7 +12,7 @@ on:
       
 env:
 #  CIBW_TEST_COMMAND: python {project}/tests/test.py
-   CIBW_REPAIR_WHEEL_COMMAND: ""
+#   CIBW_REPAIR_WHEEL_COMMAND: ""
 
 
 jobs:
