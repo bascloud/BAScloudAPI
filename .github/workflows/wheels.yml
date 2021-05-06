@@ -59,7 +59,7 @@ jobs:
     - uses: joerick/cibuildwheel@v1.11.0
       env:
         # Skip Python 2.7
-        CIBW_SKIP: cp27-*
+        CIBW_SKIP: cp27-win*
         CIBW_BEFORE_ALL_LINUX: yum install -y openssl-devel
         CIBW_BEFORE_ALL_MACOS: brew install openssl
         CIBW_ENVIRONMENT_MACOS: "OPENSSL_ROOT_DIR=/usr/local/opt/openssl"
@@ -74,58 +74,58 @@ jobs:
         path: wheelhouse/*.whl
 
 
-#   # Windows 2.7 (requires workaround for MSVC 2008 replacement)
-#   build_win27_wheels:
-#     name: Py 2.7 wheels on Windows
-#     runs-on: windows-latest
+  # Windows 2.7 (requires workaround for MSVC 2008 replacement)
+  build_win27_wheels:
+    name: Py 2.7 wheels on Windows
+    runs-on: windows-latest
 
-#     steps:
-#     - name: Setup cmake
-#       uses: jwlawson/actions-setup-cmake@v1.8
-#       with:
-#         cmake-version: '3.16.x'
+    steps:
+    - name: Setup cmake
+      uses: jwlawson/actions-setup-cmake@v1.8
+      with:
+        cmake-version: '3.16.x'
         
-#     - name: Use cmake
-#       run: cmake --version
+    - name: Use cmake
+      run: cmake --version
       
-#     - uses: actions/checkout@v2
-#       with:
-#         submodules: true
+    - uses: actions/checkout@v2
+      with:
+        submodules: true
 
-#     - uses: ilammy/msvc-dev-cmd@v1
+    - uses: ilammy/msvc-dev-cmd@v1
 
-#     - name: Build 64-bit wheel
-#       uses: joerick/cibuildwheel@v1.11.0
-#       env:
-#         CIBW_BUILD: cp27-win_amd64
-#         DISTUTILS_USE_SDK: 1
-#         MSSdk: 1
+    - name: Build 64-bit wheel
+      uses: joerick/cibuildwheel@v1.11.0
+      env:
+        CIBW_BUILD: cp27-win_amd64
+        DISTUTILS_USE_SDK: 1
+        MSSdk: 1
 
-#     - uses: ilammy/msvc-dev-cmd@v1
-#       with:
-#         arch: x86
+    - uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: x86
 
-#     - name: Build 32-bit wheel
-#       uses: joerick/cibuildwheel@v1.11.0
-#       env:
-#         CIBW_BUILD: cp27-win32
-#         DISTUTILS_USE_SDK: 1
-#         MSSdk: 1
+    - name: Build 32-bit wheel
+      uses: joerick/cibuildwheel@v1.11.0
+      env:
+        CIBW_BUILD: cp27-win32
+        DISTUTILS_USE_SDK: 1
+        MSSdk: 1
 
-#     - name: Verify clean directory
-#       run: git diff --exit-code
-#       shell: bash
+    - name: Verify clean directory
+      run: git diff --exit-code
+      shell: bash
 
-#     - uses: actions/upload-artifact@v2
-#       with:
-#         path: wheelhouse/*.whl
+    - uses: actions/upload-artifact@v2
+      with:
+        path: wheelhouse/*.whl
 
 
   create_release:
     name: Create release
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
-    needs: [build_wheels, build_sdist]
+    needs: [build_wheels, build_win27_wheels, build_sdist]
 
     steps:
       - name: Collect sdist and wheels
@@ -146,20 +146,20 @@ jobs:
           artifacts: wheelhouse/*
           token: ${{ secrets.GITHUB_TOKEN }}
 
-  upload_all:
-    name: Upload if release
-    needs: [build_wheels, build_sdist]
-    runs-on: ubuntu-latest
-    if: (github.event_name == 'release' && github.event.action == 'published') || github.event_name == 'workflow_dispatch'
+#   upload_all:
+#     name: Upload if release
+#     needs: [build_wheels, build_win27_wheels, build_sdist]
+#     runs-on: ubuntu-latest
+#     if: (github.event_name == 'release' && github.event.action == 'published') || github.event_name == 'workflow_dispatch'
 
-    steps:
-    - uses: actions/download-artifact@v2
-      with:
-        name: artifact
-        path: wheelhouse
+#     steps:
+#     - uses: actions/download-artifact@v2
+#       with:
+#         name: artifact
+#         path: wheelhouse
 
-    - uses: pypa/gh-action-pypi-publish@v1.4.2
-      with:
-        packages_dir: wheelhouse/
-        user: __token__
-        password: ${{ secrets.PYPI_PASSWORD }}
+#     - uses: pypa/gh-action-pypi-publish@v1.4.2
+#       with:
+#         packages_dir: wheelhouse/
+#         user: __token__
+#         password: ${{ secrets.PYPI_PASSWORD }}
