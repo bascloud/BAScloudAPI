@@ -12,7 +12,8 @@ on:
       
 env:
 #  CIBW_TEST_COMMAND: python {project}/tests/test.py
-  CIBW_REPAIR_WHEEL_COMMAND: ""
+  # pass the `--lib-sdir .` flag to auditwheel on Linux
+  CIBW_REPAIR_WHEEL_COMMAND_LINUX: "auditwheel repair --lib-sdir . -w {dest_dir} {wheel}"
 
 
 jobs:
