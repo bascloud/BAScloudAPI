@@ -1,0 +1,33 @@
+﻿pyBAScloudAPI.PagingResult
+==========================
+
+.. currentmodule:: pyBAScloudAPI
+
+.. autoclass:: PagingResult
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~PagingResult.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~PagingResult.count
+      ~PagingResult.currentPage
+      ~PagingResult.nextPagePointer
+      ~PagingResult.pageSize
+      ~PagingResult.previousPagePointer
+      ~PagingResult.totalPages
+   
+   

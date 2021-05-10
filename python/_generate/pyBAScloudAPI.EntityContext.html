@@ -1,0 +1,303 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>pyBAScloudAPI.EntityContext &#8212; pyBAScloudAPI 0.2.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pyBAScloudAPI.APIContext" href="pyBAScloudAPI.APIContext.html" />
+    <link rel="prev" title="pyBAScloudAPI.PagingOption" href="pyBAScloudAPI.PagingOption.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="pybascloudapi-entitycontext">
+<h1>pyBAScloudAPI.EntityContext<a class="headerlink" href="#pybascloudapi-entitycontext" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyBAScloudAPI.EntityContext">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyBAScloudAPI.</span></span><span class="sig-name descname"><span class="pre">EntityContext</span></span><a class="headerlink" href="#pyBAScloudAPI.EntityContext" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="pyBAScloudAPI.EntityContext.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#pyBAScloudAPI.EntityContext" title="pyBAScloudAPI.EntityContext"><span class="pre">pyBAScloudAPI.EntityContext</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">apiServerURL</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a><a class="headerlink" href="#pyBAScloudAPI.EntityContext.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>EntityContext.</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyBAScloudAPI.EntityContext.__init__" title="pyBAScloudAPI.EntityContext.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(self, apiServerURL)</p></td>
+<td><p>EntityContext.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">assignTenantUsers</span></code>(self, tenantUUID, userUUIDs)</p></td>
+<td><p>Assigns a collection of User entities to a Tenant.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">authenticateWithConnectorToken</span></code>(self, …)</p></td>
+<td><p>Authenticate a connector using a valid connector token.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">authenticateWithUserLogin</span></code>(self, email, password)</p></td>
+<td><p>Authenticate a user against the BAScloud API.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">createConnector</span></code>(self, tenantUUID, …)</p></td>
+<td><p>Create a new Connector entity in the BAScloud.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">createDevice</span></code>(self, tenantUUID, …)</p></td>
+<td><p>Create a new Device entity in the BAScloud.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">createNewUser</span></code>(self, email, password)</p></td>
+<td><p>Authenticate with user login.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">createProperty</span></code>(self, tenantUUID, name, …)</p></td>
+<td><p>Create a new Property entity in the BAScloud.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">createReading</span></code>(self, tenantUUID, deviceUUID, …)</p></td>
+<td><p>Create a new Reading entity in the BAScloud.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">createSetPoint</span></code>(self, tenantUUID, deviceUUID, …)</p></td>
+<td><p>Create a new SetPoint entity in the BAScloud.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">createTenant</span></code>(self, name, userUUID)</p></td>
+<td><p>Creates a new Tenant entity in the BAScloud.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">deleteConnector</span></code>(self, tenantUUID, connectorUUID)</p></td>
+<td><p>Deletes an existing Connector in the BAScloud.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">deleteDevice</span></code>(self, tenantUUID, deviceUUID)</p></td>
+<td><p>Deletes an existing Device in the BAScloud.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">deleteProperty</span></code>(self, tenantUUID, propertyUUID)</p></td>
+<td><p>Deletes an existing Property in the BAScloud.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">deleteReading</span></code>(self, tenantUUID, readingUUID)</p></td>
+<td><p>Deletes an existing Reading in the BAScloud.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">deleteTenant</span></code>(self, tenantUUID)</p></td>
+<td><p>Deletes an existing Tenant in the BAScloud.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">deleteUser</span></code>(self, userUUID)</p></td>
+<td><p>Deletes an existing User in the BAScloud.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">getAssociatedConnector</span></code>(self, tenantUUID, …)</p></td>
+<td><p>Get the associated Connector entity of the Device.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">getAssociatedConnectors</span></code>(self, tenantUUID, …)</p></td>
+<td><p>Get a collection of associated Connector entities of a Property.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">getAssociatedDevice</span></code>(self, tenantUUID, …)</p></td>
+<td><p>Get the associated Device entity of the Reading.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">getAssociatedDevices</span></code>(self, tenantUUID, …)</p></td>
+<td><p>Get the associated Device entities of the Connector.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">getAssociatedProperty</span></code>(self, tenantUUID, …)</p></td>
+<td><p>Get the associated Property entity of the Connector.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">getAssociatedReadings</span></code>(self, tenantUUID, …)</p></td>
+<td><p>Get a collection of associated Reading entities of the Device.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">getAssociatedSetPoints</span></code>(self, tenantUUID, …)</p></td>
+<td><p>Get a collection of associated Reading entities of the Device.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">getAssociatedTenant</span></code>(self, userUUID)</p></td>
+<td><p>Get a the associated Tenant entity of the User.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">getAssociatedUsers</span></code>(self, tenantUUID, paging, …)</p></td>
+<td><p>Get a collection of associated User entities of the Tenant.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">getConnector</span></code>(self, tenantUUID, connectorUUID)</p></td>
+<td><p>Request a single Connector entity.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">getConnectorsCollection</span></code>(self, tenantUUID, …)</p></td>
+<td><p>Request a collection of Connector entities grouped under the given Tenant.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">getDevice</span></code>(self, tenantUUID, deviceUUID)</p></td>
+<td><p>Request a single Device entity.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">getDevicesCollection</span></code>(self, tenantUUID, …)</p></td>
+<td><p>Request a collection of Device entities grouped under the given Tenant.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNewConnectorAuthToken</span></code>(self, tenantUUID, …)</p></td>
+<td><p>Requests a new API key for a Connector entity.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPropertiesCollection</span></code>(self, tenantUUID, …)</p></td>
+<td><p>Request a collection of Property entities grouped under the given Tenant.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">getProperty</span></code>(self, tenantUUID, propertyUUID)</p></td>
+<td><p>Request a single Property entity.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">getReading</span></code>(self, tenantUUID, readingUUID)</p></td>
+<td><p>Request a single Reading entity.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">getReadingsCollection</span></code>(self, tenantUUID, …)</p></td>
+<td><p>Request a collection of Reading entities grouped under the given Tenant.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">getSetPoint</span></code>(self, tenantUUID, setpointUUID)</p></td>
+<td><p>Request a single SetPoint entity.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">getSetPointsCollection</span></code>(self, tenantUUID, …)</p></td>
+<td><p>Request a collection of SetPoint entities grouped under the given Tenant.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">getTenant</span></code>(self, tenantUUID)</p></td>
+<td><p>Request a single Tenant entity.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">getTenantsCollection</span></code>(self, paging, …)</p></td>
+<td><p>Request a collection of Tenant entities.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">getToken</span></code>(self)</p></td>
+<td><p>Get the authentication token.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">getTokenExpirationDate</span></code>(self)</p></td>
+<td><p>Get the expiration date of the authentication token.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">getUser</span></code>(self, userUUID)</p></td>
+<td><p>Request a single User entity.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">getUsersCollection</span></code>(self, email, paging, …)</p></td>
+<td><p>Request a collection of User entities.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">isAuthenticated</span></code>(self)</p></td>
+<td><p>Returns wherever the current EntityContext is authenticated.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">removeTenantUsers</span></code>(self, tenantUUID, userUUIDs)</p></td>
+<td><p>Removes a collection of User entities from a Tenant.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">requestUserPasswordReset</span></code>(self, email)</p></td>
+<td><p>Request a password reset for the User.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">updateConnector</span></code>(self, tenantUUID, …)</p></td>
+<td><p>Update an existing Connector in the BAScloud.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">updateDevice</span></code>(self, tenantUUID, deviceUUID, …)</p></td>
+<td><p>Update an existing Device in the BAScloud.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">updateProperty</span></code>(self, tenantUUID, …)</p></td>
+<td><p>Update an existing Property in the BAScloud.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">updateTenant</span></code>(self, tenantUUID, name)</p></td>
+<td><p>Updates the information of a Tenant entity in the BAScloud.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">updateUser</span></code>(self, userUUID, email)</p></td>
+<td><p>Authenticate with user login.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">updateUserPassword</span></code>(self, userUUID, …)</p></td>
+<td><p>Changes the password of a User.</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">pyBAScloudAPI</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../pyBAScloudAPI.html">BAScloud API bindings</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="pyBAScloudAPI.EntityDateMixin.html">pyBAScloudAPI.EntityDateMixin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyBAScloudAPI.EntityTenantMixin.html">pyBAScloudAPI.EntityTenantMixin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyBAScloudAPI.Entity.html">pyBAScloudAPI.Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyBAScloudAPI.Connector.html">pyBAScloudAPI.Connector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyBAScloudAPI.Device.html">pyBAScloudAPI.Device</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyBAScloudAPI.Property.html">pyBAScloudAPI.Property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyBAScloudAPI.Reading.html">pyBAScloudAPI.Reading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyBAScloudAPI.SetPoint.html">pyBAScloudAPI.SetPoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyBAScloudAPI.Tenant.html">pyBAScloudAPI.Tenant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyBAScloudAPI.User.html">pyBAScloudAPI.User</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyBAScloudAPI.PagingResult.html">pyBAScloudAPI.PagingResult</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyBAScloudAPI.PagingOption.html">pyBAScloudAPI.PagingOption</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">pyBAScloudAPI.EntityContext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyBAScloudAPI.APIContext.html">pyBAScloudAPI.APIContext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyBAScloudAPI.Util.html">pyBAScloudAPI.Util</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../pyBAScloudAPI.html">BAScloud API bindings</a><ul>
+      <li>Previous: <a href="pyBAScloudAPI.PagingOption.html" title="previous chapter">pyBAScloudAPI.PagingOption</a></li>
+      <li>Next: <a href="pyBAScloudAPI.APIContext.html" title="next chapter">pyBAScloudAPI.APIContext</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, ProFM Facility & Project Management GmbH.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/_generate/pyBAScloudAPI.EntityContext.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

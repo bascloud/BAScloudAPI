@@ -1,0 +1,82 @@
+﻿pyBAScloudAPI.APIContext
+========================
+
+.. currentmodule:: pyBAScloudAPI
+
+.. autoclass:: APIContext
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~APIContext.__init__
+      ~APIContext.getAPIURL
+      ~APIContext.getToken
+      ~APIContext.requestAssignTenantUsers
+      ~APIContext.requestAuthenticationLogin
+      ~APIContext.requestConnector
+      ~APIContext.requestConnectorAssociatedDevices
+      ~APIContext.requestConnectorAssociatedProperty
+      ~APIContext.requestConnectorCollection
+      ~APIContext.requestConnectorDevicesRelationship
+      ~APIContext.requestConnectorPropertyRelationship
+      ~APIContext.requestConnectorToken
+      ~APIContext.requestCreateConnector
+      ~APIContext.requestCreateDevice
+      ~APIContext.requestCreateProperty
+      ~APIContext.requestCreateReading
+      ~APIContext.requestCreateSetPoint
+      ~APIContext.requestCreateTenant
+      ~APIContext.requestDeleteConnector
+      ~APIContext.requestDeleteDevice
+      ~APIContext.requestDeleteProperty
+      ~APIContext.requestDeleteReading
+      ~APIContext.requestDeleteTenant
+      ~APIContext.requestDeleteUser
+      ~APIContext.requestDevice
+      ~APIContext.requestDeviceAssociatedConnector
+      ~APIContext.requestDeviceAssociatedReadings
+      ~APIContext.requestDeviceAssociatedSetPoints
+      ~APIContext.requestDeviceCollection
+      ~APIContext.requestDeviceConnectorRelationship
+      ~APIContext.requestDeviceReadingsRelationship
+      ~APIContext.requestDeviceSetPointsRelationship
+      ~APIContext.requestProperty
+      ~APIContext.requestPropertyAssociatedConnectors
+      ~APIContext.requestPropertyCollection
+      ~APIContext.requestPropertyConnectorsRelationship
+      ~APIContext.requestReading
+      ~APIContext.requestReadingAssociatedDevice
+      ~APIContext.requestReadingCollection
+      ~APIContext.requestReadingDeviceRelationship
+      ~APIContext.requestRemoveTenantUsers
+      ~APIContext.requestSetPoint
+      ~APIContext.requestSetPointCollection
+      ~APIContext.requestTenant
+      ~APIContext.requestTenantAssociatedUsers
+      ~APIContext.requestTenantCollection
+      ~APIContext.requestTenantUsersRelationship
+      ~APIContext.requestUpdateConnector
+      ~APIContext.requestUpdateDevice
+      ~APIContext.requestUpdateProperty
+      ~APIContext.requestUpdateTenant
+      ~APIContext.requestUpdateUser
+      ~APIContext.requestUser
+      ~APIContext.requestUserAssociatedTenant
+      ~APIContext.requestUserCollection
+      ~APIContext.requestUserPasswordChange
+      ~APIContext.requestUserPasswordReset
+      ~APIContext.requestUserSignup
+      ~APIContext.requestUserTenantRelationship
+      ~APIContext.setAPIURL
+      ~APIContext.setToken
+   
+   
+
+   
+   
+   

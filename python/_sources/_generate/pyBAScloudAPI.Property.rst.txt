@@ -1,0 +1,36 @@
+﻿pyBAScloudAPI.Property
+======================
+
+.. currentmodule:: pyBAScloudAPI
+
+.. autoclass:: Property
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Property.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Property.city
+      ~Property.country
+      ~Property.createdAt
+      ~Property.name
+      ~Property.postalCode
+      ~Property.street
+      ~Property.tenantUUID
+      ~Property.updatedAt
+      ~Property.uuid
+   
+   

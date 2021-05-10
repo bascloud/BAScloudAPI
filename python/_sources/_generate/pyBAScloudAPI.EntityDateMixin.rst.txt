@@ -1,0 +1,29 @@
+﻿pyBAScloudAPI.EntityDateMixin
+=============================
+
+.. currentmodule:: pyBAScloudAPI
+
+.. autoclass:: EntityDateMixin
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~EntityDateMixin.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~EntityDateMixin.createdAt
+      ~EntityDateMixin.updatedAt
+   
+   

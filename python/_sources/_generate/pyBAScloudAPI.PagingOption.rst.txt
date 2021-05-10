@@ -1,0 +1,33 @@
+﻿pyBAScloudAPI.PagingOption
+==========================
+
+.. currentmodule:: pyBAScloudAPI
+
+.. autoclass:: PagingOption
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~PagingOption.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~PagingOption.NEXT
+      ~PagingOption.NONE
+      ~PagingOption.PREVIOUS
+      ~PagingOption.direction
+      ~PagingOption.pagePointer
+      ~PagingOption.pageSize
+   
+   

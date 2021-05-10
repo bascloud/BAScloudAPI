@@ -1,0 +1,28 @@
+﻿pyBAScloudAPI.EntityTenantMixin
+===============================
+
+.. currentmodule:: pyBAScloudAPI
+
+.. autoclass:: EntityTenantMixin
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~EntityTenantMixin.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~EntityTenantMixin.tenantUUID
+   
+   

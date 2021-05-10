@@ -1,0 +1,73 @@
+﻿pyBAScloudAPI.EntityContext
+===========================
+
+.. currentmodule:: pyBAScloudAPI
+
+.. autoclass:: EntityContext
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~EntityContext.__init__
+      ~EntityContext.assignTenantUsers
+      ~EntityContext.authenticateWithConnectorToken
+      ~EntityContext.authenticateWithUserLogin
+      ~EntityContext.createConnector
+      ~EntityContext.createDevice
+      ~EntityContext.createNewUser
+      ~EntityContext.createProperty
+      ~EntityContext.createReading
+      ~EntityContext.createSetPoint
+      ~EntityContext.createTenant
+      ~EntityContext.deleteConnector
+      ~EntityContext.deleteDevice
+      ~EntityContext.deleteProperty
+      ~EntityContext.deleteReading
+      ~EntityContext.deleteTenant
+      ~EntityContext.deleteUser
+      ~EntityContext.getAssociatedConnector
+      ~EntityContext.getAssociatedConnectors
+      ~EntityContext.getAssociatedDevice
+      ~EntityContext.getAssociatedDevices
+      ~EntityContext.getAssociatedProperty
+      ~EntityContext.getAssociatedReadings
+      ~EntityContext.getAssociatedSetPoints
+      ~EntityContext.getAssociatedTenant
+      ~EntityContext.getAssociatedUsers
+      ~EntityContext.getConnector
+      ~EntityContext.getConnectorsCollection
+      ~EntityContext.getDevice
+      ~EntityContext.getDevicesCollection
+      ~EntityContext.getNewConnectorAuthToken
+      ~EntityContext.getPropertiesCollection
+      ~EntityContext.getProperty
+      ~EntityContext.getReading
+      ~EntityContext.getReadingsCollection
+      ~EntityContext.getSetPoint
+      ~EntityContext.getSetPointsCollection
+      ~EntityContext.getTenant
+      ~EntityContext.getTenantsCollection
+      ~EntityContext.getToken
+      ~EntityContext.getTokenExpirationDate
+      ~EntityContext.getUser
+      ~EntityContext.getUsersCollection
+      ~EntityContext.isAuthenticated
+      ~EntityContext.removeTenantUsers
+      ~EntityContext.requestUserPasswordReset
+      ~EntityContext.updateConnector
+      ~EntityContext.updateDevice
+      ~EntityContext.updateProperty
+      ~EntityContext.updateTenant
+      ~EntityContext.updateUser
+      ~EntityContext.updateUserPassword
+   
+   
+
+   
+   
+   

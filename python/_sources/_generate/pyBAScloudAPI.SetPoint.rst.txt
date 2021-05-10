@@ -1,0 +1,33 @@
+﻿pyBAScloudAPI.SetPoint
+======================
+
+.. currentmodule:: pyBAScloudAPI
+
+.. autoclass:: SetPoint
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SetPoint.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~SetPoint.createdAt
+      ~SetPoint.tenantUUID
+      ~SetPoint.timestamp
+      ~SetPoint.updatedAt
+      ~SetPoint.uuid
+      ~SetPoint.value
+   
+   

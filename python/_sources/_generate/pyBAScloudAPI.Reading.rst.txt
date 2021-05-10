@@ -1,0 +1,33 @@
+﻿pyBAScloudAPI.Reading
+=====================
+
+.. currentmodule:: pyBAScloudAPI
+
+.. autoclass:: Reading
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Reading.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Reading.createdAt
+      ~Reading.tenantUUID
+      ~Reading.timestamp
+      ~Reading.updatedAt
+      ~Reading.uuid
+      ~Reading.value
+   
+   

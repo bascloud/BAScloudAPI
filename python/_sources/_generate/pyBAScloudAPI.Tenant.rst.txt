@@ -1,0 +1,32 @@
+﻿pyBAScloudAPI.Tenant
+====================
+
+.. currentmodule:: pyBAScloudAPI
+
+.. autoclass:: Tenant
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Tenant.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Tenant.createdAt
+      ~Tenant.name
+      ~Tenant.updatedAt
+      ~Tenant.urlName
+      ~Tenant.uuid
+   
+   

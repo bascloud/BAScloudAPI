@@ -1,0 +1,33 @@
+﻿pyBAScloudAPI.Connector
+=======================
+
+.. currentmodule:: pyBAScloudAPI
+
+.. autoclass:: Connector
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Connector.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Connector.apiKey
+      ~Connector.createdAt
+      ~Connector.name
+      ~Connector.tenantUUID
+      ~Connector.updatedAt
+      ~Connector.uuid
+   
+   
