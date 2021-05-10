@@ -165,8 +165,6 @@ void EntityContext::authenticateWithConnectorToken(std::string API_connector_tok
 
 
 User EntityContext::createNewUser(std::string email, std::string password) {
-
-    checkAndRenewAuthentication();
  
     cpr::Response r = api_context.requestUserSignup(email, password);
     

@@ -36,7 +36,7 @@ PYBIND11_MODULE(pyBAScloudAPI, m) {
         .. currentmodule:: pyBAScloudAPI
 
         .. autosummary::
-           :toctree: _generate
+        :toctree: _generate
 
     )pbdoc";
 
