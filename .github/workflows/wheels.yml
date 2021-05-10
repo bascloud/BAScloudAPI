@@ -13,7 +13,7 @@ on:
 env:
 #  CIBW_TEST_COMMAND: python {project}/tests/test.py
   # pass the `--lib-sdir .` flag to auditwheel on Linux
-  CIBW_REPAIR_WHEEL_COMMAND_LINUX: "rm -rf /tmp/cibuildwheel/unpacked_wheel && mkdir -p /tmp/cibuildwheel/unpacked_wheel && unzip {wheel} -d /tmp/cibuildwheel/unpacked_wheel && auditwheel repair --lib-sdir /tmp/cibuildwheel/unpacked_wheel -w {dest_dir} {wheel}"
+  CIBW_REPAIR_WHEEL_COMMAND_LINUX: "rm -rf /tmp/cibuildwheel/unpacked_wheel && mkdir -p /tmp/cibuildwheel/unpacked_wheel && unzip {wheel} -d /tmp/cibuildwheel/unpacked_wheel && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/tmp/cibuildwheel/unpacked_wheel && auditwheel repair -w {dest_dir} {wheel}"
 
 
 jobs:
