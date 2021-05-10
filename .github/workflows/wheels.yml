@@ -147,20 +147,20 @@ jobs:
           artifacts: wheelhouse/*
           token: ${{ secrets.GITHUB_TOKEN }}
 
-#   upload_all:
-#     name: Upload if release
-#     needs: [build_wheels, build_win27_wheels, build_sdist]
-#     runs-on: ubuntu-latest
-#     if: (github.event_name == 'release' && github.event.action == 'published') || github.event_name == 'workflow_dispatch'
+  upload_all:
+    name: Upload if release
+    needs: [build_wheels, build_win27_wheels, build_sdist]
+    runs-on: ubuntu-latest
+    if: (github.event_name == 'release' && github.event.action == 'published') || github.event_name == 'workflow_dispatch'
 
-#     steps:
-#     - uses: actions/download-artifact@v2
-#       with:
-#         name: artifact
-#         path: wheelhouse
+    steps:
+    - uses: actions/download-artifact@v2
+      with:
+        name: artifact
+        path: wheelhouse
 
-#     - uses: pypa/gh-action-pypi-publish@v1.4.2
-#       with:
-#         packages_dir: wheelhouse/
-#         user: __token__
-#         password: ${{ secrets.PYPI_PASSWORD }}
+    - uses: pypa/gh-action-pypi-publish@v1.4.2
+      with:
+        packages_dir: wheelhouse/
+        user: __token__
+        password: ${{ secrets.PYPI_PASSWORD }}
