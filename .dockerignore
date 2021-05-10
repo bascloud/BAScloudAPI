@@ -3,6 +3,7 @@
 build
 rpibuild
 toolchains
+**/.git*
 
 dist/
 _build/

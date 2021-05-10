@@ -5,6 +5,9 @@ services:
     build:
       context: ../
       dockerfile: ./docker/Dockerfile
+    environment:
+      # You can set a custom token for the jupyter notebook here:
+      - JUPYTER_TOKEN=
     ports:
       - 8888:8888
     volumes:

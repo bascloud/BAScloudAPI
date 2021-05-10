@@ -36,8 +36,29 @@ PYBIND11_MODULE(pyBAScloudAPI, m) {
         .. currentmodule:: pyBAScloudAPI
 
         .. autosummary::
-        :toctree: _generate
+           :toctree: _generate
 
+        EntityDateMixin
+        EntityTenantMixin
+        Entity
+        Connector
+        Device
+        Property
+        Reading
+        SetPoint
+        Tenant
+        User
+        PagingResult
+        PagingOption
+        EntityContext
+        APIContext
+        ServerError
+        ConnectionError
+        NotFoundRequest
+        BadRequest
+        ConflictRequest
+        UnauthorizedRequest
+        InvalidResponse
     )pbdoc";
 
     py::class_<EntityDateMixin>(m, "EntityDateMixin")
@@ -527,7 +548,6 @@ PYBIND11_MODULE(pyBAScloudAPI, m) {
         .def_static("parseURLParameter", &Util::parseURLParameter, R"pbdoc(
                 Parses a URL and returns a dict of parameter key-value pairs. 
             )pbdoc", py::arg("url"));
-
 
     py::register_exception<ServerError>(m, "ServerError", PyExc_RuntimeError);
     py::register_exception<ConnectionError>(m, "ConnectionError", PyExc_RuntimeError);
