@@ -115,6 +115,7 @@ BAScloud API</h2>
 <h2><a class="anchor" id="wrappers"></a>
 Language Wrappers</h2>
 <p>The BAScloud API Library is written in C/C++. For the Python programming language, additional bindings exist which wrap the C/C++ library.</p>
+<p>See <a href="https://bascloud.github.io/BAScloudAPI/pythondocs/" target="_blank">pyBAScloudAPI</a> for the Python bindings documentation.</p>
 <h2><a class="anchor" id="c_cxx_api"></a>
 BAScloud API for C/C++</h2>
 <p>See BAScloud namespace under Data Structures for the class documentation of the C/C++ library classes and functions. The class <a class="el" href="classBAScloud_1_1EntityContext.html" title="The EntityContext class provides a high-level abstraction to access the BAScloud API endpoint functio...">BAScloud::EntityContext</a> is the basis for all high-level interaction with the BAScloud API and should be used.</p>
@@ -174,10 +175,11 @@ Access Readings</h3>
 </div><!-- fragment --><p>See examples for complete executable code.</p>
 <h2><a class="anchor" id="python_api"></a>
 BAScloud API for Python</h2>
-<p>The Python package pyBAScloudAPI can be compiled, or installed through a pre-build packages provided for Windows/Linux/MacOS as wheel packages.</p>
-<p>After downloading the corresponding package for the platform, the package can be installed through:</p>
-<div class="fragment"><div class="line">python -m pip install pyBAScloudAPI-*.whl</div>
-</div><!-- fragment --><p>After installation, the package can be imported and used like any Python package.</p>
+<p>The Python package pyBAScloudAPI can be installed through pip, through a pre-build packages provided for Windows/Linux/MacOS as wheel packages, or compiled manually.</p>
+<p>The easiest way to install the package is through:</p>
+<div class="fragment"><div class="line">python -m pip install pyBAScloudAPI</div>
+</div><!-- fragment --><p>See <a href="https://bascloud.github.io/BAScloudAPI/pythondocs/" target="_blank">pyBAScloudAPI</a> for the Python bindings documentation.</p>
+<p>After installation, the package can be imported and used like any Python package.</p>
 <div class="fragment"><div class="line"><span class="keyword">import</span> pyBAScloudAPI as api </div>
 <div class="line"> </div>
 <div class="line">api.EntityContext(url)</div>
