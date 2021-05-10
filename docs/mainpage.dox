@@ -41,6 +41,8 @@ A complete documentation of the REST API endpoints of the BAScloud is available 
 
 The BAScloud API Library is written in C/C++. For the Python programming language, additional bindings exist which wrap the C/C++ library.
 
+See <a target="_blank" href="https://bascloud.github.io/BAScloudAPI/pythondocs/">pyBAScloudAPI</a> for the Python bindings documentation.
+
 \subsection c_cxx_api BAScloud API for C/C++
 
 See BAScloud namespace under Data Structures for the class documentation of the C/C++ library classes and functions.
@@ -175,14 +177,16 @@ See examples for complete executable code.
 
 \subsection python_api BAScloud API for Python
 
-The Python package pyBAScloudAPI can be compiled, or installed through a pre-build 
-packages provided for Windows/Linux/MacOS as wheel packages.
+The Python package pyBAScloudAPI can be installed through pip, through a pre-build 
+packages provided for Windows/Linux/MacOS as wheel packages, or compiled manually.
 
-After downloading the corresponding package for the platform, the package can be installed through:
+The easiest way to install the package is through:
 
 \code 
-python -m pip install pyBAScloudAPI-*.whl
+python -m pip install pyBAScloudAPI
 \endcode 
+
+See <a target="_blank" href="https://bascloud.github.io/BAScloudAPI/pythondocs/">pyBAScloudAPI</a> for the Python bindings documentation.
 
 After installation, the package can be imported and used like any Python package.
 
