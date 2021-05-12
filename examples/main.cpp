@@ -25,14 +25,14 @@ int main (int argc, char *argv[]) {
 
     std::cout << "Initialising library..."<< std::endl;
 
-    EntityContext BCAPI("https://basc-prd-apm-euw.azure-api.net/v2");
+    EntityContext BCAPI("server_url");
 
     std::cout << "\tOK." << std::endl;
 
 
     std::cout << "1. - Authentication with user login" << std::endl;
 
-        BCAPI.authenticateWithUserLogin("erhardt@profm-gmbh.de", "Dont4get$1");
+        BCAPI.authenticateWithUserLogin("user_email", "user_password");
         std::cout << "\tOK." << std::endl;
 
         std::cout << "\tAuthenticated: " << BCAPI.isAuthenticated() << std::endl;

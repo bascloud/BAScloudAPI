@@ -23,13 +23,13 @@ print("Demo of library methods for BAScloud API endpoints.")
 
 print("Initialising library...")
 
-BCAPI = api.EntityContext("https://basc-prd-apm-euw.azure-api.net/v2")
+BCAPI = api.EntityContext("server_url")
 
 print("\tOK.")
 
 print("1. - Authentication with user login")
 
-BCAPI.authenticateWithUserLogin(email="erhardt@profm-gmbh.de", password="Dont4get$1")
+BCAPI.authenticateWithUserLogin(email="user_email", password="user_password")
 print("\tOK.")
 print("\tAuthenticated: ", BCAPI.isAuthenticated())
 print("\tToken valid until: ", datetime.datetime.fromtimestamp(BCAPI.getTokenExpirationDate()))
