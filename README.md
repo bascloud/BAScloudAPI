@@ -161,7 +161,7 @@ try {
 
 - C/C++ compiler (CLANG/GCC/MSVC)
 
-- CMake >= 2.11
+- CMake >= 3.11
 
 - (Linux/macOS) OpenSSL Library (libssl-dev, openssl-devel, openssl)
 
