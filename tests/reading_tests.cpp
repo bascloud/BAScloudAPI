@@ -42,6 +42,37 @@ TEST(BasicTests, ReadingCollectionTest) {
     EXPECT_TRUE(readings.first.size() >= 1);
 }
 
+TEST(BasicTests, ReadingCollectionPagingTest) {
+
+    std::cout << "\tRequesting paged readings..." << std::endl;
+
+    EntityCollection<Reading> readings = BCAPI.getReadingsCollection(BASCLOUD_TEST_TENANT_UUID, PagingOption(10), -1, -1, -1, std::numeric_limits<double>::quiet_NaN(), {}, [](std::exception& e, json& j) {
+            throw e;
+        });
+    std::cout << "\t\tOK." << std::endl;
+
+    std::cout << "\tFound readings: " << readings.first.size() << std::endl;
+    std::cout << "\tFound total pages: " << readings.second.totalPages << std::endl;
+
+    EXPECT_TRUE(readings.first.size() >= 1);
+
+    int page_cnt = 1;
+    while(!readings.second.nextPagePointer.empty()) {
+        readings = BCAPI.getReadingsCollection(BASCLOUD_TEST_TENANT_UUID, PagingOption(10, PagingOption::Direction::NEXT, readings.second.nextPagePointer), -1, -1, -1, std::numeric_limits<double>::quiet_NaN(), {}, [](std::exception& e, json& j) {
+            throw e;
+        });
+
+        std::cout << "\tFound readings: " << readings.first.size() << std::endl;
+        EXPECT_TRUE(readings.first.size() >= 1);
+
+        page_cnt++;
+        
+        std::cout << "\tFound paging links: Prev:" << readings.second.previousPagePointer << " Next:" << readings.second.nextPagePointer << std::endl;
+    }
+
+    EXPECT_TRUE(readings.second.totalPages == page_cnt);
+}
+
 TEST(BasicTests, SingleReadingTest) {
 
     std::cout << "\tRequesting single reading with UUID..." << std::endl;

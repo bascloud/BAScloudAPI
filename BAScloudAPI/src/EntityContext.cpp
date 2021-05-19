@@ -77,8 +77,11 @@ PagingResult EntityContext::parsePaging(json response) {
         pres.count = response["meta"]["page"].value("count", 1); // TODO ML: is it true that only if there is only a single element, the count is missing?
 
         if(response.contains("links")) {
-            pres.nextPagePointer = response["links"].at("next").is_null() ? "" : response["links"].value("next", ""); 
-            pres.previousPagePointer = response["links"].at("prev").is_null() ? "" : response["links"].value("prev", ""); 
+            std::string next_link = response["links"].at("next").is_null() ? "" : response["links"].value("next", "");
+            std::string prev_link = response["links"].at("prev").is_null() ? "" : response["links"].value("prev", "");
+
+            pres.nextPagePointer = next_link.empty() ? "" : BAScloud::Util::parseURLParameter(next_link).at("page[after]"); 
+            pres.previousPagePointer =  prev_link.empty() ? "" : BAScloud::Util::parseURLParameter(prev_link).at("page[before]"); 
         } else {
             pres.nextPagePointer = "";
             pres.previousPagePointer = "";        
