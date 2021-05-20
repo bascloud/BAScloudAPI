@@ -58,7 +58,7 @@ jobs:
         submodules: true
         
     - name: Set up QEMU
-      if: runner.os == 'Linux'
+      if: runner.os == 'linux'
       uses: docker/setup-qemu-action@v1
       with:
         platforms: all
@@ -71,7 +71,7 @@ jobs:
         CIBW_BEFORE_ALL_MACOS: brew install openssl
         CIBW_ENVIRONMENT_MACOS: "OPENSSL_ROOT_DIR=/usr/local/opt/openssl"
         CIBW_ARCHS_MACOS: x86_64 universal2
-        CIBW_ARCHS_LINUX: auto aarch64 ppc64le s390x
+        CIBW_ARCHS_LINUX: auto
 
     - name: Verify clean directory
       run: git diff --exit-code
