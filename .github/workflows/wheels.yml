@@ -72,7 +72,8 @@ jobs:
     - uses: joerick/cibuildwheel@v1.11.0
       env:
         # Skip Python 2.7
-        CIBW_SKIP: cp27-win*
+        #CIBW_SKIP: cp27-win*
+        CIBW_SKIP: cp27-*
         CIBW_BEFORE_ALL_LINUX: yum install -y openssl-devel
         CIBW_BEFORE_ALL_MACOS: brew install openssl
         CIBW_ENVIRONMENT_MACOS: "OPENSSL_ROOT_DIR=/usr/local/opt/openssl"
