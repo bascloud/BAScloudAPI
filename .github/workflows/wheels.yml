@@ -14,7 +14,8 @@ env:
 #  CIBW_TEST_COMMAND: python {project}/tests/test.py
   # pass the `--lib-sdir .` flag to auditwheel on Linux
   CIBW_REPAIR_WHEEL_COMMAND_LINUX: "rm -rf /tmp/cibuildwheel/unpacked_wheel && mkdir -p /tmp/cibuildwheel/unpacked_wheel && unzip {wheel} -d /tmp/cibuildwheel/unpacked_wheel && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/tmp/cibuildwheel/unpacked_wheel && auditwheel repair -w {dest_dir} {wheel}"
-
+  CIBW_MANYLINUX_X86_64_IMAGE: quay.io/pypa/manylinux2010_x86_64:latest
+  CIBW_MANYLINUX_I686_IMAGE: quay.io/pypa/manylinux2010_i686:latest
 
 jobs:
   build_sdist:
@@ -61,6 +62,7 @@ jobs:
       if: runner.os == 'linux'
       uses: docker/setup-qemu-action@v1
       with:
+        image: tonistiigi/binfmt:latest
         platforms: all
 
     - uses: joerick/cibuildwheel@v1.11.0
@@ -70,7 +72,7 @@ jobs:
         CIBW_BEFORE_ALL_LINUX: yum install -y openssl-devel
         CIBW_BEFORE_ALL_MACOS: brew install openssl
         CIBW_ENVIRONMENT_MACOS: "OPENSSL_ROOT_DIR=/usr/local/opt/openssl"
-        CIBW_ARCHS_MACOS: x86_64 universal2
+        CIBW_ARCHS_MACOS: x86_64 arm64 universal2
         CIBW_ARCHS_LINUX: auto
 
     - name: Verify clean directory
