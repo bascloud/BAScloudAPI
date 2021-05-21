@@ -71,7 +71,7 @@ jobs:
         CIBW_BEFORE_ALL_MACOS: brew install openssl
         CIBW_ENVIRONMENT_MACOS: "OPENSSL_ROOT_DIR=/usr/local/opt/openssl"
         CIBW_ARCHS_MACOS: x86_64 arm64 universal2
-        CIBW_ARCHS_LINUX: auto
+        CIBW_ARCHS_LINUX: auto aarch64
 
     - name: Verify clean directory
       run: git diff --exit-code
