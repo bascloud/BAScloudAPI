@@ -235,6 +235,11 @@ The pyBAScloud Python package is available on PyPi and can be installed through 
 
 `python -m pip install pyBAScloudAPI`
 
+**Note**: You should update pip to the latest version to ensure the correct PyPi package is downloaded.
+
+`python -m pip install -U pip`
+
+
 ### Usage
 
 ```python
