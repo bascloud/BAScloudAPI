@@ -157,10 +157,16 @@ void EntityContext::authenticateWithUserLogin(std::string API_email, std::string
 
 void EntityContext::authenticateWithConnectorToken(std::string API_connector_token) {
     
+    if(API_connector_token.empty()) {
+        throw std::invalid_argument("Invalid Connector token: Token is empty.");
+    }
+
     API_login_email = "";
     API_login_password = "";
     
     API_token = API_connector_token;
+    api_context.setToken(API_token);
+    
     struct tm never = {};
     never.tm_year=10000;
     API_token_valid_until = mktime(&never);
