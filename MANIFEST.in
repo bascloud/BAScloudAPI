@@ -1,0 +1,10 @@
+include pyproject.toml
+include setup.py
+include CMakeLists.txt
+recursive-include cmake *.cmake
+recursive-include BAScloudAPI *.txt *.h *.cpp
+recursive-include pybind11 *.*
+recursive-exclude pybind11/tests *.*
+recursive-exclude pybind11/docs *.*
+recursive-include pyBAScloudAPI *.txt *.h *.cpp
+

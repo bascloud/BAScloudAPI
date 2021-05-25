@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.11-3.18)
 
 
 project(BAScloudAPI
-        VERSION 0.2.2
+        VERSION 0.2.3
         DESCRIPTION "BAScloud API Library"
         LANGUAGES CXX C)
 
