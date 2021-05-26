@@ -6,9 +6,6 @@ on:
   push:
     tags:
       - v*
-  release:
-    types:
-      - published
       
 env:
 #  CIBW_TEST_COMMAND: python {project}/tests/test.py
@@ -159,7 +156,7 @@ jobs:
     name: Upload if release
     needs: [build_wheels, build_win27_wheels, build_sdist]
     runs-on: ubuntu-latest
-    if: (github.event_name == 'release' && github.event.action == 'published') || github.event_name == 'workflow_dispatch'
+    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
 
     steps:
     - uses: actions/download-artifact@v2
