@@ -19,7 +19,7 @@ def authenticate():
     currentDateTimeString = datetime.datetime.fromtimestamp(currentDateTime).strftime("%FT%T.000Z")
     print("CURRENT DATETIME STR: ", currentDateTimeString)
 
-    BCAPI.authenticateWithUserLogin(BASCLOUD_TEST_EMAIL, BASCLOUD_TEST_PASS)
+    BCAPI.authenticateWithUserLogin(BASCLOUD_TEST_ADMIN_EMAIL, BASCLOUD_TEST_PASS)
 
     print("TOKEN: ", BCAPI.getToken())
     print("EXPIRATION DATE: ", datetime.datetime.fromtimestamp(BCAPI.getTokenExpirationDate()).strftime("%FT%T.000Z"))
@@ -57,17 +57,17 @@ class TestSingleConnector(unittest.TestCase):
         self.assertTrue(connector.updatedAt > 0)
 
 
-class TestAssociatedProperty(unittest.TestCase):
+# class TestAssociatedProperty(unittest.TestCase):
 
-    def test_connector(self):
-        print("\tRequesting associated property of the connector again...")
+#     def test_connector(self):
+#         print("\tRequesting associated property of the connector again...")
 
-        conn_prop = BCAPI.getAssociatedProperty(BASCLOUD_TEST_TENANT_UUID, BASCLOUD_TEST_CONNECTOR_UUID)
-        print("\t\tOK.")
+#         conn_prop = BCAPI.getAssociatedProperty(BASCLOUD_TEST_TENANT_UUID, BASCLOUD_TEST_CONNECTOR_UUID)
+#         print("\t\tOK.")
 
-        print("\tConnector's property UUID: ", conn_prop.uuid)
+#         print("\tConnector's property UUID: ", conn_prop.uuid)
 
-        self.assertEqual(conn_prop.uuid, BASCLOUD_TEST_PROPERTY_UUID)
+#         self.assertEqual(conn_prop.uuid, BASCLOUD_TEST_PROPERTY_UUID)
 
 
 class TestAssociatedDevices(unittest.TestCase):
@@ -87,7 +87,7 @@ class TestCreateUpdateAndDeleteConnector(unittest.TestCase):
     def test_connector(self):
         print("\tCreating new connector...")
 
-        new_connector = BCAPI.createConnector(BASCLOUD_TEST_TENANT_UUID, BASCLOUD_TEST_PROPERTY_UUID, "TestConnector")
+        new_connector = BCAPI.createConnector(BASCLOUD_TEST_TENANT_UUID, "TestConnector")
         print("\t\tOK.")
 
         new_uuid = new_connector.uuid

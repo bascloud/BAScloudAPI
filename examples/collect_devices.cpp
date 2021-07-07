@@ -87,7 +87,7 @@ int main (int argc, char *argv[]) {
          * 
          * The function is given the exception which was thrown and the json data which caused the error.
          */
-        EntityCollection<Device> devices = BCAPI.getDevicesCollection(tenantUUID, paging, aksID_filter, description_filter, unit_filter, [](std::exception& e, json& j) {
+        EntityCollection<Device> devices = BCAPI.getDevicesCollection(tenantUUID, paging, aksID_filter, "", "", "", description_filter, unit_filter, -1, -1, -1, [](std::exception& e, json& j) {
             std::cout << "\tAn error occured while parsing a device entity from the follwing data: " << j.dump() << std::endl << e.what() << std::endl;
         });
         std::cout << "\t\tOK." << std::endl;

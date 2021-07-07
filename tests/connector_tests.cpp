@@ -22,7 +22,7 @@ void authenticate() {
 
     std::cerr <<"CURRENT DATETIME: "<<fmt::format("{:%Y-%m-%d %H:%M:%S}", fmt::localtime(currentDateTime))<<std::endl;
 
-    BCAPI.authenticateWithUserLogin(BASCLOUD_TEST_EMAIL, BASCLOUD_TEST_PASS);
+    BCAPI.authenticateWithUserLogin(BASCLOUD_TEST_ADMIN_EMAIL, BASCLOUD_TEST_PASS);
 
     std::cerr <<"TOKEN: "<<BCAPI.getToken()<<std::endl;
     std::cerr <<"EXPIRATION DATE: "<<fmt::format("{:%Y-%m-%d %H:%M:%S}", fmt::localtime(BCAPI.getTokenExpirationDate()))<<std::endl;
@@ -58,24 +58,25 @@ TEST(BasicTests, SingleConnectorTest) {
     EXPECT_TRUE(connector.getLastUpdatedDate() > 0);
 }
 
+// Deprecated
+// TEST(BasicTests, AssociatedPropertyTest) {
 
-TEST(BasicTests, AssociatedPropertyTest) {
+//     std::cout << "\tRequesting associated property of the connector again..." << std::endl;
 
-    std::cout << "\tRequesting associated property of the connector again..." << std::endl;
+//     Property conn_prop = BCAPI.getAssociatedProperty(BASCLOUD_TEST_TENANT_UUID, BASCLOUD_TEST_CONNECTOR_UUID);
+//     std::cout << "\t\tOK." << std::endl;
 
-    Property conn_prop = BCAPI.getAssociatedProperty(BASCLOUD_TEST_TENANT_UUID, BASCLOUD_TEST_CONNECTOR_UUID);
-    std::cout << "\t\tOK." << std::endl;
+//     std::cout << "\tConnector's property UUID: " << conn_prop.getUUID() << std::endl;
 
-    std::cout << "\tConnector's property UUID: " << conn_prop.getUUID() << std::endl;
-
-    EXPECT_EQ(conn_prop.getUUID(), BASCLOUD_TEST_PROPERTY_UUID);
-}
+//     EXPECT_EQ(conn_prop.getUUID(), BASCLOUD_TEST_PROPERTY_UUID);
+// }
 
 TEST(BasicTests, AssociatedDevicesTest) {
 
     std::cout << "\tRequest connector's associated devices..." << std::endl;
+    PagingOption paging = {};
 
-    EntityCollection<Device> conn_devices = BCAPI.getAssociatedDevices(BASCLOUD_TEST_TENANT_UUID, BASCLOUD_TEST_CONNECTOR_UUID);
+    EntityCollection<Device> conn_devices = BCAPI.getAssociatedConnectorDevices(BASCLOUD_TEST_TENANT_UUID, BASCLOUD_TEST_CONNECTOR_UUID);
 
     std::cout <<"\t\tFound connector with " << conn_devices.first.size() << " devices" << std::endl;
 
@@ -86,7 +87,7 @@ TEST(BasicTests, CreateUpdateAndDeleteConnectorTest) {
 
     std::cout << "\tCreating new connector..." << std::endl;
 
-    Connector new_connector = BCAPI.createConnector(BASCLOUD_TEST_TENANT_UUID, BASCLOUD_TEST_PROPERTY_UUID, "TestConnector");
+    Connector new_connector = BCAPI.createConnector(BASCLOUD_TEST_TENANT_UUID, "TestConnector");
     std::cout << "\t\tOK." << std::endl;
 
     std::string new_uuid = new_connector.getUUID();

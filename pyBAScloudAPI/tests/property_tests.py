@@ -62,17 +62,17 @@ class TestSingleProperty(unittest.TestCase):
         self.assertTrue(property.updatedAt > 0)
 
 
-class TestAssociatedConnector(unittest.TestCase):
+# class TestAssociatedConnector(unittest.TestCase):
 
-    def test_property(self):
-        print("\tRequesting associated connectors of the property...")
+#     def test_property(self):
+#         print("\tRequesting associated connectors of the property...")
 
-        prop_connectors = BCAPI.getAssociatedConnectors(BASCLOUD_TEST_TENANT_UUID, BASCLOUD_TEST_PROPERTY_UUID, errorHandler=errorHandler)
-        print("\t\tOK.")
+#         prop_connectors = BCAPI.getAssociatedConnectors(BASCLOUD_TEST_TENANT_UUID, BASCLOUD_TEST_PROPERTY_UUID, errorHandler=errorHandler)
+#         print("\t\tOK.")
 
-        print("\tFound property connectors: ", len(prop_connectors[0]))
+#         print("\tFound property connectors: ", len(prop_connectors[0]))
 
-        self.assertTrue(len(prop_connectors[0]) >= 1)
+#         self.assertTrue(len(prop_connectors[0]) >= 1)
 
 
 class TestCreateUpdateAndDeleteProperty(unittest.TestCase):
@@ -80,14 +80,18 @@ class TestCreateUpdateAndDeleteProperty(unittest.TestCase):
     def test_property(self):
         print("\tCreating new property...")
 
-        new_property = BCAPI.createProperty(BASCLOUD_TEST_TENANT_UUID, "TestProperty", "Street", "12345", "City", "Deutschland")
+        new_property = BCAPI.createProperty(BASCLOUD_TEST_TENANT_UUID, "TestProperty", "AKS-1000", "L-1000", "Street", "64401", "City", "Deutschland")
         print("\t\tOK.")
 
         new_uuid = new_property.uuid
 
+
+        print(new_uuid)
         self.assertEqual(new_property.name, "TestProperty")
+        self.assertEqual(new_property.aksID, "AKS-1000")
+        self.assertEqual(new_property.identifier, "L-1000")
         self.assertEqual(new_property.street, "Street")
-        self.assertEqual(new_property.postalCode, "12345")
+        self.assertEqual(new_property.postalCode, "64401")
         self.assertEqual(new_property.city, "City")
         self.assertEqual(new_property.country, "Deutschland")
         self.assertTrue(new_property.createdAt > 0)

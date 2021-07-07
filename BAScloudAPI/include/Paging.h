@@ -45,8 +45,7 @@ struct PagingResult {
 
 	/**
 	 * The number of results remaining in the request result.
-	 * At currentPage==1, count describes the total number of entries of the result over all pages. When
-	 * navigating to following pages, the count decreases to the remaining entries excluding the already seen.
+	 * count describes the total number of entries of the result over all pages.
 	 */
 	size_t count = 1;
 };

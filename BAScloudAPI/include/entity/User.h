@@ -7,6 +7,8 @@
 #include "EntityDateMixin.h"
 #include "EntityCollection.h"
 
+#include "Util.h"
+
 
 namespace BAScloud {
 
@@ -46,21 +48,6 @@ class User : public Entity, public EntityDateMixin {
   * @param context EntityContext proving an abstracted context for accessing the API functions.
   */
   User(std::string API_UUID, std::string email, std::time_t createdAt, std::time_t updatedAt, EntityContext* context);
-
-// /**
-//   * Incomplete User constructor
-//   *
-//   * Creates an incomplete User object representing a failed request result for a BAScloud API entity.
-//   * 
-//   * CAUTION: All User attributes are empty, no context is available. Evoking methods on an incomplete entity object will throw
-//   * null pointer exception due to empty context. Check wherever an entity is incomplete through isIncomplete().
-//   *
-//   * @param incomplete Wherever the entity object is incomplete and result of a failed request (incomplete data).
-//   * @param status Optional status message containing the reason for incomplete data/failure.
-//   * @param exception Optional exception which was thrown at failure.
-//   * @param context EntityContext proving an abstracted context for accessing the API functions.
-//   */
-//   User(bool incomplete, std::string status={}, std::exception exception={});
 
 
   /**
@@ -106,13 +93,15 @@ class User : public Entity, public EntityDateMixin {
     * @param context EntityContext proving an abstracted context for accessing the API functions.
     * @param paging Optional PagingOption that is used for requesting paged API results.
     * @param email Optional value filter for the user email.
+    * @param createdFrom Optional filter for the creation date of the User. All points from this timestamp.
+    * @param createdUntil Optional filter for the creation date of the User. All points until this timestamp.
     * 
     * @return EntityCollection containing a list of User entities.
     */
-  static EntityCollection<User> getUsers(EntityContext* context, PagingOption paging={}, std::string email={});
+  static EntityCollection<User> getUsers(EntityContext* context, PagingOption paging={}, std::string email={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1);
 
    /**
-    * Get a the associated Tenant entity of the User.
+    * Get the associated Tenant entity of the User.
     * 
     * You may be only authorized to view the associated Tenant of the currently authenticated User.
     * 
@@ -127,6 +116,23 @@ class User : public Entity, public EntityDateMixin {
     * @return A Tenant object representing the BAScloud Tenant associated with the User.
     */
   Tenant getAssociatedTenant();
+
+   /**
+    * Get the tenant permissions and role of the User.
+    * 
+    * Returns the role and list of resource actions the user is allowed to access.
+    * 
+    * @throws ServerError
+    * @throws ConnectionError
+    * @throws BadRequest
+    * @throws UnauthorizedRequest
+    * @throws NotFoundRequest
+    * @throws ConflictRequest
+    * @throws InvalidResponse
+    * 
+    * @return A PermissionData object representing the permissions the user has and resources the user can access.
+    */
+  PermissionData getPermissions();
 
    /**
     * Request a password reset for the User.
@@ -221,10 +227,12 @@ class User : public Entity, public EntityDateMixin {
     * @param API_UUID User entity UUID that is supposed to be updated.
     * @param context EntityContext proving an abstracted context for accessing the API functions.
     * @param email Optional new value for the User email.
+    * @param API_tenant_UUID Tenant UUID of the tenant the user should be associated to (updates relationship)
+    * @param role If Tenant relationship is updated, a role needs to be specified
     * 
     * @return User entity object representing the updated BAScloud User.
     */
-  static User updateUser(std::string API_UUID, EntityContext* context, std::string email={});
+  static User updateUser(std::string API_UUID, EntityContext* context, std::string email={}, std::string API_tenant_UUID={}, std::string role={});
 
 };
 

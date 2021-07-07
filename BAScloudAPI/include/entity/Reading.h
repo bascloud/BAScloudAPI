@@ -11,6 +11,8 @@
 #include "Paging.h"
 #include "EntityCollection.h"
 
+#include "Util.h"
+
 
 namespace BAScloud {
 
@@ -128,10 +130,12 @@ class Reading : public Entity, public EntityTenantMixin, public EntityDateMixin 
     * @param timestamp Optional filter for the timestamp of the Reading.
     * @param value Optional filter for the value of the Reading.
     * @param API_device_UUID Optional filter for the associated Device UUID of the Reading.
+    * @param createdFrom Optional filter for the creation date of the Reading. All points from this timestamp.
+    * @param createdUntil Optional filter for the creation date of the Reading. All points until this timestamp.
     * 
-    * @return EntityCollection containing list of Property entities matching the provided filters and paging information.
+    * @return EntityCollection containing list of Reading entities matching the provided filters and paging information.
     */
-   static EntityCollection<Reading> getReadings(std::string API_tenant_UUID, EntityContext* context, PagingOption paging={}, std::time_t from=-1, std::time_t until=-1, std::time_t timestamp=-1, double value=std::numeric_limits<double>::quiet_NaN(), std::string API_device_UUID={});
+   static EntityCollection<Reading> getReadings(std::string API_tenant_UUID, EntityContext* context, PagingOption paging={}, std::time_t from=-1, std::time_t until=-1, std::time_t timestamp=-1, double value=std::numeric_limits<double>::quiet_NaN(), std::string API_device_UUID={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1);
 
    /**
     * Create a new Reading entity in the BAScloud.
@@ -155,6 +159,51 @@ class Reading : public Entity, public EntityTenantMixin, public EntityDateMixin 
     * @return Reading entity object representing the newly created BAScloud Reading.
     */
 	 static Reading createReading(std::string API_tenant_UUID, std::string API_device_UUID, double value, std::time_t timestamp, EntityContext* context);
+
+
+   /**
+    * Create a new Reading entity in the BAScloud.
+    * 
+    * Given the associated Tenant and Device entity, a new Reading is created using the given Reading parameter.
+    * 
+    * @throws ServerError
+    * @throws ConnectionError
+    * @throws BadRequest
+    * @throws UnauthorizedRequest
+    * @throws NotFoundRequest
+    * @throws ConflictRequest
+    * @throws InvalidResponse
+    * 
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the Reading.
+    * @param readings List of ReadingData for Reading entities that should be created in the BAScloud.
+    * @param context EntityContext proving an abstracted context for accessing the API functions.
+    * 
+    * @return List of Reading entities representing the newly created BAScloud Reading. Unsuccessfull creations will be null.
+    */
+	 static Reading createReadings(std::string API_tenant_UUID, std::vector<ReadingSetData> readings, EntityContext* context);
+
+   /**
+    * Updates an existing Reading entity in the BAScloud. [Admin]
+    * 
+    * Can update the Reading's value, timestamp or device relationship
+    * 
+    * @throws ServerError
+    * @throws ConnectionError
+    * @throws BadRequest
+    * @throws UnauthorizedRequest
+    * @throws NotFoundRequest
+    * @throws ConflictRequest
+    * @throws InvalidResponse
+    * 
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the Reading.
+    * @param API_reading_UUID UUID of the existing BAScloud Reading that is supposed to be updated.
+    * @param context EntityContext proving an abstracted context for accessing the API functions.
+    * @param value Optional update of the Readings value.
+    * @param timestamp Optional update for the timestamp of the Reading.
+    * @param API_device_UUID Optional relationship update for the associated device of the Reading.
+    * @return List of Reading entities representing the newly created BAScloud Reading. Unsuccessfull creations will be null.
+    */
+    void updateReading(std::string API_tenant_UUID, std::string API_reading_UUID, EntityContext* context, double value=std::numeric_limits<double>::quiet_NaN(), std::time_t timestamp=-1, std::string API_device_UUID={});
 
    /**
     * Deletes an existing Reading in the BAScloud. [Admin] 

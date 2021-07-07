@@ -35,7 +35,7 @@ TEST(BasicTests, ConnectorAuthenticationTest) {
     std::cerr <<"CURRENT DATETIME: "<<currentDateTime<<std::endl;
 
     BAScloud::EntityContext BCAPI(BASCLOUD_TEST_URL);
-    BCAPI.authenticateWithUserLogin(BASCLOUD_TEST_EMAIL, BASCLOUD_TEST_PASS);
+    BCAPI.authenticateWithUserLogin(BASCLOUD_TEST_ADMIN_EMAIL, BASCLOUD_TEST_PASS);
 
     std::cout << "\tRequesting API Token for connector..." << std::endl;
 

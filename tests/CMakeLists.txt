@@ -5,6 +5,7 @@ project(tests)
 # Information UUID constants used in testing
 add_definitions(-DBASCLOUD_TEST_URL="")
 add_definitions(-DBASCLOUD_TEST_EMAIL="")
+add_definitions(-DBASCLOUD_TEST_ADMIN_EMAIL="")
 add_definitions(-DBASCLOUD_TEST_PASS="")
 
 add_definitions(-DBASCLOUD_TEST_USER_UUID="")
@@ -14,6 +15,9 @@ add_definitions(-DBASCLOUD_TEST_READING_UUID="")
 add_definitions(-DBASCLOUD_TEST_DEVICE_UUID="")
 add_definitions(-DBASCLOUD_TEST_CONNECTOR_UUID="")
 add_definitions(-DBASCLOUD_TEST_STEPOINT_UUID="")
+
+add_definitions(-DBASCLOUD_TEST_USER2_UUID="")
+add_definitions(-DBASCLOUD_TEST_USER3_UUID="")
 
 
 

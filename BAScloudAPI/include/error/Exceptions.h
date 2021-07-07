@@ -103,7 +103,7 @@ class ConflictRequest : public std::runtime_error {
  * 401 Unauthorized HTTP error.
  * 
  * The current user does not have valid authentication credentials for the target resource.
- * This could mean a invalid authentication token or no authorisation for the resource (e.g. administration endpoints).
+ * This means the user has a invalid or expired authentication token.
  * 
  */
 class UnauthorizedRequest : public std::runtime_error {
@@ -114,6 +114,24 @@ class UnauthorizedRequest : public std::runtime_error {
   * @param message Message describing the occurred error and potential causes.
   */
    UnauthorizedRequest(const std::string &message) : std::runtime_error(message) {
+   }
+};
+
+/** 
+ * 403 Forbidden HTTP error.
+ * 
+ * The current user does not have permission for the target resource.
+ * This means that the user has no authorisation for the resource (e.g. wrong tenant, administration endpoints).
+ * 
+ */
+class ForbiddenRequest : public std::runtime_error {
+ public:
+ /**
+  * ForbiddenRequest constructor
+  *
+  * @param message Message describing the occurred error and potential causes.
+  */
+   ForbiddenRequest(const std::string &message) : std::runtime_error(message) {
    }
 };
 

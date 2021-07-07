@@ -32,7 +32,7 @@ TEST(BasicTests, ReadingCollectionTest) {
 
     std::cout << "\tRequesting all readings..." << std::endl;
 
-    EntityCollection<Reading> readings = BCAPI.getReadingsCollection(BASCLOUD_TEST_TENANT_UUID, {}, -1, -1, -1, std::numeric_limits<double>::quiet_NaN(), {}, [](std::exception& e, json& j) {
+    EntityCollection<Reading> readings = BCAPI.getReadingsCollection(BASCLOUD_TEST_TENANT_UUID, {}, -1, -1, -1, std::numeric_limits<double>::quiet_NaN(), {}, -1, -1, [](std::exception& e, json& j) {
             throw e;
         });
     std::cout << "\t\tOK." << std::endl;
@@ -46,7 +46,7 @@ TEST(BasicTests, ReadingCollectionPagingTest) {
 
     std::cout << "\tRequesting paged readings..." << std::endl;
 
-    EntityCollection<Reading> readings = BCAPI.getReadingsCollection(BASCLOUD_TEST_TENANT_UUID, PagingOption(10), -1, -1, -1, std::numeric_limits<double>::quiet_NaN(), {}, [](std::exception& e, json& j) {
+    EntityCollection<Reading> readings = BCAPI.getReadingsCollection(BASCLOUD_TEST_TENANT_UUID, PagingOption(1000), -1, -1, -1, std::numeric_limits<double>::quiet_NaN(), BASCLOUD_TEST_DEVICE_UUID, -1, -1, [](std::exception& e, json& j) {
             throw e;
         });
     std::cout << "\t\tOK." << std::endl;
@@ -58,7 +58,7 @@ TEST(BasicTests, ReadingCollectionPagingTest) {
 
     int page_cnt = 1;
     while(!readings.second.nextPagePointer.empty()) {
-        readings = BCAPI.getReadingsCollection(BASCLOUD_TEST_TENANT_UUID, PagingOption(10, PagingOption::Direction::NEXT, readings.second.nextPagePointer), -1, -1, -1, std::numeric_limits<double>::quiet_NaN(), {}, [](std::exception& e, json& j) {
+        readings = BCAPI.getReadingsCollection(BASCLOUD_TEST_TENANT_UUID, PagingOption(1000, PagingOption::Direction::NEXT, readings.second.nextPagePointer), -1, -1, -1, std::numeric_limits<double>::quiet_NaN(), BASCLOUD_TEST_DEVICE_UUID, -1, -1, [](std::exception& e, json& j) {
             throw e;
         });
 
@@ -99,7 +99,7 @@ TEST(BasicTests, AssociatedDeviceTest) {
 
     std::cout << "\tRequesting associated device of the reading again..." << std::endl;
 
-    Device read_device = BCAPI.getAssociatedDevice(BASCLOUD_TEST_TENANT_UUID, BASCLOUD_TEST_READING_UUID);
+    Device read_device = BCAPI.getAssociatedReadingsDevice(BASCLOUD_TEST_TENANT_UUID, BASCLOUD_TEST_READING_UUID);
     std::cout << "\t\tOK." << std::endl;
 
     EXPECT_EQ(read_device.getUUID(), BASCLOUD_TEST_DEVICE_UUID);

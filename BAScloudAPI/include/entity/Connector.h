@@ -10,6 +10,8 @@
 #include "Paging.h"
 #include "EntityCollection.h"
 
+#include "Util.h"
+
 
 namespace BAScloud {
 
@@ -32,12 +34,12 @@ class Connector : public Entity, public EntityTenantMixin, public EntityDateMixi
    std::string name;
 
    /**
-    * API key of the Connector for accessing the BAScloud API. A Connector's API key never expires.
+    * API token of the Connector for accessing the BAScloud API. A Connector's API token never expires.
     * 
-    * The API key may not be available (empty), a new API key can be requested through refreshAuthToken().
-    * This request invalidates the previous API key.
+    * The API key may not be available (empty), a new API token can be requested through refreshAuthToken().
+    * This request invalidates the previous API token.
     */
-   std::string api_key;
+   std::string token;
 
  public:
 
@@ -47,17 +49,17 @@ class Connector : public Entity, public EntityTenantMixin, public EntityDateMixi
     * Creates a Connector object representing a BAScloud API entity.
     *
     * Note: Creating an entity object over its constructor does not automatically create the entity in the BAScloud. 
-    * For creation of a BAScloud entity use the static method of the corresponding object class Connector::createConnector().
+    * For creation of a BAScloud entity use the static method of the object class Connector::createConnector().
     * 
     * @param API_UUID Universally unique identifier of the represented BAScloud Connector.
     * @param API_tenant_UUID Universally unique identifier of the represented BAScloud Device.
     * @param name Name for the Connector in the building.
-    * @param apiKey API key of the Connector for accessing the BAScloud API.
+    * @param token API token of the Connector for accessing the BAScloud API.
     * @param createdAt Datetime describing the creation of the device entity in the BAScloud.
     * @param updatedAt Datetime describing the last update of the device information in the BAScloud.
     * @param context EntityContext proving an abstracted context for accessing the API functions.
     */
-   Connector(std::string API_UUID, std::string API_tenant_UUID, std::string name, std::string apiKey, std::time_t createdAt, std::time_t updatedAt, EntityContext* context);
+   Connector(std::string API_UUID, std::string API_tenant_UUID, std::string name, std::string token, std::time_t createdAt, std::time_t updatedAt, EntityContext* context);
 
    /**
     * Get the Connector name.
@@ -67,30 +69,32 @@ class Connector : public Entity, public EntityTenantMixin, public EntityDateMixi
    std::string getName();
 
    /**
-    * Get the Connector API key.
+    * Get the Connector API token.
     * 
-    * This field may be empty if no current API key is available. User refreshAuthToken() to update the API key attribute.
-    * The refreshAuthToken() call invalidates all previous API keys. 
+    * This field may be empty if no current API token is available. User refreshAuthToken() to update the API token attribute.
+    * The refreshAuthToken() call invalidates all previous API tokens. 
     * 
     * @return API key of the Connector.
     */
-   std::string getAPIKey();
+   std::string getToken();
 
    /**
-    * Set the Connector API key.
+    * Set the Connector API token.
     */
-   void setAPIKey(std::string newApiKey);
+   void setToken(std::string newToken);
 
    /**
-    * Refresh the Connector API key from the BAScloud.
+    * Refresh the Connector API token from the BAScloud.
     * 
-    * Requests a new API key for this Connector entity and updates its api_key attribute.
-    * A call to this function invalidates the previous API key.
+    * Requests a new API token for this Connector entity and updates its token attribute.
+    * A call to this function invalidates the previous API token.
     * 
     */
    void refreshAuthToken();
 
    /**
+    * [DEPRECATED] in API v2.1
+    * 
     * Get the associated Property entity of the Connector.
     * 
     * Each Connector can have a relation to one Property.
@@ -109,6 +113,23 @@ class Connector : public Entity, public EntityTenantMixin, public EntityDateMixi
     */
    Property getAssociatedProperty();
 
+   /**
+    * Get the tenant permissions and role of the Connector.
+    * 
+    * Returns the role and list of resource actions the Connector is allowed to access.
+    * 
+    * @throws ServerError
+    * @throws ConnectionError
+    * @throws BadRequest
+    * @throws UnauthorizedRequest
+    * @throws NotFoundRequest
+    * @throws ConflictRequest
+    * @throws InvalidResponse
+    * 
+    * @return A PermissionData object representing the permissions the Connector has and resources the Connector can access.
+    */
+  PermissionData getPermissions();
+
     /**
     * Get the associated Device entities of the Connector.
     * 
@@ -123,10 +144,15 @@ class Connector : public Entity, public EntityTenantMixin, public EntityDateMixi
     * @throws InvalidResponse
     * 
     * @param paging Optional PagingOption that is used for requesting paged API results.
+    * @param aksID Optional filter for the AKS ID of the Device.
+    * @param description Optional filter for the Description of the Device.
+    * @param unit Optional filter for the measuring unit of the Device.
+    * @param createdFrom Optional filter for the creation date of the Device. All points from this timestamp.
+    * @param createdUntil Optional filter for the creation date of the Device. All points until this timestamp.
     * 
     * @return EntityCollection containing list of Device entities associated with the Connector.
     */
-   EntityCollection<Device> getAssociatedDevices(PagingOption paging={});
+   EntityCollection<Device> getAssociatedDevices(PagingOption paging={}, std::string aksID={}, std::string localAksID={}, std::string description={}, std::string unit={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1, std::time_t deletedUntil=-1);
 
    /**
     * Request a single Connector entity.
@@ -163,10 +189,12 @@ class Connector : public Entity, public EntityTenantMixin, public EntityDateMixi
     * @param API_tenant_UUID UUID of the associated BAScloud Tenant.
     * @param context EntityContext proving an abstracted context for accessing the API functions.
     * @param paging Optional PagingOption that is used for requesting paged API results.
+    * @param createdFrom Optional filter for the creation date of the Connector. All points from this timestamp.
+    * @param createdUntil Optional filter for the creation date of the Connector. All points until this timestamp.
     * 
     * @return EntityCollection containing list of Connector entities matching the provided filters and paging information.
     */
-   static EntityCollection<Connector> getConnectors(std::string API_tenant_UUID, EntityContext* context, PagingOption paging={});
+   static EntityCollection<Connector> getConnectors(std::string API_tenant_UUID, EntityContext* context, PagingOption paging={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1);
 
    /**
     * Create a new Connector entity in the BAScloud.
@@ -188,7 +216,7 @@ class Connector : public Entity, public EntityTenantMixin, public EntityDateMixi
     * 
     * @return Connector entity object representing the newly created BAScloud Connector.
     */
-   static Connector createConnector(std::string API_tenant_UUID, std::string API_property_UUID, std::string name, EntityContext* context);
+   static Connector createConnector(std::string API_tenant_UUID, std::string name, EntityContext* context);
 
    /**
     * Update an existing Connector in the BAScloud.

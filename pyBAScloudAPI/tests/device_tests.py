@@ -93,7 +93,7 @@ class TestAssociatedSetPoints(unittest.TestCase):
         self.assertTrue(len(device_setpoint[0]) >= 0) # May not any setpoints for it
 
 
-# // Delete devices not working atm
+# // TODO
 # // TEST(BasicTests, CreateUpdateAndDeleteDeviceTest) {
 # //     print("\tCreating new device...")
 

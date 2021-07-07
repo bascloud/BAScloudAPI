@@ -25,14 +25,14 @@ int main (int argc, char *argv[]) {
 
     std::cout << "Initialising library..."<< std::endl;
 
-    EntityContext BCAPI("server_url");
+    EntityContext BCAPI("https://basc-prd-apm-euw.azure-api.net/v2");
 
     std::cout << "\tOK." << std::endl;
 
 
     std::cout << "1. - Authentication with user login" << std::endl;
 
-        BCAPI.authenticateWithUserLogin("user_email", "user_password");
+        BCAPI.authenticateWithUserLogin("erhardt@profm-gmbh.de", "Dont4get$1");
         std::cout << "\tOK." << std::endl;
 
         std::cout << "\tAuthenticated: " << BCAPI.isAuthenticated() << std::endl;
@@ -44,7 +44,7 @@ int main (int argc, char *argv[]) {
 
         std::cout << "\tRequesting all users..." << std::endl;
 
-        EntityCollection<User> users = BCAPI.getUsersCollection({}, {}, [](std::exception& e, json& j) {
+        EntityCollection<User> users = BCAPI.getUsersCollection({}, {}, -1, -1, [](std::exception& e, json& j) {
             std::cout << "\t\tException occured while receiving user entities: " << e.what() << j << std::endl;
         });
 
@@ -284,7 +284,7 @@ int main (int argc, char *argv[]) {
 
         int max_devices = 0;
         for(Connector conn: connectors.first) {
-            EntityCollection<Device> conn_devices = BCAPI.getAssociatedDevices(tenant.getUUID(), conn.getUUID());
+            EntityCollection<Device> conn_devices = BCAPI.getAssociatedConnectorDevices(tenant.getUUID(), conn.getUUID());
             if(conn_devices.first.size() > max_devices) {
                 max_devices = conn_devices.first.size();
                 connector = conn;
@@ -297,7 +297,7 @@ int main (int argc, char *argv[]) {
 
         std::cout << "\tCreating new connector..." << std::endl;
 
-        Connector new_connector = BCAPI.createConnector(tenant.getUUID(), new_property.getUUID(), "MoritzTestConnector");
+        Connector new_connector = BCAPI.createConnector(tenant.getUUID(), "MoritzTestConnector");
         std::cout << "\t\tOK." << std::endl;
 
         std::cout << "\tNew connector UUID: " << new_connector.getUUID() << std::endl;
@@ -435,7 +435,7 @@ int main (int argc, char *argv[]) {
 
         std::cout << "\tCreating new device..." << std::endl;
 
-        Device new_device = BCAPI.createDevice(tenant.getUUID(), new_connector.getUUID(), "MoritzTestAKS1000", "TestDevice", "m3");
+        Device new_device = BCAPI.createDevice(tenant.getUUID(), new_connector.getUUID(), new_property.getUUID(), "MoritzTestAKS1000", "TestDevice", "m3", "localAKS1000");
         std::cout << "\t\tOK." << std::endl;
 
         std::cout << "\tNew device UUID: " << new_device.getUUID() << std::endl;
@@ -501,7 +501,7 @@ int main (int argc, char *argv[]) {
 
             std::cout << "\tRequesting associated device of the reading again..." << std::endl;
 
-            Device read_device = BCAPI.getAssociatedDevice(tenant.getUUID(), reading.getUUID());
+            Device read_device = BCAPI.getAssociatedReadingsDevice(tenant.getUUID(), reading.getUUID());
             std::cout << "\t\tOK." << std::endl;
 
             std::cout << "\tReadings's Device UUID: " << read_device.getUUID() << std::endl;

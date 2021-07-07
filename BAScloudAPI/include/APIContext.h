@@ -8,6 +8,7 @@
 using json = nlohmann::json;
 #include <cpr/cpr.h>
 
+#include "Util.h"
 
 namespace BAScloud {
 
@@ -58,6 +59,7 @@ class APIContext {
 	const std::string API_USER_TENANT_RELATIONSHIP_PATH = "/users/{}/relationships/tenant";
 	const std::string API_USER_ASSOCIATED_TENANT_PATH = "/users/{}/tenant";
 	const std::string API_USER_DELETE_PATH = "/users/{}";
+	const std::string API_USER_PERMISSIONS_PATH = "/users/{}/permissions";
 
 	const std::string API_TENANT_SINGLE_PATH = "/tenants/{}";
 	const std::string API_TENANT_COLLECTION_PATH = "/tenants";
@@ -71,6 +73,7 @@ class APIContext {
 	const std::string API_PROPERTY_COLLECTION_PATH = "/tenants/{}/properties";
 	const std::string API_PROPERTY_CONNECTORS_RELATIONSHIP_PATH = "/tenants/{}/properties/{}/relationships/connectors";
 	const std::string API_PROPERTY_ASSOCIATED_CONNECTORS_PATH = "/tenants/{}/properties/{}/connectors";
+	const std::string API_PROPERTY_ASSOCIATED_DEVICES_PATH = "/tenants/{}/properties/{}/devices";
 	const std::string API_PROPERTY_CREATE_PATH = "/tenants/{}/properties";
 	const std::string API_PROPERTY_UPDATE_DELETE_PATH = "/tenants/{}/properties/{}";
 
@@ -83,6 +86,7 @@ class APIContext {
 	const std::string API_CONNECTOR_CREATE_PATH = "/tenants/{}/connectors";
 	const std::string API_CONNECTOR_UPDATE_DELETE_PATH = "/tenants/{}/connectors/{}";
 	const std::string API_CONNECTOR_GENERATE_TOKEN_PATH = "/tenants/{}/connectors/{}/generateToken";
+	const std::string API_CONNECTOR_PERMISSIONS_PATH = "/tenants/{}/connectors/{}/permissions";
 
 	const std::string API_DEVICE_SINGLE_PATH = "/tenants/{}/devices/{}";
 	const std::string API_DEVICE_COLLECTION_PATH = "/tenants/{}/devices";
@@ -105,6 +109,8 @@ class APIContext {
 	const std::string API_SETPOINT_SINGLE_PATH = "/tenants/{}/setpoints/{}";
 	const std::string API_SETPOINT_COLLECTION_PATH = "/tenants/{}/setpoints";
 	const std::string API_SETPOINT_CREATE_PATH = "/tenants/{}/setpoints";
+	const std::string API_SETPOINT_ASSOCIATED_DEVICE_PATH = "/tenants/{}/setpoints/{}/device";
+	const std::string API_SETPOINT_DELETE_PATH = "/tenants/{}/setpoints/{}";
 
  public:
 
@@ -186,7 +192,7 @@ class APIContext {
 	 * 
      * @return cpr::Response object representing the raw request response.
 	 */
-	cpr::Response requestUserCollection(std::string email={});
+	cpr::Response requestUserCollection(std::string email={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1, int page_size=-1, std::string page_before={}, std::string page_after={});
 
    /**
 	 * Request the user tenant relationship of a given user.
@@ -265,7 +271,7 @@ class APIContext {
 	 * 
      * @return cpr::Response object representing the raw request response.
 	 */
-	cpr::Response requestUpdateUser(std::string API_user_UUID, std::string email);
+	cpr::Response requestUpdateUser(std::string API_user_UUID, std::string email={}, std::string API_tenant_UUID={}, std::string role={});
 
    /**
 	 * Request the deletion of an existing user. [Admin] 
@@ -299,7 +305,7 @@ class APIContext {
 	 * 
      * @return cpr::Response object representing the raw request response.
 	 */
-	cpr::Response requestTenantCollection();
+	cpr::Response requestTenantCollection(std::time_t createdFrom=-1, std::time_t createdUntil=-1);
 
    /**
 	 * Request the tenant users relationships of a given tenant.
@@ -320,7 +326,7 @@ class APIContext {
 	 * 
      * @return cpr::Response object representing the raw request response.
 	 */
-	cpr::Response requestTenantAssociatedUsers(std::string API_tenant_UUID, int page_size=-1, std::string page_before={}, std::string page_after={});
+	cpr::Response requestTenantAssociatedUsers(std::string API_tenant_UUID, std::string email={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1, int page_size=-1, std::string page_before={}, std::string page_after={});
 
 
 	// Admin Tenants API endpoints
@@ -364,7 +370,7 @@ class APIContext {
 	* 
     * @return cpr::Response object representing the raw request response.
     */
-	cpr::Response requestAssignTenantUsers(std::string API_tenant_UUID, std::vector<std::string> API_user_UUIDs);
+	cpr::Response requestAssignTenantUsers(std::string API_tenant_UUID, std::vector<std::string> API_user_UUIDs, std::vector<std::string> API_user_ROLES);
 
   /**
     * Request to remove a collection of User entities from a tenant. [Admin] 
@@ -403,7 +409,7 @@ class APIContext {
 	 * 
 	 * @return cpr::Response object representing the raw request response.
 	 */
-	cpr::Response requestPropertyCollection(std::string API_tenant_UUID, std::string name={}, std::string street={}, std::string postalCode={}, std::string city={}, std::string country={}, int page_size=-1, std::string page_before={}, std::string page_after={});
+	cpr::Response requestPropertyCollection(std::string API_tenant_UUID, std::string name={}, std::string aksID={}, std::string identifier={}, std::string street={}, std::string postalCode={}, std::string city={}, std::string country={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1, int page_size=-1, std::string page_before={}, std::string page_after={});
 	
    /**
 	 * Request the connectors relationships of a given property.
@@ -428,7 +434,19 @@ class APIContext {
 	 */
 	cpr::Response requestPropertyAssociatedConnectors(std::string API_tenant_UUID, std::string API_property_UUID, int page_size=-1, std::string page_before={}, std::string page_after={});
 	
-	
+	/**
+	 * Request the associated devices of a given property.
+	 * 
+	 * @param API_tenant_UUID API UUID of the tenant entity.
+	 * @param API_property_UUID API UUID of the property entity.
+	 * @param page_size Optional page size for the request e.g. maximal number of entries per page.
+	 * @param page_before Optional page identifier pointing to the previous page.
+	 * @param page_after Optional page identifier pointing to the next page.
+	 * 
+	 * @return cpr::Response object representing the raw request response.
+	 */
+	cpr::Response requestPropertyAssociatedDevices(std::string API_tenant_UUID, std::string API_property_UUID, std::string aksID={}, std::string localAksID={}, std::string API_connector_UUID={}, std::string description={}, std::string unit={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1, std::time_t deletedUntil=-1, int page_size=-1, std::string page_before={}, std::string page_after={});
+
    /**
     * Requests the creation a new property.
     * 
@@ -441,7 +459,7 @@ class APIContext {
     * 
     * @return cpr::Response object representing the raw request response.
     */
-	cpr::Response requestCreateProperty(std::string API_tenant_UUID, std::string name, std::string street, std::string postalCode, std::string city, std::string country);
+	cpr::Response requestCreateProperty(std::string API_tenant_UUID, std::string name, std::string aksID/*={}*/, std::string identifier/*={}*/, std::string street/*={}*/, std::string postalCode/*={}*/, std::string city/*={}*/, std::string country/*={}*/);
 	
    /**
     * Requests the update an existing property.
@@ -456,7 +474,7 @@ class APIContext {
     * 
     * @return cpr::Response object representing the raw request response.
     */
-	cpr::Response requestUpdateProperty(std::string API_tenant_UUID, std::string API_property_UUID, std::string name={}, std::string street={}, std::string postalCode={}, std::string city={}, std::string country={});
+	cpr::Response requestUpdateProperty(std::string API_tenant_UUID, std::string API_property_UUID, std::string name={}, std::string aksID={}, std::string identifier={}, std::string street={}, std::string postalCode={}, std::string city={}, std::string country={});
 	
    /**
     * Requests the deletion of an existing property.
@@ -489,7 +507,7 @@ class APIContext {
 	 * 
 	 * @return cpr::Response object representing the raw request response.
 	 */
-	cpr::Response requestConnectorCollection(std::string API_tenant_UUID, int page_size=-1, std::string page_before={}, std::string page_after={});
+	cpr::Response requestConnectorCollection(std::string API_tenant_UUID, std::time_t createdFrom=-1, std::time_t createdUntil=-1, int page_size=-1, std::string page_before={}, std::string page_after={});
 	
    /**
 	 * Request the property relationships of a given connector.
@@ -532,18 +550,17 @@ class APIContext {
 	 * 
 	 * @return cpr::Response object representing the raw request response.
 	 */
-	cpr::Response requestConnectorAssociatedDevices(std::string API_tenant_UUID, std::string API_connector_UUID, int page_size=-1, std::string page_before={}, std::string page_after={});
+	cpr::Response requestConnectorAssociatedDevices(std::string API_tenant_UUID, std::string API_connector_UUID, std::string aksID={}, std::string localAksID={}, std::string description={}, std::string unit={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1, std::time_t deletedUntil=-1, int page_size=-1, std::string page_before={}, std::string page_after={});
 	
    /**
     * Requests the creation a new connector.
     * 
     * @param API_tenant_UUID UUID of the associated BAScloud Tenant.
-    * @param API_property_UUID UUID of the associated BAScloud property.
     * @param name Name of the connector.
     * 
     * @return cpr::Response object representing the raw request response.
     */
-	cpr::Response requestCreateConnector(std::string API_tenant_UUID, std::string API_property_UUID, std::string name);
+	cpr::Response requestCreateConnector(std::string API_tenant_UUID, std::string name);
 	
    /**
     * Requests the update of an existing connector.
@@ -567,7 +584,7 @@ class APIContext {
 	cpr::Response requestDeleteConnector(std::string API_tenant_UUID, std::string API_connector_UUID);
 	
    /**
-    * Requests a new API key for a connector entity.
+    * Requests a new API token for a connector entity.
     * 
     * @param API_tenant_UUID UUID of the associated BAScloud tenant.
     * @param API_connector_UUID UUID of a BAScloud connector for which the API key is requested.
@@ -601,7 +618,7 @@ class APIContext {
 	 * 
 	 * @return cpr::Response object representing the raw request response.
 	 */
-	cpr::Response requestDeviceCollection(std::string API_tenant_UUID, std::string aksID={}, std::string description={}, std::string unit={}, int page_size=-1, std::string page_before={}, std::string page_after={});
+	cpr::Response requestDeviceCollection(std::string API_tenant_UUID, std::string aksID={}, std::string localAksID={}, std::string API_connector_UUID={}, std::string API_property_UUID={}, std::string description={}, std::string unit={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1, std::time_t deletedUntil=-1, int page_size=-1, std::string page_before={}, std::string page_after={});
 	
    /**
 	 * Request the connector relationship of a given device.
@@ -644,7 +661,7 @@ class APIContext {
 	 * 
 	 * @return cpr::Response object representing the raw request response.
 	 */
-	cpr::Response requestDeviceAssociatedReadings(std::string API_tenant_UUID, std::string API_device_UUID, int page_size=-1, std::string page_before={}, std::string page_after={});
+	cpr::Response requestDeviceAssociatedReadings(std::string API_tenant_UUID, std::string API_device_UUID, std::time_t from=-1, std::time_t until=-1, std::time_t timestamp=-1, double value=std::numeric_limits<double>::quiet_NaN(), std::time_t createdFrom=-1, std::time_t createdUntil=-1, int page_size=-1, std::string page_before={}, std::string page_after={});
 	
    /**
 	 * Request the setpoints releationship of a given device.
@@ -667,20 +684,21 @@ class APIContext {
 	 * 
 	 * @return cpr::Response object representing the raw request response.
 	 */
-	cpr::Response requestDeviceAssociatedSetPoints(std::string API_tenant_UUID, std::string API_device_UUID, int page_size=-1, std::string page_before={}, std::string page_after={}); 
+	cpr::Response requestDeviceAssociatedSetPoints(std::string API_tenant_UUID, std::string API_device_UUID, std::time_t from=-1, std::time_t until=-1, std::time_t timestamp=-1, std::time_t currentTime=-1, std::time_t createdFrom=-1, std::time_t createdUntil=-1, int page_size=-1, std::string page_before={}, std::string page_after={}); 
 	
    /**
 	 * Request the creation of a new device entity given an associated connector.
 	 * 
 	 * @param API_tenant_UUID API UUID of the associated tenant entity.
 	 * @param API_connector_UUID API UUID of the associated connector entity.
+	 * @param API_property_UUID API UUID of the associated property entity.
      * @param aksID The AKS ID of the new device.
      * @param description The Description of the new device.
      * @param unit The measuring unit of the new device.
 	 * 
 	 * @return cpr::Response object representing the raw request response.
 	 */
-	cpr::Response requestCreateDevice(std::string API_tenant_UUID, std::string API_connector_UUID, std::string aksID, std::string description, std::string unit);
+	cpr::Response requestCreateDevice(std::string API_tenant_UUID, std::string API_connector_UUID, std::string API_property_UUID, std::string aksID, std::string description, std::string unit, std::string localAksID={});
 	
    /**
 	 * Request an update of an existing device.
@@ -693,7 +711,7 @@ class APIContext {
 	 * 
 	 * @return cpr::Response object representing the raw request response.
 	 */
-	cpr::Response requestUpdateDevice(std::string API_tenant_UUID, std::string API_device_UUID, std::string aksID={}, std::string description={}, std::string unit={});
+	cpr::Response requestUpdateDevice(std::string API_tenant_UUID, std::string API_device_UUID, std::string aksID={}, std::string localAksID={}, std::string description={}, std::string unit={});
 	
 	/**
 	 * Request the deletion of an existing device.
@@ -732,7 +750,7 @@ class APIContext {
 	 * 
 	 * @return cpr::Response object representing the raw request response.
 	 */
-	cpr::Response requestReadingCollection(std::string API_tenant_UUID, std::time_t from=-1, std::time_t until=-1, std::time_t timestamp=-1, double value=std::numeric_limits<double>::quiet_NaN(), std::string API_device_UUID={}, int page_size=-1, std::string page_before={}, std::string page_after={});
+	cpr::Response requestReadingCollection(std::string API_tenant_UUID, std::time_t from=-1, std::time_t until=-1, std::time_t timestamp=-1, double value=std::numeric_limits<double>::quiet_NaN(), std::string API_device_UUID={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1, int page_size=-1, std::string page_before={}, std::string page_after={});
 	
    /**
 	 * Request the device releationship of a given reading.
@@ -766,6 +784,33 @@ class APIContext {
 	 */
 	cpr::Response requestCreateReading(std::string API_tenant_UUID, std::string API_device_UUID, double value, std::time_t timestamp);
 	
+   /**
+	 * Request the creation of a new reading entity given an associated device.
+	 * 
+	 * @param API_tenant_UUID API UUID of the associated tenant entity.
+	 * @param API_device_UUID API UUID of the associated device entity.
+     * @param value Value of the reading.
+     * @param timestamp The time of the reading of the entity value.
+	 * 
+	 * @return cpr::Response object representing the raw request response.
+	 */
+	cpr::Response requestCreateReadingsSet(std::string API_tenant_UUID, std::vector<ReadingSetData> readings);
+
+
+   /**
+	 * Request the update of a reading entity.
+	 * 
+	 * @param API_tenant_UUID API UUID of the associated tenant entity.
+	 * @param API_reading_UUID API UUID of the reading entity.
+     * @param value Optional value of the reading.
+     * @param timestamp Optional the time of the reading of the entity value.
+     * @param API_device_UUID Optional API UUID of the associated device entity.
+	 * 
+	 * @return cpr::Response object representing the raw request response.
+	 */
+	cpr::Response requestUpdateReading(std::string API_tenant_UUID, std::string API_reading_UUID, double value=std::numeric_limits<double>::quiet_NaN(), std::time_t timestamp=-1, std::string API_device_UUID={});
+
+
 	/**
 	 * Request the deletion of an existing reading entity.
 	 * 
@@ -803,7 +848,7 @@ class APIContext {
 	 * 
 	 * @return cpr::Response object representing the raw request response.
 	 */
-	cpr::Response requestSetPointCollection(std::string API_tenant_UUID, std::time_t from=-1, std::time_t until=-1, std::time_t timestamp=-1, std::time_t currentTime=-1, std::string API_device_UUID={}, int page_size=-1, std::string page_before={}, std::string page_after={});
+	cpr::Response requestSetPointCollection(std::string API_tenant_UUID, std::time_t from=-1, std::time_t until=-1, std::time_t timestamp=-1, std::time_t currentTime=-1, std::string API_device_UUID={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1, int page_size=-1, std::string page_before={}, std::string page_after={});
 	
    /**
 	 * Request the creation of a new setpoint entity given an associated device.
@@ -817,6 +862,59 @@ class APIContext {
 	 */
 	cpr::Response requestCreateSetPoint(std::string API_tenant_UUID, std::string API_device_UUID, double value, std::time_t timestamp);
 
+   /**
+	 * Request the update of a SetPoint entity.
+	 * 
+	 * @param API_tenant_UUID API UUID of the associated tenant entity.
+	 * @param API_reading_UUID API UUID of the SetPoint entity.
+     * @param value Optional value of the SetPoint.
+     * @param timestamp Optional the time of the SetPoint of the entity value.
+     * @param API_device_UUID Optional API UUID of the associated device entity.
+	 * 
+	 * @return cpr::Response object representing the raw request response.
+	 */
+	cpr::Response requestUpdateSetPoint(std::string API_tenant_UUID, std::string API_setpoint_UUID, double value=std::numeric_limits<double>::quiet_NaN(), std::time_t timestamp=-1, std::string API_device_UUID={});
+
+
+   /**
+	 * Request the associated device of a given setpoint.
+	 * 
+	 * @param API_tenant_UUID API UUID of the tenant entity.
+	 * @param API_setpoint_UUID API UUID of the setpoint entity.
+	 * 
+	 * @return cpr::Response object representing the raw request response.
+	 */
+	cpr::Response requestSetPointAssociatedDevice(std::string API_tenant_UUID, std::string API_setpoint_UUID);
+
+	/**
+	 * Request the deletion of an existing setpoint entity.
+	 * 
+	 * @param API_tenant_UUID API UUID of the associated tenant entity.
+	 * @param API_setpoint_UUID API UUID of the setpoint entity.
+	 * 
+	 * @return cpr::Response object representing the raw request response.
+	 */
+	cpr::Response requestDeleteSetPoint(std::string API_tenant_UUID, std::string API_setpoint_UUID);
+
+
+   /**
+	 * Request the user permissions on its associated tenant.
+	 * 
+	 * @param API_user_UUID API UUID of the user entity.
+	 * 
+	 * @return cpr::Response object representing the raw request response.
+	 */
+	cpr::Response requestUserPermissions(std::string API_user_UUID);
+
+   /**
+	 * Request the connector permissions on its associated tenant.
+	 * 
+	 * @param API_tenant_UUID API UUID of the associated tenant entity.
+	 * @param API_connector_UUID API UUID of the connector entity.
+	 * 
+	 * @return cpr::Response object representing the raw request response.
+	 */
+	cpr::Response requestConnectorPermissions(std::string API_tenant_UUID, std::string API_connector_UUID);
 
 };
 

@@ -8,6 +8,17 @@
 
 namespace BAScloud {
 
+    struct PermissionData {
+        std::string role;
+        std::map<std::string, std::vector<std::string>> resources;
+    };
+
+    struct ReadingSetData {
+        std::string API_device_UUID;
+        double value;
+        std::time_t timestamp;
+    };
+
     /** 
      * Util class providing various utility functions for handling BAScloud request and responses.
      */

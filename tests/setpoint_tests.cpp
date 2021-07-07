@@ -32,7 +32,7 @@ TEST(BasicTests, SetPointCollectionTest) {
 
     std::cout << "\tRequesting all setpoints..." << std::endl;
 
-    EntityCollection<SetPoint> setpoints = BCAPI.getSetPointsCollection(BASCLOUD_TEST_TENANT_UUID, {}, -1, -1, -1, -1, {}, [](std::exception& e, json& j) {
+    EntityCollection<SetPoint> setpoints = BCAPI.getSetPointsCollection(BASCLOUD_TEST_TENANT_UUID, {}, -1, -1, -1, -1, {}, -1, -1, [](std::exception& e, json& j) {
             throw e;
         });
     std::cout << "\t\tOK." << std::endl;
@@ -82,7 +82,7 @@ TEST(BasicTests, CreateAndDeleteSetPointTest) {
     std::cout << "\tFrom: " << fmt::format("{:%F %T}", fmt::localtime(currentDateTime-(60*60*24))) << std::endl;
     std::cout << "\tUntil: " << fmt::format("{:%F %T}", fmt::localtime(currentDateTime+(60*60*24))) << std::endl;
 
-    EntityCollection<SetPoint> setpoints = BCAPI.getSetPointsCollection(BASCLOUD_TEST_TENANT_UUID, {}, currentDateTime-(60*60*24), currentDateTime+(60*60*24), -1, -1, {}, [](std::exception& e, json& j) {
+    EntityCollection<SetPoint> setpoints = BCAPI.getSetPointsCollection(BASCLOUD_TEST_TENANT_UUID, {}, currentDateTime-(60*60*24), currentDateTime+(60*60*24), -1, -1, {}, -1, -1, [](std::exception& e, json& j) {
             throw e;
         });
     std::cout << "\t\tOK." << std::endl;

@@ -55,7 +55,7 @@ class TestSingleTenant(unittest.TestCase):
 
         self.assertEqual(tenant.uuid, BASCLOUD_TEST_TENANT_UUID)
         self.assertEqual(tenant.name, "testing")
-        self.assertEqual(tenant.urlName, "testing")
+        self.assertEqual(tenant.urlName, "tenant_8eda44f3a00d426fbe17d3260aaec0ed")
         self.assertTrue(tenant.createdAt > 0)
         self.assertTrue(tenant.updatedAt > 0)
 

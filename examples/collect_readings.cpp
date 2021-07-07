@@ -65,6 +65,8 @@ int main (int argc, char *argv[]) {
     std::time_t timestamp_filter = -1;
     double value_filter = std::numeric_limits<double>::quiet_NaN();
     std::string deviceUUID_filter = {};
+    std::time_t createdFromFilter = -1;
+    std::time_t createdUntilFilter = -1;
 
     /**
      * For requesting a collection of BAScloud entities, pagination can be used for large collections.
@@ -90,7 +92,7 @@ int main (int argc, char *argv[]) {
          * 
          * The function is given the exception which was thrown and the json data which caused the error.
          */
-        EntityCollection<Reading> readings = BCAPI.getReadingsCollection(tenantUUID, paging, from_filter, until_filter, timestamp_filter, value_filter, deviceUUID_filter, [](std::exception& e, json& j) {
+        EntityCollection<Reading> readings = BCAPI.getReadingsCollection(tenantUUID, paging, from_filter, until_filter, timestamp_filter, value_filter, deviceUUID_filter, createdFromFilter, createdUntilFilter, [](std::exception& e, json& j) {
                 throw e;
             });
         std::cout << "\t\tOK." << std::endl;

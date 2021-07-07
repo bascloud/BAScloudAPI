@@ -50,15 +50,15 @@ json EntityContext::parseResponse(cpr::Response response) {
             case 400: 
                 throw BadRequest(fmt::format("400 Bad Request error response received from BAScloud API. {} {}", json_response["errors"][0]["title"], json_response["errors"][0]["detail"]));
             case 401: 
-                throw UnauthorizedRequest(fmt::format("401 Unauthorized error response received from BAScloud API. {}", json_response["errors"][0]["title"]));
+                throw UnauthorizedRequest(fmt::format("401 Unauthorized error response received from BAScloud API. {} {}", json_response["errors"][0]["title"], json_response["errors"][0]["detail"]));
+            case 403: 
+                throw ForbiddenRequest(fmt::format("409 Forbidden error response received from BAScloud API. {} {}", json_response["errors"][0]["title"], json_response["errors"][0]["detail"]));
             case 404: 
-                if(json_response.contains("errors")) {
-                    throw NotFoundRequest(fmt::format("404 Not Found error response received from BAScloud API. {} {}", json_response["errors"][0]["title"], json_response["errors"][0]["detail"]));
-                } else {
-                    throw NotFoundRequest("404 Not Found error response received from BAScloud API.");
-                }
+                throw NotFoundRequest(fmt::format("404 Not Found error response received from BAScloud API. {} {}", json_response["errors"][0]["title"], json_response["errors"][0]["detail"]));
             case 409: 
                 throw ConflictRequest(fmt::format("409 Conflict error response received from BAScloud API. {} {}", json_response["errors"][0]["title"], json_response["errors"][0]["detail"]));
+            case 500: 
+                throw ServerError(fmt::format("500 Internal Server Error response received from BAScloud API. {} {}", json_response["errors"][0]["title"], json_response["errors"][0]["detail"]));
             default: throw std::runtime_error(fmt::format("Unexpected HTTP error response received from the BAScloud API. Error: {} {}", response.status_code, HTTPCodeToPhrase(response.status_code)));
         }
     } else {
@@ -74,7 +74,7 @@ PagingResult EntityContext::parsePaging(json response) {
         pres.currentPage = response["meta"]["page"]["page"];
         pres.pageSize = response["meta"]["page"]["pageSize"];
         pres.totalPages = response["meta"]["page"]["totalPages"];
-        pres.count = response["meta"]["page"].value("count", 1); // TODO ML: is it true that only if there is only a single element, the count is missing?
+        pres.count = response["meta"]["page"]["count"];
 
         if(response.contains("links")) {
             std::string next_link = response["links"].at("next").is_null() ? "" : response["links"].value("next", "");
@@ -98,6 +98,12 @@ void EntityContext::validateUUID(std::string UUID) {
     // TODO ML: Too narrow? always valid for our UUIDs?
     if(UUID.length()!=36) {
         throw std::invalid_argument(fmt::format("Invalid argument. UUID incorrect format or length. Provided UUID: \"{}\"", UUID));
+    }
+}
+
+void EntityContext::validateRole(std::string role) {
+    if(role != "admin" && role != "user" && role != "connector" && role != "superadmin") {
+        throw std::invalid_argument(fmt::format("Invalid argument. Role not supported. Provided Role: \"{}\"", role));
     }
 }
 
@@ -217,18 +223,18 @@ void EntityContext::updateUserPassword(std::string API_user_UUID, std::string re
     // Wherever the request was valid i.e. correct email can not be distinguished by the response for security reasons
 }
 
-User EntityContext::updateUser(std::string API_user_UUID, std::string email) {
-    
+User EntityContext::updateUser(std::string API_user_UUID, std::string email/*={}*/, std::string API_tenant_UUID/*={}*/, std::string role/*={}*/) {
+
     validateUUID(API_user_UUID);
     checkAndRenewAuthentication();
 
-    cpr::Response r = api_context.requestUpdateUser(API_user_UUID, email);
+    cpr::Response r = api_context.requestUpdateUser(API_user_UUID, email, API_tenant_UUID, role);
     
     json respond = parseResponse(r);
 
     if(respond["data"]["type"] == "users") {
         try {
-            User user(respond["data"]["id"], respond["data"]["attributes"]["email"], -1, -1, this); // TODO ML: doesnt return meta?
+            User user(respond["data"]["id"], respond["data"]["attributes"]["email"], Util::parseDateTimeString(respond["data"]["meta"]["createdAt"]), Util::parseDateTimeString(respond["data"]["meta"]["updatedAt"]), this);
 
             return user;
         } catch (...) {
@@ -278,12 +284,29 @@ User EntityContext::getUser(std::string API_user_UUID) {
     }
 }
 
-EntityCollection<User> EntityContext::getUsersCollection(std::string email/*={}*/, PagingOption paging/*={}*/, 
+EntityCollection<User> EntityContext::getUsersCollection(PagingOption paging/*={}*/, std::string email/*={}*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/, 
     std::function<void (std::exception&, json&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
 
     checkAndRenewAuthentication();
 
-    cpr::Response r = api_context.requestUserCollection(email);
+    cpr::Response r;
+
+    switch(paging.direction) {
+        case PagingOption::Direction::PREVIOUS:
+
+            r = api_context.requestUserCollection(email, createdFrom, createdUntil, paging.page_size, paging.page_pointer, {});
+        break;
+        case PagingOption::Direction::NEXT:
+
+            r = api_context.requestUserCollection(email, createdFrom, createdUntil, paging.page_size, {}, paging.page_pointer);
+        break;
+        case PagingOption::Direction::NONE:
+
+            r = api_context.requestUserCollection(email, createdFrom, createdUntil, paging.page_size);
+        break;
+        default:
+            r = api_context.requestUserCollection(email, createdFrom, createdUntil);
+    }
 
     json respond = parseResponse(r);
 
@@ -327,6 +350,40 @@ Tenant EntityContext::getAssociatedTenant(std::string API_user_UUID) {
     }
 }
 
+PermissionData EntityContext::getUserPermissions(std::string API_user_UUID) {
+
+    validateUUID(API_user_UUID);
+    checkAndRenewAuthentication();
+
+    cpr::Response r = api_context.requestUserPermissions(API_user_UUID);
+    
+    json respond = parseResponse(r);
+
+    if(respond["data"]["type"] == "permissions") {
+        try {
+            PermissionData perm;
+            perm.role = respond["data"]["attributes"]["role"];
+
+            for(auto it: respond["data"]["attributes"]["resources"].items()) {
+                std::cout << it.key() << " | " << it.value() << "\n";
+                std::vector<std::string> resources = {};
+                for (auto it : it.value()) {
+                    resources.push_back(it);
+                }
+                perm.resources[it.key()] = resources;
+            }
+
+            return perm;
+        } catch (...) {
+            // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
+            std::throw_with_nested(InvalidResponse("Invalid response received from the BAScloud API. Response did not contain expected data."));
+        }
+    } else {
+        // If no tenant is contained in the response data return invalid response
+        throw InvalidResponse("Invalid response received from the BAScloud API. Response did not contain permissions data.");
+    }
+}
+
 Tenant EntityContext::getTenant(std::string API_tenant_UUID) {
 
     validateUUID(API_tenant_UUID);
@@ -351,11 +408,11 @@ Tenant EntityContext::getTenant(std::string API_tenant_UUID) {
     }
 }
 
-EntityCollection<Tenant> EntityContext::getTenantsCollection(PagingOption paging/*={}*/, std::function<void (std::exception&, json&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
+EntityCollection<Tenant> EntityContext::getTenantsCollection(PagingOption paging/*={}*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/, std::function<void (std::exception&, json&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
 
     checkAndRenewAuthentication();
 
-    cpr::Response r = api_context.requestTenantCollection();
+    cpr::Response r = api_context.requestTenantCollection(createdFrom, createdUntil);
 
     json respond = parseResponse(r);
 
@@ -375,7 +432,7 @@ EntityCollection<Tenant> EntityContext::getTenantsCollection(PagingOption paging
     return std::make_pair(tenants, PagingResult{});
 }
 
-EntityCollection<User> EntityContext::getAssociatedUsers(std::string API_tenant_UUID, PagingOption paging/*={}*/, std::function<void (std::exception&, json&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
+EntityCollection<User> EntityContext::getAssociatedUsers(std::string API_tenant_UUID, PagingOption paging/*={}*/, std::string email/*={}*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/, std::function<void (std::exception&, json&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
 
     validateUUID(API_tenant_UUID);
     checkAndRenewAuthentication();
@@ -385,15 +442,15 @@ EntityCollection<User> EntityContext::getAssociatedUsers(std::string API_tenant_
     switch(paging.direction) {
         case PagingOption::Direction::PREVIOUS:
 
-            r = api_context.requestTenantAssociatedUsers(API_tenant_UUID, paging.page_size, paging.page_pointer, {});
+            r = api_context.requestTenantAssociatedUsers(API_tenant_UUID, email, createdFrom, createdUntil, paging.page_size, paging.page_pointer, {});
         break;
         case PagingOption::Direction::NEXT:
 
-            r = api_context.requestTenantAssociatedUsers(API_tenant_UUID, paging.page_size, {}, paging.page_pointer);
+            r = api_context.requestTenantAssociatedUsers(API_tenant_UUID, email, createdFrom, createdUntil, paging.page_size, {}, paging.page_pointer);
         break;
         case PagingOption::Direction::NONE:
 
-            r = api_context.requestTenantAssociatedUsers(API_tenant_UUID, paging.page_size);
+            r = api_context.requestTenantAssociatedUsers(API_tenant_UUID, email, createdFrom, createdUntil, paging.page_size);
         break;
         default:
             r = api_context.requestTenantAssociatedUsers(API_tenant_UUID);
@@ -464,7 +521,7 @@ Tenant EntityContext::updateTenant(std::string API_tenant_UUID, std::string name
 
     if(respond["data"]["type"] == "tenants") {
         try {
-            Tenant tenant(respond["data"]["id"], respond["data"]["attributes"]["name"], respond["data"]["attributes"]["urlName"], -1, -1, this); // TODO ML: dates not returned
+            Tenant tenant(respond["data"]["id"], respond["data"]["attributes"]["name"], respond["data"]["attributes"]["urlName"], Util::parseDateTimeString(respond["data"]["meta"]["createdAt"]), Util::parseDateTimeString(respond["data"]["meta"]["updatedAt"]), this);
 
             return tenant;
         } catch (...) {
@@ -478,15 +535,22 @@ Tenant EntityContext::updateTenant(std::string API_tenant_UUID, std::string name
 }
 
 
-void EntityContext::assignTenantUsers(std::string API_tenant_UUID, std::vector<std::string> API_user_UUIDs) {
+void EntityContext::assignTenantUsers(std::string API_tenant_UUID, std::vector<std::string> API_user_UUIDs, std::vector<std::string> API_user_ROLES) {
     
+    if(API_user_UUIDs.size() != API_user_ROLES.size()) {
+        throw std::invalid_argument("Invalid argument. User UUIDs and Roles lists must be the same length.");
+    }
+
     validateUUID(API_tenant_UUID);
     for(std::string uuid: API_user_UUIDs) {
         validateUUID(uuid);
     }
+    for(std::string role: API_user_ROLES) {
+        validateRole(role);
+    }
     checkAndRenewAuthentication();
 
-    cpr::Response r = api_context.requestAssignTenantUsers(API_tenant_UUID, API_user_UUIDs);
+    cpr::Response r = api_context.requestAssignTenantUsers(API_tenant_UUID, API_user_UUIDs, API_user_ROLES);
     
     json respond = parseResponse(r);
 
@@ -521,7 +585,14 @@ Property EntityContext::getProperty(std::string API_tenant_UUID, std::string API
 
     if(respond["data"]["type"] == "properties") {
         try {
-            Property property(respond["data"]["id"], API_tenant_UUID, respond["data"]["attributes"]["name"], respond["data"]["attributes"]["street"], respond["data"]["attributes"]["postalCode"], respond["data"]["attributes"]["city"], respond["data"]["attributes"]["country"], Util::parseDateTimeString(respond["data"]["meta"]["createdAt"]), Util::parseDateTimeString(respond["data"]["meta"]["updatedAt"]), this);
+            // aksId and identifier may be null in response
+            if(respond["data"]["attributes"]["aksId"].is_null())
+                respond["data"]["attributes"]["aksId"] = "";
+            
+            if(respond["data"]["attributes"]["identifier"].is_null())
+                respond["data"]["attributes"]["identifier"] = "";
+
+            Property property(respond["data"]["id"], API_tenant_UUID, respond["data"]["attributes"]["name"], respond["data"]["attributes"].value("aksId", ""), respond["data"]["attributes"].value("identifier", ""), respond["data"]["attributes"]["street"], respond["data"]["attributes"]["postalCode"], respond["data"]["attributes"]["city"], respond["data"]["attributes"]["country"], Util::parseDateTimeString(respond["data"]["meta"]["createdAt"]), Util::parseDateTimeString(respond["data"]["meta"]["updatedAt"]), this);
 
             return property;
         } catch (...) {
@@ -534,8 +605,8 @@ Property EntityContext::getProperty(std::string API_tenant_UUID, std::string API
     }
 }
 
-EntityCollection<Property> EntityContext::getPropertiesCollection(std::string API_tenant_UUID, PagingOption paging/*={}*/, std::string name/*={}*/, 
-    std::string street/*={}*/, std::string postalCode/*={}*/, std::string city/*={}*/, std::string country/*={}*/, std::function<void (std::exception&, json&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
+EntityCollection<Property> EntityContext::getPropertiesCollection(std::string API_tenant_UUID, PagingOption paging/*={}*/, std::string name/*={}*/, std::string aksID/*={}*/, std::string identifier/*={}*/, std::string street/*={}*/, std::string postalCode/*={}*/, std::string city/*={}*/, std::string country/*={}*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/,
+     std::function<void (std::exception&, json&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
 
     validateUUID(API_tenant_UUID);
     checkAndRenewAuthentication();
@@ -545,18 +616,18 @@ EntityCollection<Property> EntityContext::getPropertiesCollection(std::string AP
     switch(paging.direction) {
         case PagingOption::Direction::PREVIOUS:
 
-            r = api_context.requestPropertyCollection(API_tenant_UUID, name, street, postalCode, city, country, paging.page_size, paging.page_pointer, {});
+            r = api_context.requestPropertyCollection(API_tenant_UUID, name, aksID, identifier, street, postalCode, city, country, createdFrom, createdUntil, paging.page_size, paging.page_pointer, {});
         break;
         case PagingOption::Direction::NEXT:
 
-            r = api_context.requestPropertyCollection(API_tenant_UUID, name, street, postalCode, city, country, paging.page_size, {}, paging.page_pointer);
+            r = api_context.requestPropertyCollection(API_tenant_UUID, name, aksID, identifier, street, postalCode, city, country, createdFrom, createdUntil, paging.page_size, {}, paging.page_pointer);
         break;
         case PagingOption::Direction::NONE:
 
-            r = api_context.requestPropertyCollection(API_tenant_UUID, name, street, postalCode, city, country, paging.page_size);
+            r = api_context.requestPropertyCollection(API_tenant_UUID, name, aksID, identifier, street, postalCode, city, country, createdFrom, createdUntil, paging.page_size);
         break;
         default:
-            r = api_context.requestPropertyCollection(API_tenant_UUID, name, street, postalCode, city, country);
+            r = api_context.requestPropertyCollection(API_tenant_UUID, name, aksID, identifier, street, postalCode, city, country, createdFrom, createdUntil);
     }
 
     json respond = parseResponse(r);
@@ -565,7 +636,16 @@ EntityCollection<Property> EntityContext::getPropertiesCollection(std::string AP
     for(json json_prop: respond["data"]) {
         if(json_prop["type"] == "properties") {
             try {
-                Property property(json_prop["id"], API_tenant_UUID, json_prop["attributes"]["name"], json_prop["attributes"]["street"], json_prop["attributes"]["postalCode"], json_prop["attributes"]["city"], json_prop["attributes"]["country"], Util::parseDateTimeString(json_prop["meta"]["createdAt"]), Util::parseDateTimeString(json_prop["meta"]["updatedAt"]), this);
+                // aksId and identifier may be null in response
+                std::string aksId = "";
+                if(!json_prop["data"]["attributes"]["aksId"].is_null())
+                    aksId = json_prop["data"]["attributes"]["aksId"];
+                
+                std::string identifier = "";
+                if(!json_prop["data"]["attributes"]["identifier"].is_null())
+                    identifier = json_prop["data"]["attributes"]["identifier"];
+
+                Property property(json_prop["id"], API_tenant_UUID, json_prop["attributes"]["name"], aksId, identifier, json_prop["attributes"]["street"], json_prop["attributes"]["postalCode"], json_prop["attributes"]["city"], json_prop["attributes"]["country"], Util::parseDateTimeString(json_prop["meta"]["createdAt"]), Util::parseDateTimeString(json_prop["meta"]["updatedAt"]), this);
 
                 properties.push_back(property);
             } catch (std::exception& e) {
@@ -621,18 +701,68 @@ EntityCollection<Connector> EntityContext::getAssociatedConnectors(std::string A
     return std::make_pair(connectors, parsePaging(respond));
 }
 
-Property EntityContext::createProperty(std::string API_tenant_UUID, std::string name, std::string street, std::string postalCode, std::string city, std::string country) {
+EntityCollection<Device> EntityContext::getAssociatedPropertyDevices(std::string API_tenant_UUID, std::string API_property_UUID, PagingOption paging/*={}*/, std::string aksID/*={}*/, std::string localAksID/*={}*/, std::string API_connector_UUID/*={}*/, std::string description/*={}*/, std::string unit/*={}*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/, std::time_t deletedUntil/*=-1*/,
+    std::function<void (std::exception&, json&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
+    
+    validateUUID(API_tenant_UUID);
+    checkAndRenewAuthentication();
+
+    cpr::Response r;
+
+    switch(paging.direction) {
+        case PagingOption::Direction::PREVIOUS:
+
+            r = api_context.requestDeviceCollection(API_tenant_UUID, aksID, localAksID, API_connector_UUID, API_property_UUID, description, unit, createdFrom, createdUntil, deletedUntil, paging.page_size, paging.page_pointer, {});
+        break;
+        case PagingOption::Direction::NEXT:
+
+            r = api_context.requestDeviceCollection(API_tenant_UUID, aksID, localAksID, API_connector_UUID, API_property_UUID, description, unit, createdFrom, createdUntil, deletedUntil, paging.page_size, {}, paging.page_pointer);
+        break;
+        case PagingOption::Direction::NONE:
+
+            r = api_context.requestDeviceCollection(API_tenant_UUID, aksID, localAksID, API_connector_UUID, API_property_UUID, description, unit, createdFrom, createdUntil, deletedUntil, paging.page_size);
+        break;
+        default:
+            r = api_context.requestDeviceCollection(API_tenant_UUID, aksID, localAksID, API_connector_UUID, API_property_UUID, description, unit, createdFrom, createdUntil, deletedUntil);
+    }
+
+    json respond = parseResponse(r);
+
+    std::vector<Device> devices;
+    for(json json_dev: respond["data"]) {
+        if(json_dev["type"] == "devices") {
+            try {
+                Device device(json_dev["id"], API_tenant_UUID, json_dev["attributes"]["aksId"], json_dev["attributes"]["localAksId"], json_dev["attributes"]["description"], json_dev["attributes"]["unit"], Util::parseDateTimeString(json_dev["meta"]["createdAt"]), Util::parseDateTimeString(json_dev["meta"]["updatedAt"]), this);
+
+                devices.push_back(device);
+            } catch (std::exception& e) {
+                errorHandler(e, json_dev);
+            }
+        } 
+    }
+
+    return std::make_pair(devices, parsePaging(respond));
+}
+
+Property EntityContext::createProperty(std::string API_tenant_UUID, std::string name, std::string aksID/*={}*/, std::string identifier/*={}*/, std::string street/*={}*/, std::string postalCode/*={}*/, std::string city/*={}*/, std::string country/*={}*/) {
 
     validateUUID(API_tenant_UUID);
     checkAndRenewAuthentication();
 
-    cpr::Response r = api_context.requestCreateProperty(API_tenant_UUID, name, street, postalCode, city, country);
+    cpr::Response r = api_context.requestCreateProperty(API_tenant_UUID, name, aksID, identifier, street, postalCode, city, country);
     
     json respond = parseResponse(r);
 
     if(respond["data"]["type"] == "properties") {
         try {
-            Property prop(respond["data"]["id"], API_tenant_UUID, respond["data"]["attributes"]["name"], respond["data"]["attributes"]["street"], respond["data"]["attributes"]["postalCode"], respond["data"]["attributes"]["city"], respond["data"]["attributes"]["country"], Util::parseDateTimeString(respond["data"]["meta"]["createdAt"]), Util::parseDateTimeString(respond["data"]["meta"]["updatedAt"]), this);
+            // aksId and identifier may be null in response
+            if(respond["data"]["attributes"]["aksId"].is_null())
+                respond["data"]["attributes"]["aksId"] = "";
+            
+            if(respond["data"]["attributes"]["identifier"].is_null())
+                respond["data"]["attributes"]["identifier"] = "";
+
+            Property prop(respond["data"]["id"], API_tenant_UUID, respond["data"]["attributes"]["name"], respond["data"]["attributes"]["aksId"], respond["data"]["attributes"]["identifier"], respond["data"]["attributes"]["street"], respond["data"]["attributes"]["postalCode"], respond["data"]["attributes"]["city"], respond["data"]["attributes"]["country"], Util::parseDateTimeString(respond["data"]["meta"]["createdAt"]), Util::parseDateTimeString(respond["data"]["meta"]["updatedAt"]), this);
 
             return prop;
         } catch (...) {
@@ -654,7 +784,7 @@ void EntityContext::deleteProperty(std::string API_tenant_UUID, std::string API_
     // Successfull delete returns 204 No Content
 }
 
-Property EntityContext::updateProperty(std::string API_tenant_UUID, std::string API_property_UUID, std::string name/*={}*/, std::string street/*={}*/, std::string postalCode/*={}*/, std::string city/*={}*/, std::string country/*={}*/) {
+Property EntityContext::updateProperty(std::string API_tenant_UUID, std::string API_property_UUID, std::string name/*={}*/, std::string aksID/*={}*/, std::string identifier/*={}*/, std::string street/*={}*/, std::string postalCode/*={}*/, std::string city/*={}*/, std::string country/*={}*/) {
 
     validateUUID(API_tenant_UUID);
     validateUUID(API_property_UUID);
@@ -666,7 +796,14 @@ Property EntityContext::updateProperty(std::string API_tenant_UUID, std::string 
 
     if(respond["data"]["type"] == "properties") {
         try {
-            Property prop(respond["data"]["id"], API_tenant_UUID, respond["data"]["attributes"]["name"], respond["data"]["attributes"]["street"], respond["data"]["attributes"]["postalCode"], respond["data"]["attributes"]["city"], respond["data"]["attributes"]["country"], Util::parseDateTimeString(respond["data"]["meta"]["createdAt"]), Util::parseDateTimeString(respond["data"]["meta"]["updatedAt"]), this);
+            // aksId and identifier may be null in response
+            if(respond["data"]["attributes"]["aksId"].is_null())
+                respond["data"]["attributes"]["aksId"] = "";
+            
+            if(respond["data"]["attributes"]["identifier"].is_null())
+                respond["data"]["attributes"]["identifier"] = "";
+                
+            Property prop(respond["data"]["id"], API_tenant_UUID, respond["data"]["attributes"]["name"], respond["data"]["attributes"]["aksId"], respond["data"]["attributes"]["identifier"], respond["data"]["attributes"]["street"], respond["data"]["attributes"]["postalCode"], respond["data"]["attributes"]["city"], respond["data"]["attributes"]["country"], Util::parseDateTimeString(respond["data"]["meta"]["createdAt"]), Util::parseDateTimeString(respond["data"]["meta"]["updatedAt"]), this);
 
             return prop;
         } catch (...) {
@@ -705,7 +842,7 @@ Connector EntityContext::getConnector(std::string API_tenant_UUID, std::string A
     }
 }
 
-EntityCollection<Connector> EntityContext::getConnectorsCollection(std::string API_tenant_UUID, PagingOption paging/*={}*/, 
+EntityCollection<Connector> EntityContext::getConnectorsCollection(std::string API_tenant_UUID, PagingOption paging/*={}*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/, 
     std::function<void (std::exception&, json&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
 
     validateUUID(API_tenant_UUID);
@@ -716,18 +853,18 @@ EntityCollection<Connector> EntityContext::getConnectorsCollection(std::string A
     switch(paging.direction) {
         case PagingOption::Direction::PREVIOUS:
 
-            r = api_context.requestConnectorCollection(API_tenant_UUID, paging.page_size, paging.page_pointer, {});
+            r = api_context.requestConnectorCollection(API_tenant_UUID, createdFrom, createdUntil, paging.page_size, paging.page_pointer, {});
         break;
         case PagingOption::Direction::NEXT:
 
-            r = api_context.requestConnectorCollection(API_tenant_UUID, paging.page_size, {}, paging.page_pointer);
+            r = api_context.requestConnectorCollection(API_tenant_UUID, createdFrom, createdUntil, paging.page_size, {}, paging.page_pointer);
         break;
         case PagingOption::Direction::NONE:
 
-            r = api_context.requestConnectorCollection(API_tenant_UUID, paging.page_size);
+            r = api_context.requestConnectorCollection(API_tenant_UUID, createdFrom, createdUntil, paging.page_size);
         break;
         default:
-            r = api_context.requestConnectorCollection(API_tenant_UUID);
+            r = api_context.requestConnectorCollection(API_tenant_UUID, createdFrom, createdUntil);
     }
 
     json respond = parseResponse(r);
@@ -760,7 +897,7 @@ Property EntityContext::getAssociatedProperty(std::string API_tenant_UUID, std::
 
     if(respond["data"]["type"] == "properties") {
         try {
-            Property prop(respond["data"]["id"], API_tenant_UUID, respond["data"]["attributes"]["name"], respond["data"]["attributes"]["street"], respond["data"]["attributes"]["postalCode"], respond["data"]["attributes"]["city"], respond["data"]["attributes"]["country"], Util::parseDateTimeString(respond["data"]["meta"]["createdAt"]), Util::parseDateTimeString(respond["data"]["meta"]["updatedAt"]), this);
+            Property prop(respond["data"]["id"], API_tenant_UUID, respond["data"]["attributes"]["name"], respond["data"]["attributes"]["aksId"], respond["data"]["attributes"]["identifier"], respond["data"]["attributes"]["street"], respond["data"]["attributes"]["postalCode"], respond["data"]["attributes"]["city"], respond["data"]["attributes"]["country"], Util::parseDateTimeString(respond["data"]["meta"]["createdAt"]), Util::parseDateTimeString(respond["data"]["meta"]["updatedAt"]), this);
 
             return prop;
         } catch (...) {
@@ -773,7 +910,7 @@ Property EntityContext::getAssociatedProperty(std::string API_tenant_UUID, std::
     }
 }
 
-EntityCollection<Device> EntityContext::getAssociatedDevices(std::string API_tenant_UUID, std::string API_connector_UUID, PagingOption paging/*={}*/, 
+EntityCollection<Device> EntityContext::getAssociatedConnectorDevices(std::string API_tenant_UUID, std::string API_connector_UUID, PagingOption paging/*={}*/, std::string aksID/*={}*/, std::string localAksID/*={}*/, std::string description/*={}*/, std::string unit/*={}*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/, std::time_t deletedUntil/*=-1*/,
     std::function<void (std::exception&, json&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
 
     validateUUID(API_tenant_UUID);
@@ -785,18 +922,18 @@ EntityCollection<Device> EntityContext::getAssociatedDevices(std::string API_ten
     switch(paging.direction) {
         case PagingOption::Direction::PREVIOUS:
 
-            r = api_context.requestConnectorAssociatedDevices(API_tenant_UUID, API_connector_UUID, paging.page_size, paging.page_pointer, {});
+            r = api_context.requestConnectorAssociatedDevices(API_tenant_UUID, API_connector_UUID, aksID, localAksID, description, unit, createdFrom, createdUntil, deletedUntil, paging.page_size, paging.page_pointer, {});
         break;
         case PagingOption::Direction::NEXT:
 
-            r = api_context.requestConnectorAssociatedDevices(API_tenant_UUID, API_connector_UUID, paging.page_size, {}, paging.page_pointer);
+            r = api_context.requestConnectorAssociatedDevices(API_tenant_UUID, API_connector_UUID, aksID, localAksID, description, unit, createdFrom, createdUntil, deletedUntil, paging.page_size, {}, paging.page_pointer);
         break;
         case PagingOption::Direction::NONE:
 
-            r = api_context.requestConnectorAssociatedDevices(API_tenant_UUID, API_connector_UUID, paging.page_size);
+            r = api_context.requestConnectorAssociatedDevices(API_tenant_UUID, API_connector_UUID, aksID, localAksID, description, unit, createdFrom, createdUntil, deletedUntil, paging.page_size);
         break;
         default:
-            r = api_context.requestConnectorAssociatedDevices(API_tenant_UUID, API_connector_UUID);
+            r = api_context.requestConnectorAssociatedDevices(API_tenant_UUID, API_connector_UUID, aksID, localAksID, description, unit, createdFrom, createdUntil, deletedUntil);
     }
 
     json respond = parseResponse(r);
@@ -805,7 +942,7 @@ EntityCollection<Device> EntityContext::getAssociatedDevices(std::string API_ten
     for(json json_dev: respond["data"]) {
         if(json_dev["type"] == "devices") {
             try {
-                Device device(json_dev["id"], API_tenant_UUID, json_dev["attributes"]["aksId"], json_dev["attributes"]["description"], json_dev["attributes"]["unit"], Util::parseDateTimeString(json_dev["meta"]["createdAt"]), Util::parseDateTimeString(json_dev["meta"]["updatedAt"]), this);
+                Device device(json_dev["id"], API_tenant_UUID, json_dev["attributes"]["aksId"], json_dev["attributes"]["localAksId"], json_dev["attributes"]["description"], json_dev["attributes"]["unit"], Util::parseDateTimeString(json_dev["meta"]["createdAt"]), Util::parseDateTimeString(json_dev["meta"]["updatedAt"]), this);
 
                 devices.push_back(device);
             } catch (std::exception& e) {
@@ -817,19 +954,18 @@ EntityCollection<Device> EntityContext::getAssociatedDevices(std::string API_ten
     return std::make_pair(devices, parsePaging(respond));
 }
 
-Connector EntityContext::createConnector(std::string API_tenant_UUID, std::string API_property_UUID, std::string name) {
+Connector EntityContext::createConnector(std::string API_tenant_UUID, std::string name) {
 
     validateUUID(API_tenant_UUID);
-    validateUUID(API_property_UUID);
     checkAndRenewAuthentication();
 
-    cpr::Response r = api_context.requestCreateConnector(API_tenant_UUID, API_property_UUID, name);
+    cpr::Response r = api_context.requestCreateConnector(API_tenant_UUID, name);
     
     json respond = parseResponse(r);
 
     if(respond["data"]["type"] == "connectors") {
         try {
-            Connector conn(respond["data"]["id"], API_tenant_UUID, respond["data"]["attributes"]["name"], respond["data"]["attributes"]["apiKey"], Util::parseDateTimeString(respond["data"]["meta"]["createdAt"]), Util::parseDateTimeString(respond["data"]["meta"]["updatedAt"]), this);
+            Connector conn(respond["data"]["id"], API_tenant_UUID, respond["data"]["attributes"]["name"], respond["data"]["attributes"]["token"], Util::parseDateTimeString(respond["data"]["meta"]["createdAt"]), Util::parseDateTimeString(respond["data"]["meta"]["updatedAt"]), this);
 
             return conn;
         } catch (...) {
@@ -867,7 +1003,7 @@ Connector EntityContext::updateConnector(std::string API_tenant_UUID, std::strin
 
     if(respond["data"]["type"] == "connectors") {
         try {
-            // TODO apiKey left empty
+            // token left empty
             Connector conn(respond["data"]["id"], API_tenant_UUID, respond["data"]["attributes"]["name"], "", Util::parseDateTimeString(respond["data"]["meta"]["createdAt"]), Util::parseDateTimeString(respond["data"]["meta"]["updatedAt"]), this);
 
             return conn;
@@ -882,6 +1018,41 @@ Connector EntityContext::updateConnector(std::string API_tenant_UUID, std::strin
 
 }
 
+PermissionData EntityContext::getConnectorPermissions(std::string API_tenant_UUID, std::string API_connector_UUID) {
+
+    validateUUID(API_tenant_UUID);
+    validateUUID(API_connector_UUID);
+    checkAndRenewAuthentication();
+
+    cpr::Response r = api_context.requestConnectorPermissions(API_tenant_UUID, API_connector_UUID);
+    
+    json respond = parseResponse(r);
+
+    if(respond["data"]["type"] == "permissions") {
+        try {
+            PermissionData perm;
+            perm.role = respond["data"]["attributes"]["role"];
+
+            for(auto it: respond["data"]["attributes"]["resources"].items()) {
+                std::cout << it.key() << " | " << it.value() << "\n";
+                std::vector<std::string> resources = {};
+                for (auto it : it.value()) {
+                    resources.push_back(it);
+                }
+                perm.resources[it.key()] = resources;
+            }
+
+            return perm;
+        } catch (...) {
+            // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
+            std::throw_with_nested(InvalidResponse("Invalid response received from the BAScloud API. Response did not contain expected data."));
+        }
+    } else {
+        // If no tenant is contained in the response data return invalid response
+        throw InvalidResponse("Invalid response received from the BAScloud API. Response did not contain permissions data.");
+    }
+}
+
 std::string EntityContext::getNewConnectorAuthToken(std::string API_tenant_UUID, std::string API_connector_UUID) {
 
     validateUUID(API_tenant_UUID);
@@ -894,7 +1065,6 @@ std::string EntityContext::getNewConnectorAuthToken(std::string API_tenant_UUID,
 
     if(respond["data"]["type"] == "accesstoken") {
         try {
-            // TODO ML: is token the same as apiKey returned by createConnector?
             return respond["data"]["attributes"]["token"];
         } catch (...) {
             // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
@@ -918,7 +1088,7 @@ Device EntityContext::getDevice(std::string API_tenant_UUID, std::string API_dev
 
     if(respond["data"]["type"] == "devices") {
         try {
-            Device dev(respond["data"]["id"], API_tenant_UUID, respond["data"]["attributes"]["aksId"], respond["data"]["attributes"]["description"], respond["data"]["attributes"]["unit"], Util::parseDateTimeString(respond["data"]["meta"]["createdAt"]), Util::parseDateTimeString(respond["data"]["meta"]["updatedAt"]), this);
+            Device dev(respond["data"]["id"], API_tenant_UUID, respond["data"]["attributes"]["aksId"], respond["data"]["attributes"]["localAksId"], respond["data"]["attributes"]["description"], respond["data"]["attributes"]["unit"], Util::parseDateTimeString(respond["data"]["meta"]["createdAt"]), Util::parseDateTimeString(respond["data"]["meta"]["updatedAt"]), this);
 
             return dev;
         } catch (...) {
@@ -931,8 +1101,8 @@ Device EntityContext::getDevice(std::string API_tenant_UUID, std::string API_dev
     }
 }
 
-EntityCollection<Device> EntityContext::getDevicesCollection(std::string API_tenant_UUID, PagingOption paging/*={}*/, std::string aksID/*={}*/, 
-    std::string description/*={}*/, std::string unit/*={}*/, std::function<void (std::exception&, json&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
+EntityCollection<Device> EntityContext::getDevicesCollection(std::string API_tenant_UUID, PagingOption paging/*={}*/, std::string aksID/*={}*/, std::string localAksID/*={}*/, std::string API_connector_UUID/*={}*/, std::string API_property_UUID/*={}*/, std::string description/*={}*/, std::string unit/*={}*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/, std::time_t deletedUntil/*=-1*/,
+    std::function<void (std::exception&, json&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
     
     validateUUID(API_tenant_UUID);
     checkAndRenewAuthentication();
@@ -942,18 +1112,18 @@ EntityCollection<Device> EntityContext::getDevicesCollection(std::string API_ten
     switch(paging.direction) {
         case PagingOption::Direction::PREVIOUS:
 
-            r = api_context.requestDeviceCollection(API_tenant_UUID, aksID, description, unit, paging.page_size, paging.page_pointer, {});
+            r = api_context.requestDeviceCollection(API_tenant_UUID, aksID, localAksID, API_connector_UUID, API_property_UUID, description, unit, createdFrom, createdUntil, deletedUntil, paging.page_size, paging.page_pointer, {});
         break;
         case PagingOption::Direction::NEXT:
 
-            r = api_context.requestDeviceCollection(API_tenant_UUID, aksID, description, unit, paging.page_size, {}, paging.page_pointer);
+            r = api_context.requestDeviceCollection(API_tenant_UUID, aksID, localAksID, API_connector_UUID, API_property_UUID, description, unit, createdFrom, createdUntil, deletedUntil, paging.page_size, {}, paging.page_pointer);
         break;
         case PagingOption::Direction::NONE:
 
-            r = api_context.requestDeviceCollection(API_tenant_UUID, aksID, description, unit, paging.page_size);
+            r = api_context.requestDeviceCollection(API_tenant_UUID, aksID, localAksID, API_connector_UUID, API_property_UUID, description, unit, createdFrom, createdUntil, deletedUntil, paging.page_size);
         break;
         default:
-            r = api_context.requestDeviceCollection(API_tenant_UUID, aksID, description, unit);
+            r = api_context.requestDeviceCollection(API_tenant_UUID, aksID, localAksID, API_connector_UUID, API_property_UUID, description, unit, createdFrom, createdUntil, deletedUntil);
     }
 
     json respond = parseResponse(r);
@@ -962,7 +1132,7 @@ EntityCollection<Device> EntityContext::getDevicesCollection(std::string API_ten
     for(json json_dev: respond["data"]) {
         if(json_dev["type"] == "devices") {
             try {
-                Device device(json_dev["id"], API_tenant_UUID, json_dev["attributes"]["aksId"], json_dev["attributes"]["description"], json_dev["attributes"]["unit"], Util::parseDateTimeString(json_dev["meta"]["createdAt"]), Util::parseDateTimeString(json_dev["meta"]["updatedAt"]), this);
+                Device device(json_dev["id"], API_tenant_UUID, json_dev["attributes"]["aksId"], json_dev["attributes"]["localAksId"], json_dev["attributes"]["description"], json_dev["attributes"]["unit"], Util::parseDateTimeString(json_dev["meta"]["createdAt"]), Util::parseDateTimeString(json_dev["meta"]["updatedAt"]), this);
 
                 devices.push_back(device);
             } catch (std::exception& e) {
@@ -986,7 +1156,7 @@ Connector EntityContext::getAssociatedConnector(std::string API_tenant_UUID, std
 
     if(respond["data"]["type"] == "connectors") {
         try {
-            // TODO ML: apiKey left empty, can be requested by updateConnectorAPIKey
+            // ML: token left empty, can be requested by updateConnectorToken
             Connector conn(respond["data"]["id"], API_tenant_UUID, respond["data"]["attributes"]["name"], "", Util::parseDateTimeString(respond["data"]["meta"]["createdAt"]), Util::parseDateTimeString(respond["data"]["meta"]["updatedAt"]), this);
 
             return conn;
@@ -1000,7 +1170,7 @@ Connector EntityContext::getAssociatedConnector(std::string API_tenant_UUID, std
     } 
 }
 
-EntityCollection<Reading> EntityContext::getAssociatedReadings(std::string API_tenant_UUID, std::string API_device_UUID, PagingOption paging/*={}*/, 
+EntityCollection<Reading> EntityContext::getAssociatedReadings(std::string API_tenant_UUID, std::string API_device_UUID, PagingOption paging/*={}*/, std::time_t from/*=-1*/, std::time_t until/*=-1*/, std::time_t timestamp/*=-1*/, double value/*=std::numeric_limits<double>::quiet_NaN()*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/, 
     std::function<void (std::exception&, json&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
     
     validateUUID(API_tenant_UUID);
@@ -1012,18 +1182,18 @@ EntityCollection<Reading> EntityContext::getAssociatedReadings(std::string API_t
     switch(paging.direction) {
         case PagingOption::Direction::PREVIOUS:
 
-            r = api_context.requestDeviceAssociatedReadings(API_tenant_UUID, API_device_UUID, paging.page_size, paging.page_pointer, {});
+            r = api_context.requestDeviceAssociatedReadings(API_tenant_UUID, API_device_UUID, from, until, timestamp, value, createdFrom, createdUntil, paging.page_size, paging.page_pointer, {});
         break;
         case PagingOption::Direction::NEXT:
 
-            r = api_context.requestDeviceAssociatedReadings(API_tenant_UUID, API_device_UUID, paging.page_size, {}, paging.page_pointer);
+            r = api_context.requestDeviceAssociatedReadings(API_tenant_UUID, API_device_UUID, from, until, timestamp, value, createdFrom, createdUntil, paging.page_size, {}, paging.page_pointer);
         break;
         case PagingOption::Direction::NONE:
 
-            r = api_context.requestDeviceAssociatedReadings(API_tenant_UUID, API_device_UUID, paging.page_size);
+            r = api_context.requestDeviceAssociatedReadings(API_tenant_UUID, API_device_UUID, from, until, timestamp, value, createdFrom, createdUntil, paging.page_size);
         break;
         default:
-            r = api_context.requestDeviceAssociatedReadings(API_tenant_UUID, API_device_UUID);
+            r = api_context.requestDeviceAssociatedReadings(API_tenant_UUID, API_device_UUID, from, until, timestamp, value, createdFrom, createdUntil);
     }
     
     json respond = parseResponse(r);
@@ -1044,7 +1214,7 @@ EntityCollection<Reading> EntityContext::getAssociatedReadings(std::string API_t
     return std::make_pair(readings, parsePaging(respond));
 }
 
-EntityCollection<SetPoint> EntityContext::getAssociatedSetPoints(std::string API_tenant_UUID, std::string API_device_UUID, PagingOption paging/*={}*/, 
+EntityCollection<SetPoint> EntityContext::getAssociatedSetPoints(std::string API_tenant_UUID, std::string API_device_UUID, PagingOption paging/*={}*/, std::time_t from/*=-1*/, std::time_t until/*=-1*/, std::time_t timestamp/*=-1*/, std::time_t currentTime/*=-1*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/,
         std::function<void (std::exception&, json&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
     
     validateUUID(API_tenant_UUID);
@@ -1056,18 +1226,18 @@ EntityCollection<SetPoint> EntityContext::getAssociatedSetPoints(std::string API
     switch(paging.direction) {
         case PagingOption::Direction::PREVIOUS:
 
-            r = api_context.requestDeviceAssociatedSetPoints(API_tenant_UUID, API_device_UUID, paging.page_size, paging.page_pointer, {});
+            r = api_context.requestDeviceAssociatedSetPoints(API_tenant_UUID, API_device_UUID, from, until, timestamp, currentTime, createdFrom, createdUntil, paging.page_size, paging.page_pointer, {});
         break;
         case PagingOption::Direction::NEXT:
 
-            r = api_context.requestDeviceAssociatedSetPoints(API_tenant_UUID, API_device_UUID, paging.page_size, {}, paging.page_pointer);
+            r = api_context.requestDeviceAssociatedSetPoints(API_tenant_UUID, API_device_UUID, from, until, timestamp, currentTime, createdFrom, createdUntil, paging.page_size, {}, paging.page_pointer);
         break;
         case PagingOption::Direction::NONE:
 
-            r = api_context.requestDeviceAssociatedSetPoints(API_tenant_UUID, API_device_UUID, paging.page_size);
+            r = api_context.requestDeviceAssociatedSetPoints(API_tenant_UUID, API_device_UUID, from, until, timestamp, currentTime, createdFrom, createdUntil, paging.page_size);
         break;
         default:
-            r = api_context.requestDeviceAssociatedSetPoints(API_tenant_UUID, API_device_UUID);
+            r = api_context.requestDeviceAssociatedSetPoints(API_tenant_UUID, API_device_UUID, from, until, timestamp, currentTime, createdFrom, createdUntil);
     }
     
     json respond = parseResponse(r);
@@ -1088,19 +1258,19 @@ EntityCollection<SetPoint> EntityContext::getAssociatedSetPoints(std::string API
     return std::make_pair(setpoints, parsePaging(respond));
 }
 
-Device EntityContext::createDevice(std::string API_tenant_UUID, std::string API_connector_UUID, std::string aksID, std::string description, std::string unit) {
+Device EntityContext::createDevice(std::string API_tenant_UUID, std::string API_connector_UUID, std::string API_property_UUID, std::string aksID, std::string description, std::string unit, std::string localAksID/*={}*/) {
         
     validateUUID(API_tenant_UUID);
     validateUUID(API_connector_UUID);
     checkAndRenewAuthentication();
 
-    cpr::Response r = api_context.requestCreateDevice(API_tenant_UUID, API_connector_UUID, aksID, description, unit);
+    cpr::Response r = api_context.requestCreateDevice(API_tenant_UUID, API_connector_UUID, API_property_UUID, aksID, description, unit, localAksID);
     
     json respond = parseResponse(r);
 
     if(respond["data"]["type"] == "devices") {
         try {
-            Device device(respond["data"]["id"], API_tenant_UUID, respond["data"]["attributes"]["aksId"], respond["data"]["attributes"]["description"], respond["data"]["attributes"]["unit"], Util::parseDateTimeString(respond["data"]["meta"]["createdAt"]), Util::parseDateTimeString(respond["data"]["meta"]["updatedAt"]), this);
+            Device device(respond["data"]["id"], API_tenant_UUID, respond["data"]["attributes"]["aksId"], respond["data"]["attributes"]["localAksId"], respond["data"]["attributes"]["description"], respond["data"]["attributes"]["unit"], Util::parseDateTimeString(respond["data"]["meta"]["createdAt"]), Util::parseDateTimeString(respond["data"]["meta"]["updatedAt"]), this);
 
             return device;
         } catch (...) {
@@ -1125,7 +1295,7 @@ Device EntityContext::updateDevice(std::string API_tenant_UUID, std::string API_
 
     if(respond["data"]["type"] == "devices") {
         try {
-            Device device(respond["data"]["id"], API_tenant_UUID, respond["data"]["attributes"]["aksId"], respond["data"]["attributes"]["description"], respond["data"]["attributes"]["unit"], Util::parseDateTimeString(respond["data"]["meta"]["createdAt"]), Util::parseDateTimeString(respond["data"]["meta"]["updatedAt"]), this);
+            Device device(respond["data"]["id"], API_tenant_UUID, respond["data"]["attributes"]["aksId"], respond["data"]["attributes"]["localAksId"], respond["data"]["attributes"]["description"], respond["data"]["attributes"]["unit"], Util::parseDateTimeString(respond["data"]["meta"]["createdAt"]), Util::parseDateTimeString(respond["data"]["meta"]["updatedAt"]), this);
 
             return device;
         } catch (...) {
@@ -1143,7 +1313,7 @@ void EntityContext::deleteDevice(std::string API_tenant_UUID, std::string API_de
     
     json respond = parseResponse(r);
 
-    // TODO ML: OK is NOT empty according to postman
+    // OK is empty
 }
 
 
@@ -1173,7 +1343,7 @@ Reading EntityContext::getReading(std::string API_tenant_UUID, std::string API_r
 }
 
 EntityCollection<Reading> EntityContext::getReadingsCollection(std::string API_tenant_UUID, PagingOption paging/*={}*/, std::time_t from/*=-1*/, std::time_t until/*=-1*/, 
-    std::time_t timestamp/*=-1*/, double value/*=std::numeric_limits<double>::quiet_NaN()*/, std::string API_device_UUID/*={}*/, 
+    std::time_t timestamp/*=-1*/, double value/*=std::numeric_limits<double>::quiet_NaN()*/, std::string API_device_UUID/*={}*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/,
     std::function<void (std::exception&, json&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
                 
     validateUUID(API_tenant_UUID);
@@ -1184,18 +1354,18 @@ EntityCollection<Reading> EntityContext::getReadingsCollection(std::string API_t
     switch(paging.direction) {
         case PagingOption::Direction::PREVIOUS:
 
-            r = api_context.requestReadingCollection(API_tenant_UUID, from, until, timestamp, value, API_device_UUID, paging.page_size, paging.page_pointer, {});
+            r = api_context.requestReadingCollection(API_tenant_UUID, from, until, timestamp, value, API_device_UUID, createdFrom, createdUntil, paging.page_size, paging.page_pointer, {});
         break;
         case PagingOption::Direction::NEXT:
 
-            r = api_context.requestReadingCollection(API_tenant_UUID, from, until, timestamp, value, API_device_UUID, paging.page_size, {}, paging.page_pointer);
+            r = api_context.requestReadingCollection(API_tenant_UUID, from, until, timestamp, value, API_device_UUID, createdFrom, createdUntil, paging.page_size, {}, paging.page_pointer);
         break;
         case PagingOption::Direction::NONE:
 
-            r = api_context.requestReadingCollection(API_tenant_UUID, from, until, timestamp, value, API_device_UUID, paging.page_size);
+            r = api_context.requestReadingCollection(API_tenant_UUID, from, until, timestamp, value, API_device_UUID, createdFrom, createdUntil, paging.page_size);
         break;
         default:
-            r = api_context.requestReadingCollection(API_tenant_UUID, from, until, timestamp, value, API_device_UUID);
+            r = api_context.requestReadingCollection(API_tenant_UUID, from, until, timestamp, value, API_device_UUID, createdFrom, createdUntil);
     }
 
     json respond = parseResponse(r);
@@ -1216,7 +1386,7 @@ EntityCollection<Reading> EntityContext::getReadingsCollection(std::string API_t
     return std::make_pair(readings, parsePaging(respond));
 }
 
-Device EntityContext::getAssociatedDevice(std::string API_tenant_UUID, std::string API_reading_UUID) {
+Device EntityContext::getAssociatedReadingsDevice(std::string API_tenant_UUID, std::string API_reading_UUID) {
                 
     validateUUID(API_tenant_UUID);
     validateUUID(API_reading_UUID);
@@ -1228,7 +1398,32 @@ Device EntityContext::getAssociatedDevice(std::string API_tenant_UUID, std::stri
 
     if(respond["data"]["type"] == "devices") {
         try {
-            Device device(respond["data"]["id"], API_tenant_UUID, respond["data"]["attributes"]["aksId"], respond["data"]["attributes"]["description"], respond["data"]["attributes"]["unit"], Util::parseDateTimeString(respond["data"]["meta"]["createdAt"]), Util::parseDateTimeString(respond["data"]["meta"]["updatedAt"]), this);
+            Device device(respond["data"]["id"], API_tenant_UUID, respond["data"]["attributes"]["aksId"], respond["data"]["attributes"]["localAksId"], respond["data"]["attributes"]["description"], respond["data"]["attributes"]["unit"], Util::parseDateTimeString(respond["data"]["meta"]["createdAt"]), Util::parseDateTimeString(respond["data"]["meta"]["updatedAt"]), this);
+
+            return device;
+        } catch (...) {
+            // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
+            std::throw_with_nested(InvalidResponse("Invalid response received from the BAScloud API. Response did not contain expected data."));
+        }
+    } else {
+        // If no device is contained in the response data return invalid response
+        throw InvalidResponse("Invalid response received from the BAScloud API. Response did not contain user data.");
+    }
+}
+
+Device EntityContext::getAssociatedSetpointsDevice(std::string API_tenant_UUID, std::string API_setpoint_UUID) {
+
+    validateUUID(API_tenant_UUID);
+    validateUUID(API_setpoint_UUID);
+    checkAndRenewAuthentication();
+
+    cpr::Response r = api_context.requestSetPointAssociatedDevice(API_tenant_UUID, API_setpoint_UUID);
+    
+    json respond = parseResponse(r);
+
+    if(respond["data"]["type"] == "devices") {
+        try {
+            Device device(respond["data"]["id"], API_tenant_UUID, respond["data"]["attributes"]["aksId"], respond["data"]["attributes"]["localAksId"], respond["data"]["attributes"]["description"], respond["data"]["attributes"]["unit"], Util::parseDateTimeString(respond["data"]["meta"]["createdAt"]), Util::parseDateTimeString(respond["data"]["meta"]["updatedAt"]), this);
 
             return device;
         } catch (...) {
@@ -1266,6 +1461,57 @@ Reading EntityContext::createReading(std::string API_tenant_UUID, std::string AP
     }
 }
 
+std::vector<Reading> EntityContext::createReadings(std::string API_tenant_UUID, std::vector<ReadingSetData> readings,
+    std::function<void (std::exception&, json&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
+
+    validateUUID(API_tenant_UUID);
+    checkAndRenewAuthentication();
+
+    cpr::Response r = api_context.requestCreateReadingsSet(API_tenant_UUID, readings);
+    
+    json respond = parseResponse(r);
+
+    std::vector<Reading> createdReadings;
+    for(json json_read: respond["data"]) {
+        if(json_read["type"] == "readings") {
+            try {
+                Reading read(json_read["id"], API_tenant_UUID, json_read["attributes"]["value"].get<double>(), Util::parseDateTimeString(json_read["attributes"]["timestamp"]), Util::parseDateTimeString(json_read["meta"]["createdAt"]), Util::parseDateTimeString(json_read["meta"]["updatedAt"]), this);
+
+                createdReadings.push_back(read);
+            } catch (std::exception& e) {
+                errorHandler(e, json_read);
+            }
+        } 
+    }
+
+    return createdReadings;
+}
+
+Reading EntityContext::updateReading(std::string API_tenant_UUID, std::string API_reading_UUID, double value/*=std::numeric_limits<double>::quiet_NaN()*/, std::time_t timestamp/*=-1*/, std::string API_device_UUID/*={}*/) {
+
+    validateUUID(API_tenant_UUID);
+    validateUUID(API_reading_UUID);
+    checkAndRenewAuthentication();
+
+    cpr::Response r = api_context.requestUpdateReading(API_tenant_UUID, API_reading_UUID, value, timestamp, API_device_UUID);
+    
+    json respond = parseResponse(r);
+
+    if(respond["data"]["type"] == "readings") {
+        try {
+            Reading reading(respond["data"]["id"], API_tenant_UUID, respond["data"]["attributes"]["value"].get<double>(), Util::parseDateTimeString(respond["data"]["attributes"]["timestamp"]), Util::parseDateTimeString(respond["data"]["meta"]["createdAt"]), Util::parseDateTimeString(respond["data"]["meta"]["updatedAt"]), this);
+
+            return reading;
+        } catch (...) {
+            // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
+            std::throw_with_nested(InvalidResponse("Invalid response received from the BAScloud API. Response did not contain expected data."));
+        }
+    } else {
+        // If no reading is contained in the response data return invalid response
+        throw InvalidResponse("Invalid response received from the BAScloud API. Response did not contain user data.");
+    }
+}
+
 void EntityContext::deleteReading(std::string API_tenant_UUID, std::string API_reading_UUID) {
 
     validateUUID(API_tenant_UUID);
@@ -1278,7 +1524,6 @@ void EntityContext::deleteReading(std::string API_tenant_UUID, std::string API_r
 
     // OK response is empty
 }
-
 
 SetPoint EntityContext::getSetPoint(std::string API_tenant_UUID, std::string API_setpoint_UUID) {
                     
@@ -1306,7 +1551,7 @@ SetPoint EntityContext::getSetPoint(std::string API_tenant_UUID, std::string API
 }
 
 EntityCollection<SetPoint> EntityContext::getSetPointsCollection(std::string API_tenant_UUID, PagingOption paging/*={}*/, std::time_t from/*=-1*/, std::time_t until/*=-1*/, 
-    std::time_t timestamp/*=-1*/, std::time_t currentTime/*=-1*/, std::string API_device_UUID/*={}*/, 
+    std::time_t timestamp/*=-1*/, std::time_t currentTime/*=-1*/, std::string API_device_UUID/*={}*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/,
     std::function<void (std::exception&, json&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
                     
     validateUUID(API_tenant_UUID);
@@ -1317,18 +1562,18 @@ EntityCollection<SetPoint> EntityContext::getSetPointsCollection(std::string API
     switch(paging.direction) {
         case PagingOption::Direction::PREVIOUS:
 
-            r = api_context.requestSetPointCollection(API_tenant_UUID, from, until, timestamp, currentTime, API_device_UUID, paging.page_size, paging.page_pointer, {});
+            r = api_context.requestSetPointCollection(API_tenant_UUID, from, until, timestamp, currentTime, API_device_UUID, createdFrom, createdUntil, paging.page_size, paging.page_pointer, {});
         break;
         case PagingOption::Direction::NEXT:
 
-            r = api_context.requestSetPointCollection(API_tenant_UUID, from, until, timestamp, currentTime, API_device_UUID, paging.page_size, {}, paging.page_pointer);
+            r = api_context.requestSetPointCollection(API_tenant_UUID, from, until, timestamp, currentTime, API_device_UUID, createdFrom, createdUntil, paging.page_size, {}, paging.page_pointer);
         break;
         case PagingOption::Direction::NONE:
 
-            r = api_context.requestSetPointCollection(API_tenant_UUID, from, until, timestamp, currentTime, API_device_UUID, paging.page_size);
+            r = api_context.requestSetPointCollection(API_tenant_UUID, from, until, timestamp, currentTime, API_device_UUID, createdFrom, createdUntil, paging.page_size);
         break;
         default:
-            r = api_context.requestSetPointCollection(API_tenant_UUID, from, until, timestamp, currentTime, API_device_UUID);
+            r = api_context.requestSetPointCollection(API_tenant_UUID, from, until, timestamp, currentTime, API_device_UUID, createdFrom, createdUntil);
     }
     
     json respond = parseResponse(r);
@@ -1374,5 +1619,42 @@ SetPoint EntityContext::createSetPoint(std::string API_tenant_UUID, std::string 
     }
 }
 
+SetPoint EntityContext::updateSetPoint(std::string API_tenant_UUID, std::string API_setpoint_UUID, double value/*=std::numeric_limits<double>::quiet_NaN()*/, std::time_t timestamp/*=-1*/, std::string API_device_UUID/*={}*/) {
+
+    validateUUID(API_tenant_UUID);
+    validateUUID(API_setpoint_UUID);
+    checkAndRenewAuthentication();
+
+    cpr::Response r = api_context.requestUpdateSetPoint(API_tenant_UUID, API_setpoint_UUID, value, timestamp, API_device_UUID);
+    
+    json respond = parseResponse(r);
+
+    if(respond["data"]["type"] == "setpoints") {
+        try {
+            SetPoint setpoint(respond["data"]["id"], API_tenant_UUID, respond["data"]["attributes"]["value"].get<double>(), Util::parseDateTimeString(respond["data"]["attributes"]["timestamp"]), Util::parseDateTimeString(respond["data"]["meta"]["createdAt"]), Util::parseDateTimeString(respond["data"]["meta"]["updatedAt"]), this);
+
+            return setpoint;
+        } catch (...) {
+            // Invalid JSON returned by the api, throw InvalidResponse and the nested original exception
+            std::throw_with_nested(InvalidResponse("Invalid response received from the BAScloud API. Response did not contain expected data."));
+        }
+    } else {
+        // If no setpoint is contained in the response data return invalid response
+        throw InvalidResponse("Invalid response received from the BAScloud API. Response did not contain user data.");
+    }
+}
+
+void EntityContext::deleteSetPoint(std::string API_tenant_UUID, std::string API_setpoint_UUID) {
+    
+    validateUUID(API_tenant_UUID);
+    validateUUID(API_setpoint_UUID);
+    checkAndRenewAuthentication();
+
+    cpr::Response r = api_context.requestDeleteSetPoint(API_tenant_UUID, API_setpoint_UUID);
+    
+    json respond = parseResponse(r);
+
+    // OK response is empty
+}
 
 }

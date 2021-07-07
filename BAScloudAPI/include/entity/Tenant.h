@@ -102,10 +102,12 @@ class Tenant : public Entity, public EntityDateMixin {
     * 
     * @param context EntityContext proving an abstracted context for accessing the API functions.
     * @param paging Optional PagingOption that is used for requesting paged API results.
+    * @param createdFrom Optional filter for the creation date of the Tenant. All points from this timestamp.
+    * @param createdUntil Optional filter for the creation date of the Tenant. All points until this timestamp.
     * 
     * @return EntityCollection containing a list of Tenant entities.
     */
-   static EntityCollection<Tenant> getTenants(EntityContext* context, PagingOption paging={});
+   static EntityCollection<Tenant> getTenants(EntityContext* context, PagingOption paging={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1);
 
    /**
     * Get a collection of associated User entities of the Tenant.
@@ -119,10 +121,13 @@ class Tenant : public Entity, public EntityDateMixin {
     * @throws InvalidResponse
     * 
     * @param paging Optional PagingOption that is used for requesting paged API results.
+    * @param email Optional value filter for the user email.
+    * @param createdFrom Optional filter for the creation date of the Tenant. All points from this timestamp.
+    * @param createdUntil Optional filter for the creation date of the Tenant. All points until this timestamp.
     * 
     * @return EntityCollection containing list of User entities and paging information.
     */
-   EntityCollection<User> getAssociatedUsers(PagingOption paging={});
+   EntityCollection<User> getAssociatedUsers(PagingOption paging={}, std::string email={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1);
 
   /**
     * Assigns a User entity to the Tenant. [Admin] 
@@ -138,8 +143,10 @@ class Tenant : public Entity, public EntityDateMixin {
     * @throws InvalidResponse
     * 
     * @param user User entity object that is to be assigned to the Tenant.
+    * @param role String describing the role of the user in the tenant [admin, user, connector]
+    * 
     */
-   void assignUser(User user);
+   void assignUser(User user, std::string role);
 
   /**
     * Assigns a collection of User entities to the Tenant. [Admin] 
@@ -154,9 +161,9 @@ class Tenant : public Entity, public EntityDateMixin {
     * @throws ConflictRequest
     * @throws InvalidResponse
     * 
-    * @param users Collection of User entity objects that are to be assigned to the Tenant.
+    * @param users Collection of User and role pairs that are to be assigned to the Tenant.
     */
-   void assignUsers(std::vector<User> users);
+   void assignUsers(std::vector<std::pair<User, std::string>> users);
 
   /**
     * Removes a User entity from the Tenant. [Admin] 
@@ -173,7 +180,7 @@ class Tenant : public Entity, public EntityDateMixin {
     * 
     * @param user User entity object that is to be removed from the Tenant.
     */
-   void removeUser(User user); // TODO ML: what happens when user is removed? tenant set to null? null causes bug in tenant visibility on backend
+   void removeUser(User user);
 
   /**
     * Removes a collection of User entities from the Tenant. [Admin] 

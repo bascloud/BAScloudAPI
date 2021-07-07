@@ -58,9 +58,11 @@ int main (int argc, char *argv[]) {
 
     // For creating a device, its associated connector UUID is needed describing the connector under which the device is grouped.
     std::string connectorUUID = "";
+    std::string propertyUUID = "";
 
-    // 
+    // Parameter
     std::string aksID = "AKS_ID_1000";
+    std::string localAksID = "1000"; // Optional local aksID
     std::string deviceDescription = "Device1";
     std::string measurementUnit = "meter";
 
@@ -71,7 +73,7 @@ int main (int argc, char *argv[]) {
          * a device UUID for which the setpoint is set, the setpoint value and future timestamp.
          */
 
-        Device new_device = BCAPI.createDevice(tenantUUID, connectorUUID, aksID, deviceDescription, measurementUnit);
+        Device new_device = BCAPI.createDevice(tenantUUID, connectorUUID, propertyUUID, aksID, deviceDescription, measurementUnit, localAksID);
         std::cout << "\t\tOK." << std::endl;
 
         std::cout << "Created Device:" << std::endl;

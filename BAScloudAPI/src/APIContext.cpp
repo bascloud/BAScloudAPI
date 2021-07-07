@@ -6,6 +6,7 @@
 
 #include "APIContext.h"
 
+#include "Util.h"
 
 namespace BAScloud {
 
@@ -116,17 +117,24 @@ cpr::Response APIContext::requestUserPasswordChange(std::string API_user_UUID, s
     return r;
 }
 
-cpr::Response APIContext::requestUpdateUser(std::string API_user_UUID, std::string email) {
+cpr::Response APIContext::requestUpdateUser(std::string API_user_UUID, std::string email/*={}*/, std::string API_tenant_UUID/*={}*/, std::string role/*={}*/) {
 
     json request_json = json({
         {"data", {
             {"type", "users"}, 
-            {"id", API_user_UUID},
-            {"attributes", {"email", email}
+            {"id", API_user_UUID},  
+            {"attributes", {
+                }
             }
         }
         }});
 
+    if(!email.empty()) {
+        request_json["data"]["attributes"].push_back(json::object_t::value_type("email", email));
+    }
+    if(!API_tenant_UUID.empty() && !role.empty()) {
+        request_json["data"].push_back(json::object({"relationships", {{"tenant",{{"data", {{"type", "tenants"},{"id", API_tenant_UUID},{"role", role}}}}}}}));
+    }
 
     std::string request_body = request_json.dump();
 
@@ -153,11 +161,26 @@ cpr::Response APIContext::requestUser(std::string API_user_UUID) {
     return r;
 }
 
-cpr::Response APIContext::requestUserCollection(std::string email/*={}*/) {
+cpr::Response APIContext::requestUserCollection(std::string email/*={}*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/, int page_size/*=-1*/, std::string page_before/*={}*/, std::string page_after/*={}*/) {
     
     cpr::Parameters params = cpr::Parameters{};
     if(!email.empty()) {
         params.Add({"email", email});
+    }
+    if(createdFrom >= 0) {
+        params.Add({"createdFrom", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdFrom))});
+    }
+    if(createdUntil >= 0) {
+        params.Add({"createdUntil", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdUntil))});
+    }
+    if(page_size>0) {
+        params.Add({"page[size]", fmt::format("{}", page_size)});
+    }
+    if(!page_before.empty()) {
+        params.Add({"page[before]", page_before});
+    }
+    if(!page_after.empty()) {
+        params.Add({"page[after]", page_after});
     }
 
     cpr::Response r = cpr::Get(cpr::Url(API_server_URL + API_USER_COLLECTION_PATH),
@@ -176,10 +199,16 @@ cpr::Response APIContext::requestUserTenantRelationship(std::string API_user_UUI
 
 cpr::Response APIContext::requestUserAssociatedTenant(std::string API_user_UUID) {
     cpr::Response r = cpr::Get(cpr::Url(API_server_URL + fmt::format(API_USER_ASSOCIATED_TENANT_PATH, API_user_UUID)),
-                            cpr::Header{{"Content-Type", "application/vnd.api+json"}},
                             cpr::Bearer{API_token});
 
     return r;
+}
+
+cpr::Response APIContext::requestUserPermissions(std::string API_user_UUID) {
+    cpr::Response r = cpr::Get(cpr::Url(API_server_URL + fmt::format(API_USER_PERMISSIONS_PATH, API_user_UUID)),
+                            cpr::Bearer{API_token});
+
+    return r; 
 }
 
 // Tenants API endpoints
@@ -190,9 +219,20 @@ cpr::Response APIContext::requestTenant(std::string API_tenant_UUID) {
     return r;
 }
 
-cpr::Response APIContext::requestTenantCollection() {
+cpr::Response APIContext::requestTenantCollection(std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/) {
+    
+    cpr::Parameters params = cpr::Parameters{};
+
+    if(createdFrom >= 0) {
+        params.Add({"createdFrom", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdFrom))});
+    }
+    if(createdUntil >= 0) {
+        params.Add({"createdUntil", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdUntil))});
+    }
+
     cpr::Response r = cpr::Get(cpr::Url(API_server_URL + API_TENANT_COLLECTION_PATH),
-                            cpr::Bearer{API_token});
+                            cpr::Bearer{API_token},
+                            params);
 
     return r;
 }
@@ -204,10 +244,19 @@ cpr::Response APIContext::requestTenantUsersRelationship(std::string API_tenant_
     return r;
 }
 
-cpr::Response APIContext::requestTenantAssociatedUsers(std::string API_tenant_UUID, int page_size/*=-1*/, std::string page_before/*={}*/, std::string page_after/*={}*/) {
+cpr::Response APIContext::requestTenantAssociatedUsers(std::string API_tenant_UUID, std::string email/*={}*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/, int page_size/*=-1*/, std::string page_before/*={}*/, std::string page_after/*={}*/) {
 
     cpr::Parameters params = cpr::Parameters{};
 
+    if(!email.empty()) {
+        params.Add({"email", email});
+    }
+    if(createdFrom >= 0) {
+        params.Add({"createdFrom", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdFrom))});
+    }
+    if(createdUntil >= 0) {
+        params.Add({"createdUntil", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdUntil))});
+    }
     if(page_size>0) {
         params.Add({"page[size]", fmt::format("{}", page_size)});
     }
@@ -273,17 +322,18 @@ cpr::Response APIContext::requestUpdateTenant(std::string API_tenant_UUID, std::
 }
 
 
-cpr::Response APIContext::requestAssignTenantUsers(std::string API_tenant_UUID, std::vector<std::string> API_user_UUIDs) {
+cpr::Response APIContext::requestAssignTenantUsers(std::string API_tenant_UUID, std::vector<std::string> API_user_UUIDs, std::vector<std::string> API_user_ROLES) {
 
     json request_json = json({
         {"data", {
         }
-        }}).dump();
+        }});
 
-    for(std::string uuid: API_user_UUIDs) {
+    for(int i=0; i<API_user_UUIDs.size(); i++) {
         request_json["data"].push_back(json::object({
                         {"type", "users"},
-                        {"id", uuid}
+                        {"id", API_user_UUIDs[i]},
+                        {"role", API_user_ROLES[i]},
                         }));
     }
 
@@ -303,7 +353,7 @@ cpr::Response APIContext::requestRemoveTenantUsers(std::string API_tenant_UUID, 
     json request_json = json({
         {"data", {
         }
-        }}).dump();
+        }});
 
     for(std::string uuid: API_user_UUIDs) {
         request_json["data"].push_back(json::object({
@@ -331,11 +381,17 @@ cpr::Response APIContext::requestProperty(std::string API_tenant_UUID, std::stri
     return r;
 }
 
-cpr::Response APIContext::requestPropertyCollection(std::string API_tenant_UUID, std::string name/*={}*/, std::string street/*={}*/, std::string postalCode/*={}*/, std::string city/*={}*/, std::string country/*={}*/, int page_size/*=-1*/, std::string page_before/*={}*/, std::string page_after/*={}*/) {
+cpr::Response APIContext::requestPropertyCollection(std::string API_tenant_UUID, std::string name/*={}*/, std::string aksID/*={}*/, std::string identifier/*={}*/, std::string street/*={}*/, std::string postalCode/*={}*/, std::string city/*={}*/, std::string country/*={}*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/, int page_size/*=-1*/, std::string page_before/*={}*/, std::string page_after/*={}*/) {
 
     cpr::Parameters params = cpr::Parameters{};
     if(!name.empty()) {
         params.Add({"name", name});
+    }
+    if(!aksID.empty()) {
+        params.Add({"aksId", aksID});
+    }
+    if(!identifier.empty()) {
+        params.Add({"identifier", identifier});
     }
     if(!street.empty()) {
         params.Add({"street", street});
@@ -348,6 +404,12 @@ cpr::Response APIContext::requestPropertyCollection(std::string API_tenant_UUID,
     }
     if(!country.empty()) {
         params.Add({"country", country});
+    }
+    if(createdFrom >= 0) {
+        params.Add({"createdFrom", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdFrom))});
+    }
+    if(createdUntil >= 0) {
+        params.Add({"createdUntil", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdUntil))});
     }
     if(page_size>0) {
         params.Add({"page[size]", fmt::format("{}", page_size)});
@@ -394,21 +456,82 @@ cpr::Response APIContext::requestPropertyAssociatedConnectors(std::string API_te
     return r;
 }
 
-cpr::Response APIContext::requestCreateProperty(std::string API_tenant_UUID, std::string name, std::string street, std::string postalCode, std::string city, std::string country) {
+cpr::Response APIContext::requestPropertyAssociatedDevices(std::string API_tenant_UUID, std::string API_property_UUID, std::string aksID/*={}*/, std::string localAksID/*={}*/, std::string API_connector_UUID/*={}*/, std::string description/*={}*/, std::string unit/*={}*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/, std::time_t deletedUntil/*=-1*/, int page_size/*=-1*/, std::string page_before/*={}*/, std::string page_after/*={}*/) {
     
-    std::string request_body = json({
+    cpr::Parameters params = cpr::Parameters{};
+    if(!aksID.empty()) {
+        params.Add({"aksId", aksID});
+    }
+    if(!localAksID.empty()) {
+        params.Add({"localAksId", localAksID});
+    }
+    if(!API_connector_UUID.empty()) {
+        params.Add({"connectorId", API_connector_UUID});
+    }
+    if(!description.empty()) {
+        params.Add({"description", description});
+    }
+    if(!unit.empty()) {
+        params.Add({"unit", unit});
+    }
+    if(createdFrom >= 0) {
+        params.Add({"createdFrom", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdFrom))});
+    }
+    if(createdUntil >= 0) {
+        params.Add({"createdUntil", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdUntil))});
+    }
+    if(deletedUntil >= 0) {
+        params.Add({"deletedUntil", fmt::format("{:%FT%T.000Z}", fmt::localtime(deletedUntil))});
+    }
+    if(page_size>0) {
+        params.Add({"page[size]", fmt::format("{}", page_size)});
+    }
+    if(!page_before.empty()) {
+        params.Add({"page[before]", page_before});
+    }
+    if(!page_after.empty()) {
+        params.Add({"page[after]", page_after});
+    }
+
+    cpr::Response r = cpr::Get(cpr::Url(API_server_URL + fmt::format(API_PROPERTY_ASSOCIATED_DEVICES_PATH, API_tenant_UUID, API_property_UUID)),
+                            cpr::Bearer{API_token},
+                            params);
+
+    return r;
+}
+
+cpr::Response APIContext::requestCreateProperty(std::string API_tenant_UUID, std::string name, std::string aksID/*={}*/, std::string identifier/*={}*/, std::string street/*={}*/, std::string postalCode/*={}*/, std::string city/*={}*/, std::string country/*={}*/) {
+    
+    json request_json = json({
         {"data", {
             {"type", "properties"}, 
             {"attributes", {
                     {"name", name}, 
-                    {"street", street}, 
-                    {"postalCode", postalCode}, 
-                    {"city", city}, 
-                    {"country", country}, 
                 }
             }
         }
-        }}).dump();
+        }});
+
+    if(!aksID.empty()) {
+        request_json["data"]["attributes"].push_back(json::object_t::value_type("aksId", aksID));
+    }
+    if(!identifier.empty()) {
+        request_json["data"]["attributes"].push_back(json::object_t::value_type("identifier", identifier));
+    }
+    if(!street.empty()) {
+        request_json["data"]["attributes"].push_back(json::object_t::value_type("street", street));
+    }
+    if(!postalCode.empty()) {
+        request_json["data"]["attributes"].push_back(json::object_t::value_type("postalCode", postalCode));
+    }
+    if(!city.empty()) {
+        request_json["data"]["attributes"].push_back(json::object_t::value_type("city", city));
+    }
+    if(!country.empty()) {
+        request_json["data"]["attributes"].push_back(json::object_t::value_type("country", country));
+    }
+
+    std::string request_body = request_json.dump();
 
     cpr::Response r = cpr::Post(cpr::Url(API_server_URL + fmt::format(API_PROPERTY_CREATE_PATH, API_tenant_UUID)),
                                 cpr::Header{{"Content-Type", "application/vnd.api+json"},
@@ -419,7 +542,7 @@ cpr::Response APIContext::requestCreateProperty(std::string API_tenant_UUID, std
     return r;
 }
 
-cpr::Response APIContext::requestUpdateProperty(std::string API_tenant_UUID, std::string API_property_UUID, std::string name/*={}*/, std::string street/*={}*/, std::string postalCode/*={}*/, std::string city/*={}*/, std::string country/*={}*/) {
+cpr::Response APIContext::requestUpdateProperty(std::string API_tenant_UUID, std::string API_property_UUID, std::string name/*={}*/, std::string aksID/*={}*/, std::string identifier/*={}*/, std::string street/*={}*/, std::string postalCode/*={}*/, std::string city/*={}*/, std::string country/*={}*/) {
     
     json request_json = json({
         {"data", {
@@ -433,6 +556,12 @@ cpr::Response APIContext::requestUpdateProperty(std::string API_tenant_UUID, std
 
     if(!name.empty()) {
         request_json["data"]["attributes"].push_back(json::object_t::value_type("name", name));
+    }
+    if(!aksID.empty()) {
+        request_json["data"]["attributes"].push_back(json::object_t::value_type("aksID", aksID));
+    }
+    if(!identifier.empty()) {
+        request_json["data"]["attributes"].push_back(json::object_t::value_type("identifier", identifier));
     }
     if(!street.empty()) {
         request_json["data"]["attributes"].push_back(json::object_t::value_type("street", street));
@@ -474,7 +603,7 @@ cpr::Response APIContext::requestConnector(std::string API_tenant_UUID, std::str
     return r;
 }
 
-cpr::Response APIContext::requestConnectorCollection(std::string API_tenant_UUID, int page_size/*=-1*/, std::string page_before/*={}*/, std::string page_after/*={}*/) {
+cpr::Response APIContext::requestConnectorCollection(std::string API_tenant_UUID, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/, int page_size/*=-1*/, std::string page_before/*={}*/, std::string page_after/*={}*/) {
         
     cpr::Parameters params = cpr::Parameters{};
 
@@ -516,10 +645,31 @@ cpr::Response APIContext::requestConnectorDevicesRelationship(std::string API_te
     return r;
 }
 
-cpr::Response APIContext::requestConnectorAssociatedDevices(std::string API_tenant_UUID, std::string API_connector_UUID, int page_size/*=-1*/, std::string page_before/*={}*/, std::string page_after/*={}*/) {
+cpr::Response APIContext::requestConnectorAssociatedDevices(std::string API_tenant_UUID, std::string API_connector_UUID, std::string aksID/*={}*/, std::string localAksID/*={}*/, std::string description/*={}*/, std::string unit/*={}*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/, std::time_t deletedUntil/*=-1*/, int page_size/*=-1*/, std::string page_before/*={}*/, std::string page_after/*={}*/) {
             
     cpr::Parameters params = cpr::Parameters{};
 
+    if(!aksID.empty()) {
+        params.Add({"aksId", aksID});
+    }
+    if(!localAksID.empty()) {
+        params.Add({"localAksId", localAksID});
+    }
+    if(!description.empty()) {
+        params.Add({"description", description});
+    }
+    if(!unit.empty()) {
+        params.Add({"unit", unit});
+    }
+    if(createdFrom >= 0) {
+        params.Add({"createdFrom", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdFrom))});
+    }
+    if(createdUntil >= 0) {
+        params.Add({"createdUntil", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdUntil))});
+    }
+    if(deletedUntil >= 0) {
+        params.Add({"deletedUntil", fmt::format("{:%FT%T.000Z}", fmt::localtime(deletedUntil))});
+    }
     if(page_size>0) {
         params.Add({"page[size]", fmt::format("{}", page_size)});
     }
@@ -537,12 +687,11 @@ cpr::Response APIContext::requestConnectorAssociatedDevices(std::string API_tena
     return r;
 }
 
-cpr::Response APIContext::requestCreateConnector(std::string API_tenant_UUID, std::string API_property_UUID, std::string name) {
+cpr::Response APIContext::requestCreateConnector(std::string API_tenant_UUID, std::string name) {
     
     std::string request_body = json::object({
         {"data", {
-            {"type", "connectors"},{"attributes", {{"name", name}}},
-            {"relationships", {{"property",{{"data", {{"type", "properties"},{"id", API_property_UUID}}}}}}}
+            {"type", "connectors"},{"attributes", {{"name", name}}}
         }
         }}).dump();
 
@@ -597,6 +746,13 @@ cpr::Response APIContext::requestConnectorToken(std::string API_tenant_UUID, std
     return r;
 }
 
+cpr::Response APIContext::requestConnectorPermissions(std::string API_tenant_UUID, std::string API_connector_UUID) {
+    cpr::Response r = cpr::Get(cpr::Url(API_server_URL + fmt::format(API_CONNECTOR_PERMISSIONS_PATH, API_tenant_UUID, API_connector_UUID)),
+                                cpr::Bearer{API_token});
+
+    return r; 
+}
+
 // Devices API endpoints
 cpr::Response APIContext::requestDevice(std::string API_tenant_UUID, std::string API_device_UUID) {
     cpr::Response r = cpr::Get(cpr::Url(API_server_URL + fmt::format(API_DEVICE_SINGLE_PATH, API_tenant_UUID, API_device_UUID)),
@@ -605,17 +761,35 @@ cpr::Response APIContext::requestDevice(std::string API_tenant_UUID, std::string
     return r;
 }
 
-cpr::Response APIContext::requestDeviceCollection(std::string API_tenant_UUID, std::string aksID/*={}*/, std::string description/*={}*/, std::string unit/*={}*/, int page_size/*=-1*/, std::string page_before/*={}*/, std::string page_after/*={}*/) {
+cpr::Response APIContext::requestDeviceCollection(std::string API_tenant_UUID, std::string aksID/*={}*/, std::string localAksID/*={}*/, std::string API_connector_UUID/*={}*/, std::string API_property_UUID/*={}*/, std::string description/*={}*/, std::string unit/*={}*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/, std::time_t deletedUntil/*=-1*/, int page_size/*=-1*/, std::string page_before/*={}*/, std::string page_after/*={}*/) {
 
     cpr::Parameters params = cpr::Parameters{};
     if(!aksID.empty()) {
-        params.Add({"aksID", aksID});
+        params.Add({"aksId", aksID});
+    }
+    if(!localAksID.empty()) {
+        params.Add({"localAksId", localAksID});
+    }
+    if(!API_connector_UUID.empty()) {
+        params.Add({"connectorId", API_connector_UUID});
+    }
+    if(!API_property_UUID.empty()) {
+        params.Add({"propertyId", API_property_UUID});
     }
     if(!description.empty()) {
         params.Add({"description", description});
     }
     if(!unit.empty()) {
         params.Add({"unit", unit});
+    }
+    if(createdFrom >= 0) {
+        params.Add({"createdFrom", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdFrom))});
+    }
+    if(createdUntil >= 0) {
+        params.Add({"createdUntil", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdUntil))});
+    }
+    if(deletedUntil >= 0) {
+        params.Add({"deletedUntil", fmt::format("{:%FT%T.000Z}", fmt::localtime(deletedUntil))});
     }
     if(page_size>0) {
         params.Add({"page[size]", fmt::format("{}", page_size)});
@@ -655,7 +829,7 @@ cpr::Response APIContext::requestDeviceReadingsRelationship(std::string API_tena
     return r;
 }
 
-cpr::Response APIContext::requestDeviceAssociatedReadings(std::string API_tenant_UUID, std::string API_device_UUID, int page_size/*=-1*/, std::string page_before/*={}*/, std::string page_after/*={}*/) {
+cpr::Response APIContext::requestDeviceAssociatedReadings(std::string API_tenant_UUID, std::string API_device_UUID, std::time_t from/*=-1*/, std::time_t until/*=-1*/, std::time_t timestamp/*=-1*/, double value/*=std::numeric_limits<double>::quiet_NaN()*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/, int page_size/*=-1*/, std::string page_before/*={}*/, std::string page_after/*={}*/) {
     
     cpr::Parameters params = cpr::Parameters{};
 
@@ -683,10 +857,28 @@ cpr::Response APIContext::requestDeviceSetPointsRelationship(std::string API_ten
     return r;
 }
 
-cpr::Response APIContext::requestDeviceAssociatedSetPoints(std::string API_tenant_UUID, std::string API_device_UUID, int page_size/*=-1*/, std::string page_before/*={}*/, std::string page_after/*={}*/) {
+cpr::Response APIContext::requestDeviceAssociatedSetPoints(std::string API_tenant_UUID, std::string API_device_UUID, std::time_t from/*=-1*/, std::time_t until/*=-1*/, std::time_t timestamp/*=-1*/, std::time_t currentTime/*=-1*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/, int page_size/*=-1*/, std::string page_before/*={}*/, std::string page_after/*={}*/) {
         
     cpr::Parameters params = cpr::Parameters{};
-
+    
+    if(from >= 0) {
+        params.Add({"from", fmt::format("{:%FT%T.000Z}", fmt::localtime(from))});
+    }
+    if(until >= 0) {
+        params.Add({"until", fmt::format("{:%FT%T.000Z}", fmt::localtime(until))});
+    }
+    if(timestamp >= 0) {
+        params.Add({"timestamp", fmt::format("{:%FT%T.000Z}", fmt::localtime(timestamp))});
+    }
+    if(currentTime >= 0) {
+        params.Add({"currentTime", fmt::format("{:%FT%T.000Z}", fmt::localtime(currentTime))});
+    }
+    if(createdFrom >= 0) {
+        params.Add({"createdFrom", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdFrom))});
+    }
+    if(createdUntil >= 0) {
+        params.Add({"createdUntil", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdUntil))});
+    }
     if(page_size>0) {
         params.Add({"page[size]", fmt::format("{}", page_size)});
     }
@@ -704,14 +896,22 @@ cpr::Response APIContext::requestDeviceAssociatedSetPoints(std::string API_tenan
     return r;
 }
 
-cpr::Response APIContext::requestCreateDevice(std::string API_tenant_UUID, std::string API_connector_UUID, std::string aksID, std::string description, std::string unit) {
+cpr::Response APIContext::requestCreateDevice(std::string API_tenant_UUID, std::string API_connector_UUID, std::string API_property_UUID, std::string aksID, std::string description, std::string unit, std::string localAksID/*={}*/) {
     
-    std::string request_body = json::object({
+    json request_json = json::object({
         {"data", {
             {"type", "devices"},{"attributes", {{"aksId", aksID},{"description", description},{"unit", unit}}},
-            {"relationships", {{"connector",{{"data", {{"type", "connectors"},{"id", API_connector_UUID}}}}}}}
+            {"relationships", 
+                {{"connector",{{"data", {{"type", "connectors"},{"id", API_connector_UUID}}}}}},
+                {{"property",{{"data", {{"type", "properties"},{"id", API_property_UUID}}}}}}}
         }
-        }}).dump();
+        }});
+
+    if(!localAksID.empty()) {
+        request_json["data"]["attributes"].push_back(json::object_t::value_type("localAksId", localAksID));
+    }
+
+    std::string request_body = request_json.dump();
 
     cpr::Response r = cpr::Post(cpr::Url(API_server_URL + fmt::format(API_DEVICE_CREATE_PATH, API_tenant_UUID)),
                                 cpr::Header{{"Content-Type", "application/vnd.api+json"},
@@ -722,7 +922,7 @@ cpr::Response APIContext::requestCreateDevice(std::string API_tenant_UUID, std::
     return r;
 }
 
-cpr::Response APIContext::requestUpdateDevice(std::string API_tenant_UUID, std::string API_device_UUID, std::string aksID/*={}*/, std::string description/*={}*/, std::string unit/*={}*/) {
+cpr::Response APIContext::requestUpdateDevice(std::string API_tenant_UUID, std::string API_device_UUID, std::string aksID/*={}*/, std::string localAksID/*={}*/, std::string description/*={}*/, std::string unit/*={}*/) {
     
     json request_json = json({
         {"data", {
@@ -736,6 +936,9 @@ cpr::Response APIContext::requestUpdateDevice(std::string API_tenant_UUID, std::
 
     if(!aksID.empty()) {
         request_json["data"]["attributes"].push_back(json::object_t::value_type("aksId", aksID));
+    }
+    if(!localAksID.empty()) {
+        request_json["data"]["attributes"].push_back(json::object_t::value_type("localAksId", localAksID));
     }
     if(!description.empty()) {
         request_json["data"]["attributes"].push_back(json::object_t::value_type("description", description));
@@ -771,11 +974,11 @@ cpr::Response APIContext::requestReading(std::string API_tenant_UUID, std::strin
     return r;
 }
 
-cpr::Response APIContext::requestReadingCollection(std::string API_tenant_UUID, std::time_t from/*=-1*/, std::time_t until/*=-1*/, std::time_t timestamp/*=-1*/, double value/*=std::numeric_limits<double>::quiet_NaN()*/, std::string API_device_UUID/*={}*/, int page_size/*=-1*/, std::string page_before/*={}*/, std::string page_after/*={}*/) {
+cpr::Response APIContext::requestReadingCollection(std::string API_tenant_UUID, std::time_t from/*=-1*/, std::time_t until/*=-1*/, std::time_t timestamp/*=-1*/, double value/*=std::numeric_limits<double>::quiet_NaN()*/, std::string API_device_UUID/*={}*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/, int page_size/*=-1*/, std::string page_before/*={}*/, std::string page_after/*={}*/) {
     
     cpr::Parameters params = cpr::Parameters{};
     if(from >= 0) {
-        params.Add({"from", fmt::format("{:%FT%T.000Z}", fmt::localtime(from))}); // TODO date format
+        params.Add({"from", fmt::format("{:%FT%T.000Z}", fmt::localtime(from))});
     }
     if(until >= 0) {
         params.Add({"until", fmt::format("{:%FT%T.000Z}", fmt::localtime(until))});
@@ -788,6 +991,12 @@ cpr::Response APIContext::requestReadingCollection(std::string API_tenant_UUID, 
     }
     if(!API_device_UUID.empty()) {
         params.Add({"deviceId", API_device_UUID});
+    }
+    if(createdFrom >= 0) {
+        params.Add({"createdFrom", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdFrom))});
+    }
+    if(createdUntil >= 0) {
+        params.Add({"createdUntil", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdUntil))});
     }
     if(page_size>0) {
         params.Add({"page[size]", fmt::format("{}", page_size)});
@@ -838,6 +1047,64 @@ cpr::Response APIContext::requestCreateReading(std::string API_tenant_UUID, std:
     return r;
 }
 
+cpr::Response APIContext::requestCreateReadingsSet(std::string API_tenant_UUID, std::vector<ReadingSetData> readings) {
+
+    json request_json = json({
+        {"data", {
+        }
+        }});
+
+    for(int i=0; i<readings.size(); i++) {
+        request_json["data"].push_back(json::object({
+                        {"type", "readings"},{"attributes", {{"value", readings[i].value}, {"timestamp", fmt::format("{:%FT%T.000Z}", fmt::localtime(readings[i].timestamp))}}},
+                        {"relationships", {{"device",{{"data", {{"type", "devices"},{"id", readings[i].API_device_UUID}}}}}}}
+                        }));
+    }
+
+    std::string request_body = request_json.dump();
+
+    cpr::Response r = cpr::Post(cpr::Url(API_server_URL + fmt::format(API_READING_CREATE_PATH, API_tenant_UUID)),
+                                cpr::Header{{"Content-Type", "application/vnd.api+json"},
+                                            {"Content-Length", std::to_string(request_body.length())}},
+                                cpr::Body(request_body),
+                                cpr::Bearer{API_token});
+
+    return r;
+}
+
+cpr::Response APIContext::requestUpdateReading(std::string API_tenant_UUID, std::string API_reading_UUID, double value/*=std::numeric_limits<double>::quiet_NaN()*/, std::time_t timestamp/*=-1*/, std::string API_device_UUID/*={}*/) {
+
+    json request_json = json({
+        {"data", {
+            {"type", "readings"}, 
+            {"id", API_reading_UUID},  
+            {"attributes", {
+                }
+            }
+        }
+        }});
+
+    if(!std::isnan(value)) {
+        request_json["data"]["attributes"].push_back(json::object_t::value_type("value", value));
+    }
+    if(timestamp >= 0) {
+        request_json["data"]["attributes"].push_back(json::object_t::value_type("timestamp", fmt::format("{:%FT%T.000Z}", fmt::localtime(timestamp))));
+    }
+    if(!API_device_UUID.empty()) {
+        request_json["data"].push_back(json::object({"relationships", {{"device",{{"data", {{"type", "devices"},{"id", API_device_UUID}}}}}}}));
+    }
+
+    std::string request_body = request_json.dump();
+
+    cpr::Response r = cpr::Post(cpr::Url(API_server_URL + fmt::format(API_READING_SINGLE_PATH, API_tenant_UUID, API_reading_UUID)),
+                                cpr::Header{{"Content-Type", "application/vnd.api+json"},
+                                            {"Content-Length", std::to_string(request_body.length())}},
+                                cpr::Body(request_body),
+                                cpr::Bearer{API_token});
+
+    return r;
+}
+
 cpr::Response APIContext::requestDeleteReading(std::string API_tenant_UUID, std::string API_reading_UUID) {
     cpr::Response r = cpr::Delete(cpr::Url(API_server_URL + fmt::format(API_READING_DELETE_PATH, API_tenant_UUID, API_reading_UUID)),
                             cpr::Bearer{API_token});
@@ -854,11 +1121,11 @@ cpr::Response APIContext::requestSetPoint(std::string API_tenant_UUID, std::stri
     return r;    
 }
 
-cpr::Response APIContext::requestSetPointCollection(std::string API_tenant_UUID, std::time_t from/*=-1*/, std::time_t until/*=-1*/, std::time_t timestamp/*=-1*/, std::time_t currentTime/*=-1*/, std::string API_device_UUID/*={}*/, int page_size/*=-1*/, std::string page_before/*={}*/, std::string page_after/*={}*/) {
+cpr::Response APIContext::requestSetPointCollection(std::string API_tenant_UUID, std::time_t from/*=-1*/, std::time_t until/*=-1*/, std::time_t timestamp/*=-1*/, std::time_t currentTime/*=-1*/, std::string API_device_UUID/*={}*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/, int page_size/*=-1*/, std::string page_before/*={}*/, std::string page_after/*={}*/) {
     
     cpr::Parameters params = cpr::Parameters{};
     if(from >= 0) {
-        params.Add({"from", fmt::format("{:%FT%T.000Z}", fmt::localtime(from))}); // TODO date format
+        params.Add({"from", fmt::format("{:%FT%T.000Z}", fmt::localtime(from))});
     }
     if(until >= 0) {
         params.Add({"until", fmt::format("{:%FT%T.000Z}", fmt::localtime(until))});
@@ -871,6 +1138,12 @@ cpr::Response APIContext::requestSetPointCollection(std::string API_tenant_UUID,
     }
     if(!API_device_UUID.empty()) {
         params.Add({"deviceId", API_device_UUID});
+    }
+    if(createdFrom >= 0) {
+        params.Add({"createdFrom", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdFrom))});
+    }
+    if(createdUntil >= 0) {
+        params.Add({"createdUntil", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdUntil))});
     }
     if(page_size>0) {
         params.Add({"page[size]", fmt::format("{}", page_size)});
@@ -907,6 +1180,51 @@ cpr::Response APIContext::requestCreateSetPoint(std::string API_tenant_UUID, std
     return r;
 }
 
+cpr::Response APIContext::requestDeleteSetPoint(std::string API_tenant_UUID, std::string API_setpoint_UUID) {
+    cpr::Response r = cpr::Delete(cpr::Url(API_server_URL + fmt::format(API_SETPOINT_DELETE_PATH, API_tenant_UUID, API_setpoint_UUID)),
+                            cpr::Bearer{API_token});
 
+    return r;
+}
+
+cpr::Response APIContext::requestUpdateSetPoint(std::string API_tenant_UUID, std::string API_setpoint_UUID, double value/*=std::numeric_limits<double>::quiet_NaN()*/, std::time_t timestamp/*=-1*/, std::string API_device_UUID/*={}*/) {
+
+    json request_json = json({
+        {"data", {
+            {"type", "setpoints"}, 
+            {"id", API_setpoint_UUID},  
+            {"attributes", {
+                }
+            }
+        }
+        }});
+
+    if(!std::isnan(value)) {
+        request_json["data"]["attributes"].push_back(json::object_t::value_type("value", value));
+    }
+    if(timestamp >= 0) {
+        request_json["data"]["attributes"].push_back(json::object_t::value_type("timestamp", fmt::format("{:%FT%T.000Z}", fmt::localtime(timestamp))));
+    }
+    if(!API_device_UUID.empty()) {
+        request_json["data"].push_back(json::object({"relationships", {{"device",{{"data", {{"type", "devices"},{"id", API_device_UUID}}}}}}}));
+    }
+
+    std::string request_body = request_json.dump();
+
+    cpr::Response r = cpr::Post(cpr::Url(API_server_URL + fmt::format(API_SETPOINT_SINGLE_PATH, API_tenant_UUID, API_setpoint_UUID)),
+                                cpr::Header{{"Content-Type", "application/vnd.api+json"},
+                                            {"Content-Length", std::to_string(request_body.length())}},
+                                cpr::Body(request_body),
+                                cpr::Bearer{API_token});
+
+    return r;
+}
+
+cpr::Response APIContext::requestSetPointAssociatedDevice(std::string API_tenant_UUID, std::string API_setpoint_UUID) {
+    cpr::Response r = cpr::Get(cpr::Url(API_server_URL + fmt::format(API_SETPOINT_ASSOCIATED_DEVICE_PATH, API_tenant_UUID, API_setpoint_UUID)),
+                            cpr::Bearer{API_token});
+
+    return r;
+}
 
 }

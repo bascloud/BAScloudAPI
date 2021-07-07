@@ -32,7 +32,7 @@ TEST(BasicTests, UserCollectionTest) {
 
     std::cout << "\tRequesting all users..." << std::endl;
 
-    EntityCollection<User> users = BCAPI.getUsersCollection({}, {}, [](std::exception& e, json& j) {
+    EntityCollection<User> users = BCAPI.getUsersCollection({}, {}, -1, -1, [](std::exception& e, json& j) {
             throw e;
         });
 
@@ -80,7 +80,7 @@ TEST(BasicTests, AssociatedTenantTest) {
 
     EXPECT_EQ(assoc_tenant.getUUID(), BASCLOUD_TEST_TENANT_UUID);
     EXPECT_EQ(assoc_tenant.getName(), "testing");
-    EXPECT_EQ(assoc_tenant.getUrlName(), "testing");
+    EXPECT_EQ(assoc_tenant.getUrlName(), "tenant_8eda44f3a00d426fbe17d3260aaec0ed");
     EXPECT_TRUE(assoc_tenant.getCreatedDate() > 0);
     EXPECT_TRUE(assoc_tenant.getLastUpdatedDate() > 0);
 }

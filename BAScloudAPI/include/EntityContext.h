@@ -110,6 +110,20 @@ class EntityContext {
     void validateUUID(std::string UUID);
 
    /**
+    * Checks the provided role string for validity.
+    *
+    * Role can be "admin", "user", "connector", and "superadmin"
+    * 
+    * If the given string does not hold this format an exception is thrown.
+    *
+    * @throws std::invalid_argument
+	* 
+    * @param role BAScloud API entity role string.
+	* 
+    */
+    void validateRole(std::string role);
+
+   /**
     * Checks the current authentication token and renews it if necessary.
     * 
     * The function will the token format and expiration and if invalid will try to renew the authentication
@@ -254,7 +268,7 @@ class EntityContext {
     * 
     * @return EntityCollection containing list of User entities and empty paging information (See note).
     */
-	EntityCollection<User> getUsersCollection(std::string email={}, PagingOption paging={}, std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
+	EntityCollection<User> getUsersCollection(PagingOption paging={}, std::string email={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1, std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
 
    /**
     * Get a the associated Tenant entity of the User.
@@ -276,6 +290,28 @@ class EntityContext {
     * @return A Tenant object representing the BAScloud Tenant associated with the User.
     */
 	Tenant getAssociatedTenant(std::string API_user_UUID);
+
+   /**
+    * Get a the Tenant role and permissions of the User.
+    * 
+    * Returns the role and list of resource actions the user is allowed to access.
+    * 
+    * @throws ServerError
+    * @throws ConnectionError
+    * @throws ServerError
+    * @throws ConnectionError
+    * @throws BadRequest
+    * @throws UnauthorizedRequest
+    * @throws NotFoundRequest
+    * @throws ConflictRequest
+    * @throws InvalidResponse
+	* 
+    * @param API_user_UUID UUID of the BAScloud User.
+    * 
+    * @return A PermissionData object representing the permissions the user has and resources the user can access.
+    */
+    PermissionData getUserPermissions(std::string API_user_UUID);
+
 
    /**
     * Request a password reset for the User.
@@ -365,7 +401,7 @@ class EntityContext {
     * 
     * @return User entity object representing the updated BAScloud User.
     */
-	User updateUser(std::string API_user_UUID, std::string email);
+	User updateUser(std::string API_user_UUID, std::string email={}, std::string API_tenant_UUID={}, std::string role={});
 
   /**
     * Deletes an existing User in the BAScloud. [Admin] 
@@ -434,7 +470,7 @@ class EntityContext {
     * 
     * @return EntityCollection containing list of Tenant entities and empty paging information (See note).
     */
-	EntityCollection<Tenant> getTenantsCollection(PagingOption paging={}, std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
+	EntityCollection<Tenant> getTenantsCollection(PagingOption paging={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1, std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
 
   /**
     * Get a collection of associated User entities of the Tenant.
@@ -455,7 +491,7 @@ class EntityContext {
     * 
     * @return EntityCollection containing list of User entities and paging information.
     */
-	EntityCollection<User> getAssociatedUsers(std::string API_tenant_UUID, PagingOption paging={}, std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
+	EntityCollection<User> getAssociatedUsers(std::string API_tenant_UUID, PagingOption paging={}, std::string email={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1, std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
 
    /**
     * Creates a new Tenant entity in the BAScloud. [Admin] 
@@ -541,7 +577,7 @@ class EntityContext {
     * @param API_tenant_UUID Tenant entity UUID to assign the users to.
     * @param API_user_UUIDs Collection of User entity objects that are to be assigned to the Tenant.
     */
-	void assignTenantUsers(std::string API_tenant_UUID, std::vector<std::string> API_user_UUIDs);
+	void assignTenantUsers(std::string API_tenant_UUID, std::vector<std::string> API_user_UUIDs, std::vector<std::string> API_user_ROLES);
 
   /**
     * Removes a collection of User entities from a Tenant. [Admin] 
@@ -614,11 +650,11 @@ class EntityContext {
     * 
     * @return EntityCollection containing list of Property entities matching the provided filters and paging information.
     */
-   	EntityCollection<Property> getPropertiesCollection(std::string API_tenant_UUID, PagingOption paging={}, std::string name={}, 
-		std::string street={}, std::string postalCode={}, std::string city={}, std::string country={}, std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
+   	EntityCollection<Property> getPropertiesCollection(std::string API_tenant_UUID, PagingOption paging={}, std::string name={}, std::string aksID={}, std::string identifier={}, std::string street={}, std::string postalCode={}, std::string city={}, std::string country={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1, 
+        std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
 	
    /**
-    * Get a collection of associated Connector entities of a Property.
+    * [Deprecated] Get a collection of associated Connector entities of a Property.
     * 
     * @throws ServerError
     * @throws ConnectionError
@@ -638,6 +674,29 @@ class EntityContext {
     * @return EntityCollection containing a list of Connector entities associated with the Property and paging information.
     */
 	EntityCollection<Connector> getAssociatedConnectors(std::string API_tenant_UUID, std::string API_property_UUID, PagingOption paging={}, 
+        std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
+	
+   /**
+    * [Deprecated] Get a collection of associated Connector entities of a Property.
+    * 
+    * @throws ServerError
+    * @throws ConnectionError
+    * @throws ServerError
+    * @throws ConnectionError
+    * @throws BadRequest
+    * @throws UnauthorizedRequest
+    * @throws NotFoundRequest
+    * @throws ConflictRequest
+    * @throws InvalidResponse
+    * 
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the Property.
+    * @param API_property_UUID UUID of the BAScloud Property.
+    * @param paging Optional PagingOption that is used for requesting paged API results.
+    * @param errorHandler Optional callback function for handling errors in the request. Function gets occured exception and invalid data.
+    * 
+    * @return EntityCollection containing a list of Connector entities associated with the Property and paging information.
+    */
+    EntityCollection<Device> getAssociatedPropertyDevices(std::string API_tenant_UUID, std::string API_property_UUID, PagingOption paging={}, std::string aksID={}, std::string localAksID={}, std::string API_connector_UUID={}, std::string description={}, std::string unit={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1, std::time_t deletedUntil=-1,
         std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
 	
    /**
@@ -664,7 +723,7 @@ class EntityContext {
     * 
     * @return Property entity object representing the newly created BAScloud Property.
     */
-	Property createProperty(std::string API_tenant_UUID, std::string name, std::string street, std::string postalCode, std::string city, std::string country);
+	Property createProperty(std::string API_tenant_UUID, std::string name, std::string aksID={}, std::string identifier={}, std::string street={}, std::string postalCode={}, std::string city={}, std::string country={});
 	
    /**
     * Deletes an existing Property in the BAScloud.
@@ -713,7 +772,7 @@ class EntityContext {
     * 
     * @return Property entity object representing the updated BAScloud Property.
     */
-	Property updateProperty(std::string API_tenant_UUID, std::string API_property_UUID, std::string name={}, std::string street={}, 
+	Property updateProperty(std::string API_tenant_UUID, std::string API_property_UUID, std::string name={}, std::string aksID={}, std::string identifier={}, std::string street={}, 
 		std::string postalCode={}, std::string city={}, std::string country={});
 
 	// Connector API endpoints
@@ -759,11 +818,11 @@ class EntityContext {
     * 
     * @return EntityCollection containing list of Connector entities matching the provided filters and paging information.
     */
-	EntityCollection<Connector> getConnectorsCollection(std::string API_tenant_UUID, PagingOption paging={}, 
+	EntityCollection<Connector> getConnectorsCollection(std::string API_tenant_UUID, PagingOption paging={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1, 
         std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
 	
    /**
-    * Get the associated Property entity of the Connector.
+    * [Deprecated] Get the associated Property entity of the Connector.
     * 
     * Each Connector can have a relation to one Property.
     * 
@@ -806,7 +865,7 @@ class EntityContext {
     * 
     * @return EntityCollection containing list of Device entities associated with the Connector.
     */
-	EntityCollection<Device> getAssociatedDevices(std::string API_tenant_UUID, std::string API_connector_UUID, PagingOption paging={}, 
+	EntityCollection<Device> getAssociatedConnectorDevices(std::string API_tenant_UUID, std::string API_connector_UUID, PagingOption paging={}, std::string aksID={}, std::string localAksID={}, std::string description={}, std::string unit={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1, std::time_t deletedUntil=-1,
         std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
 	
    /**
@@ -830,7 +889,7 @@ class EntityContext {
     * 
     * @return Connector entity object representing the newly created BAScloud Connector.
     */
-	Connector createConnector(std::string API_tenant_UUID, std::string API_property_UUID, std::string name);
+	Connector createConnector(std::string API_tenant_UUID, std::string name);
 
    /**
     * Deletes an existing Connector in the BAScloud.
@@ -861,7 +920,6 @@ class EntityContext {
     * 
     * @throws ServerError
     * @throws ConnectionError
-    * @throws ServerError
     * @throws ConnectionError
     * @throws BadRequest
     * @throws UnauthorizedRequest
@@ -880,12 +938,44 @@ class EntityContext {
    /**
     * Requests a new API key for a Connector entity.
     * 
+    * @throws ServerError
+    * @throws ConnectionError
+    * @throws ConnectionError
+    * @throws BadRequest
+    * @throws UnauthorizedRequest
+    * @throws NotFoundRequest
+    * @throws ConflictRequest
+    * @throws InvalidResponse
+    * 
     * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the Connector.
     * @param API_connector_UUID UUID of a BAScloud Connector for which the API key is requested.
     * 
     * @return API key token for the Connector entity. A Connector API key does not expire.
     */
 	std::string getNewConnectorAuthToken(std::string API_tenant_UUID, std::string API_connector_UUID);
+
+
+   /**
+    * Get a the Tenant role and permissions of the Connector.
+    * 
+    * Returns the role and list of resource actions the Connector is allowed to access.
+    * 
+    * @throws ServerError
+    * @throws ConnectionError
+    * @throws ConnectionError
+    * @throws BadRequest
+    * @throws UnauthorizedRequest
+    * @throws NotFoundRequest
+    * @throws ConflictRequest
+    * @throws InvalidResponse
+	* 
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the Connector.
+    * @param API_connector_UUID UUID of a BAScloud Connector for which the permissions are requested.
+    * 
+    * @return A PermissionData object representing the permissions the Connector has and resources the Connector can access.
+    */
+    PermissionData getConnectorPermissions(std::string API_tenant_UUID, std::string API_connector_UUID);
+
 
 	// Device API endpoints
 
@@ -936,8 +1026,8 @@ class EntityContext {
     * 
     * @return EntityCollection containing list of Device entities matching the provided filters and paging information.
     */
-	EntityCollection<Device> getDevicesCollection(std::string API_tenant_UUID, PagingOption paging={}, std::string aksID={}, 
-		std::string description={}, std::string unit={}, std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
+	EntityCollection<Device> getDevicesCollection(std::string API_tenant_UUID, PagingOption paging={}, std::string aksID={}, std::string localAksID={}, std::string API_connector_UUID={}, std::string API_property_UUID={}, std::string description={}, std::string unit={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1, std::time_t deletedUntil=-1,
+        std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
 	
    /**
     * Get the associated Connector entity of the Device.
@@ -981,7 +1071,7 @@ class EntityContext {
     * 
     * @return EntityCollection containing list of Reading entities and paging information.
     */
-	EntityCollection<Reading> getAssociatedReadings(std::string API_tenant_UUID, std::string API_device_UUID, PagingOption paging={}, 
+	EntityCollection<Reading> getAssociatedReadings(std::string API_tenant_UUID, std::string API_device_UUID, PagingOption paging={}, std::time_t from=-1, std::time_t until=-1, std::time_t timestamp=-1, double value=std::numeric_limits<double>::quiet_NaN(), std::time_t createdFrom=-1, std::time_t createdUntil=-1, 
         std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
 	
    /**
@@ -1004,7 +1094,7 @@ class EntityContext {
     * 
     * @return EntityCollection containing list of SetPoint entities and paging information.
     */
-	EntityCollection<SetPoint> getAssociatedSetPoints(std::string API_tenant_UUID, std::string API_device_UUID, PagingOption paging={}, 
+	EntityCollection<SetPoint> getAssociatedSetPoints(std::string API_tenant_UUID, std::string API_device_UUID, PagingOption paging={}, std::time_t from=-1, std::time_t until=-1, std::time_t timestamp=-1, std::time_t currentTime=-1, std::time_t createdFrom=-1, std::time_t createdUntil=-1,
         std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
 	
    /**
@@ -1030,7 +1120,7 @@ class EntityContext {
     * 
     * @return Device entity object representing the newly created BAScloud Device.
     */
-	Device createDevice(std::string API_tenant_UUID, std::string API_connector_UUID, std::string aksID, std::string description, std::string unit);
+	Device createDevice(std::string API_tenant_UUID, std::string API_connector_UUID, std::string API_property_UUID, std::string aksID, std::string description, std::string unit, std::string localAksID={});
 	
    /**
     * Update an existing Device in the BAScloud.
@@ -1131,7 +1221,7 @@ class EntityContext {
     * @return EntityCollection containing list of Property entities matching the provided filters and paging information.
     */
 	EntityCollection<Reading> getReadingsCollection(std::string API_tenant_UUID, PagingOption paging={}, std::time_t from=-1, std::time_t until=-1, 
-		std::time_t timestamp=-1, double value=std::numeric_limits<double>::quiet_NaN(), std::string API_device_UUID={}, 
+		std::time_t timestamp=-1, double value=std::numeric_limits<double>::quiet_NaN(), std::string API_device_UUID={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1,
         std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
 	
    /**
@@ -1152,7 +1242,27 @@ class EntityContext {
 	* 
     * @return Device entity object of the associated BAScloud Device.
     */
-	Device getAssociatedDevice(std::string API_tenant_UUID, std::string API_reading_UUID);
+	Device getAssociatedReadingsDevice(std::string API_tenant_UUID, std::string API_reading_UUID);
+	
+   /**
+    * Get the associated Device entity of the Setpoint.
+    * 
+    * @throws ServerError
+    * @throws ConnectionError
+    * @throws ServerError
+    * @throws ConnectionError
+    * @throws BadRequest
+    * @throws UnauthorizedRequest
+    * @throws NotFoundRequest
+    * @throws ConflictRequest
+    * @throws InvalidResponse
+    * 
+	* @param API_tenant_UUID UUID of the associated BAScloud Tenant.
+	* @param API_reading_UUID UUID of the Reading entity.
+	* 
+    * @return Device entity object of the associated BAScloud Device.
+    */
+	Device getAssociatedSetpointsDevice(std::string API_tenant_UUID, std::string API_setpoint_UUID);
 	
    /**
     * Create a new Reading entity in the BAScloud.
@@ -1178,6 +1288,57 @@ class EntityContext {
     */
 	Reading createReading(std::string API_tenant_UUID, std::string API_device_UUID, double value, std::time_t timestamp);
 	
+   /**
+    * Create a new set of Reading entities in the BAScloud.
+    * 
+    * Given a list of Reading Data, a set of entities are created through a single request.
+    * 
+    * @throws ServerError
+    * @throws ConnectionError
+    * @throws ServerError
+    * @throws ConnectionError
+    * @throws BadRequest
+    * @throws UnauthorizedRequest
+    * @throws NotFoundRequest
+    * @throws ConflictRequest
+    * @throws InvalidResponse
+    * 
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the Reading.
+    * @param API_device_UUID UUID of the associated BAScloud Device of the Reading.
+    * @param value Value of the reading
+    * @param timestamp The time of the reading of the entity value.
+    * @param errorHandler Optional callback function for handling errors in the request. Function gets occured exception and invalid data.
+    * 
+    * @return List of Reading entity objects representing the newly created BAScloud Readings.
+    */
+    std::vector<Reading> createReadings(std::string API_tenant_UUID, std::vector<ReadingSetData> readings,
+        std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
+
+   /**
+    * Updates a Reading entity in the BAScloud.
+    * 
+    * Given the associated Tenant and Device entity, a Reading is updated using the given Reading parameter.
+    * 
+    * @throws ServerError
+    * @throws ConnectionError
+    * @throws ServerError
+    * @throws ConnectionError
+    * @throws BadRequest
+    * @throws UnauthorizedRequest
+    * @throws NotFoundRequest
+    * @throws ConflictRequest
+    * @throws InvalidResponse
+    * 
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the Reading.
+    * @param API_reading_UUID UUID of the associated BAScloud Device of the Reading.
+    * @param value Optional update of the value of the reading
+    * @param timestamp Optional update of the time of the reading of the entity value.
+    * @param API_device_UUID Optional update of the device relationship of the reading.
+    * 
+    * @return Reading entity object representing the updated BAScloud Reading.
+    */
+	Reading updateReading(std::string API_tenant_UUID, std::string API_reading_UUID, double value=std::numeric_limits<double>::quiet_NaN(), std::time_t timestamp=-1, std::string API_device_UUID={});
+
    /**
     * Deletes an existing Reading in the BAScloud. [Admin] 
     * 
@@ -1251,7 +1412,7 @@ class EntityContext {
     * @return EntityCollection containing list of SetPoint entities matching the provided filters and paging information.
     */
 	EntityCollection<SetPoint> getSetPointsCollection(std::string API_tenant_UUID, PagingOption paging={}, std::time_t from=-1, std::time_t until=-1, 
-		std::time_t timestamp=-1, std::time_t currentTime=-1, std::string API_device_UUID={}, 
+		std::time_t timestamp=-1, std::time_t currentTime=-1, std::string API_device_UUID={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1, 
         std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
 	
    /**
@@ -1277,6 +1438,52 @@ class EntityContext {
     * @return SetPoint entity object representing the newly created BAScloud SetPoint.
     */
 	SetPoint createSetPoint(std::string API_tenant_UUID, std::string API_device_UUID, double value, std::time_t timestamp);
+
+   /**
+    * Update a SetPoint entity in the BAScloud.
+    * 
+    * Given the associated Tenant and Device entity, a SetPoint is updated using the given SetPoint parameter.
+    * 
+    * @throws ServerError
+    * @throws ConnectionError
+    * @throws ServerError
+    * @throws ConnectionError
+    * @throws BadRequest
+    * @throws UnauthorizedRequest
+    * @throws NotFoundRequest
+    * @throws ConflictRequest
+    * @throws InvalidResponse
+    * 
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the SetPoint.
+    * @param API_setpoint_UUID UUID of the associated BAScloud Device of the SetPoint.
+    * @param value Optional update of the value of the SetPoint
+    * @param timestamp Optional update of the time of the SetPoint of the entity value.
+    * @param API_device_UUID Optional update of the device relationship of the SetPoint.
+    * 
+    * @return SetPoint entity object representing the updated BAScloud SetPoint.
+    */
+	SetPoint updateSetPoint(std::string API_tenant_UUID, std::string API_setpoint_UUID, double value=std::numeric_limits<double>::quiet_NaN(), std::time_t timestamp=-1, std::string API_device_UUID={});
+
+   /**
+    * Deletes an existing SetPoint in the BAScloud. [Admin] 
+    * 
+    * The request deletes a SetPoint entity in the BAScloud based on the given SetPoint UUID.
+    * This operation needs administration authority. 
+    * 
+    * @throws ServerError
+    * @throws ConnectionError
+    * @throws ServerError
+    * @throws ConnectionError
+    * @throws BadRequest
+    * @throws UnauthorizedRequest
+    * @throws NotFoundRequest
+    * @throws ConflictRequest
+    * @throws InvalidResponse
+    * 
+    * @param API_tenant_UUID UUID of the associated BAScloud Tenant of the SetPoint.
+    * @param API_setpoint_UUID UUID of the existing BAScloud SetPoint that is supposed to be deleted.
+    */
+	void deleteSetPoint(std::string API_tenant_UUID, std::string API_setpoint_UUID);
 
 };
 

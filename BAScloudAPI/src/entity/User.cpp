@@ -10,11 +10,6 @@ User::User(std::string API_UUID, std::string email, std::time_t createdAt, std::
 
 }
 
-// User::User(bool incomplete, std::string status/*={}*/, std::exception exception/*={}*/) : 
-//     Entity("", nullptr), EntityDateMixin(-1, -1), EntityIncompleteMixin(true, status, exception), email("") {
-    
-// }
-
 std::string User::getEmail() {
     return email;
 }
@@ -31,6 +26,9 @@ Tenant User::getAssociatedTenant() {
     return context->getAssociatedTenant(getUUID());
 }
 
+PermissionData User::getPermissions() {
+    return context->getUserPermissions(getUUID());
+}
 
 User User::createUser(std::string email, std::string password, EntityContext* context) {
     return context->createNewUser(email, password);
@@ -40,15 +38,15 @@ User getUser(std::string API_UUID, EntityContext* context) {
     return context->getUser(API_UUID);
 }
 
-EntityCollection<User> getUsers(EntityContext* context, PagingOption paging/*={}*/, std::string email/*={}*/) {
-    return context->getUsersCollection(email);
+EntityCollection<User> getUsers(EntityContext* context, PagingOption paging/*={}*/, std::string email/*={}*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/) {
+    return context->getUsersCollection(paging, email, createdFrom, createdUntil);
 }
 
 void deleteUser(std::string API_UUID, EntityContext* context) {
     context->deleteUser(API_UUID);
 }
 
-User updateUser(std::string API_UUID, EntityContext* context, std::string email/*={}*/) {
+User updateUser(std::string API_UUID, EntityContext* context, std::string email/*={}*/, std::string API_tenant_UUID/*={}*/, std::string role/*={}*/) {
     return context->updateUser(API_UUID, email);
 }
 

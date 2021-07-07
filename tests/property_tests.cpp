@@ -32,7 +32,7 @@ TEST(BasicTests, PropertyCollectionTest) {
 
     std::cout << "\tRequesting all properties..." << std::endl;
 
-    EntityCollection<Property> props = BCAPI.getPropertiesCollection(BASCLOUD_TEST_TENANT_UUID, {}, {}, {}, {}, {}, {}, [](std::exception& e, json& j) {
+    EntityCollection<Property> props = BCAPI.getPropertiesCollection(BASCLOUD_TEST_TENANT_UUID, {}, {}, {}, {}, {}, {}, {}, {}, -1, -1, [](std::exception& e, json& j) {
             throw e;
         });
     std::cout << "\t\tOK." << std::endl;
@@ -65,32 +65,33 @@ TEST(BasicTests, SinglePropertyTest) {
     EXPECT_TRUE(property.getLastUpdatedDate() > 0);
 }
 
-TEST(BasicTests, AssociatedConnectorTest) {
+// Deprecated
+// TEST(BasicTests, AssociatedConnectorTest) {
 
-    std::cout << "\tRequesting associated connectors of the property..." << std::endl;
+//     std::cout << "\tRequesting associated connectors of the property..." << std::endl;
 
-    EntityCollection<Connector> prop_connectors = BCAPI.getAssociatedConnectors(BASCLOUD_TEST_TENANT_UUID, BASCLOUD_TEST_PROPERTY_UUID, {}, [](std::exception& e, json& j) {
-            throw e;
-        });
-    std::cout << "\t\tOK." << std::endl;
+//     EntityCollection<Connector> prop_connectors = BCAPI.getAssociatedConnectors(BASCLOUD_TEST_TENANT_UUID, BASCLOUD_TEST_PROPERTY_UUID, {}, [](std::exception& e, json& j) {
+//             throw e;
+//         });
+//     std::cout << "\t\tOK." << std::endl;
 
-    std::cout << "\tFound property connectors: " << prop_connectors.first.size() << std::endl;
+//     std::cout << "\tFound property connectors: " << prop_connectors.first.size() << std::endl;
 
-    EXPECT_TRUE(prop_connectors.first.size() >= 1);
-}
+//     EXPECT_TRUE(prop_connectors.first.size() >= 1);
+// }
 
 TEST(BasicTests, CreateUpdateAndDeletePropertyTest) {
 
     std::cout << "\tCreating new property..." << std::endl;
 
-    Property new_property = BCAPI.createProperty(BASCLOUD_TEST_TENANT_UUID, "TestProperty", "Street", "12345", "City", "Deutschland");
+    Property new_property = BCAPI.createProperty(BASCLOUD_TEST_TENANT_UUID, "TestProperty", "AKS1000", "L-1000", "Street", "64401", "City", "Deutschland");
     std::cout << "\t\tOK." << std::endl;
 
     std::string new_uuid = new_property.getUUID();
 
     EXPECT_EQ(new_property.getName(), "TestProperty");
     EXPECT_EQ(new_property.getStreet(), "Street");
-    EXPECT_EQ(new_property.getPostalCode(), "12345");
+    EXPECT_EQ(new_property.getPostalCode(), "64401");
     EXPECT_EQ(new_property.getCity(), "City");
     EXPECT_EQ(new_property.getCountry(), "Deutschland");
     EXPECT_TRUE(new_property.getCreatedDate() > 0);

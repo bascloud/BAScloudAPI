@@ -23,9 +23,8 @@ For accessing the raw response data of the REST API endpoints, the class BASClou
 
 ## Library Documentation
 
-See [bascloud.github.io/BAScloudAPI](https://bascloud.github.io/BAScloudAPI/) for the C/C++ library code documentation.
+See [here](https://bascloud.github.io/BASCloudAPI/) for the C/C++ library code documentation.
 
-The library documenation for the Python bindings are available under [bascloud.github.io/BAScloudAPI/pythondocs](https://bascloud.github.io/BAScloudAPI/pythondocs).
 
 
 ## API Documentation
@@ -161,7 +160,7 @@ try {
 
 - C/C++ compiler (CLANG/GCC/MSVC)
 
-- CMake >= 3.11
+- CMake >= 2.11
 
 - (Linux/macOS) OpenSSL Library (libssl-dev, openssl-devel, openssl)
 
@@ -225,20 +224,15 @@ Coming soon.
 
 ## Python
 
-The code for the Python binding of the BAScloudAPI library is available under pyBAScloudAPI.
+The code for the Python binding of the BASCloudAPI library is available under pyBAScloudAPI.
 
-Pre-build packages for different platforms are provided under [releases](https://github.com/bascloud/BAScloudAPI/releases).
+Pre-build packages for different platforms are provided under [releases](https://github.com/bascloud/BASCloudAPI/releases).
 
 ### Installation
 
-The pyBAScloud Python package is available on PyPi and can be installed through pip:
+Using the pre-build packages simply execute:
 
-`python -m pip install pyBAScloudAPI`
-
-**Note**: You should update pip to the latest version to ensure the correct PyPi package is downloaded.
-
-`python -m pip install -U pip`
-
+`python -m pip install pyBAScloudAPI-*.whl`
 
 ### Usage
 
@@ -251,10 +245,6 @@ BCAPI.authenticateWithUserLogin("user_email", "user_password")
 
 For complete examples see [pyBAScloudAPI/examples](pyBAScloudAPI/examples) and 
 [pyBAScloudAPI/tests](pyBAScloudAPI/tests).
-
-### Documentation
-
-The library documenation for the Python bindings are available under [bascloud.github.io/BAScloudAPI/pythondocs](https://bascloud.github.io/BAScloudAPI/pythondocs).
 
 ### Building
 

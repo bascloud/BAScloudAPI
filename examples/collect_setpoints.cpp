@@ -65,6 +65,8 @@ int main (int argc, char *argv[]) {
     std::time_t timestamp_filter = -1;
     std::time_t currenttime_filter = -1;
     std::string deviceUUID_filter = {};
+    std::time_t createdFrom_filter = -1;
+    std::time_t createdUntil_filter = -1;
 
     /**
      * For requesting a collection of BAScloud entities, pagination can be used for large collections.
@@ -90,8 +92,8 @@ int main (int argc, char *argv[]) {
          * 
          * The function is given the exception which was thrown and the json data which caused the error.
          */
-        EntityCollection<SetPoint> setpoints = BCAPI.getSetPointsCollection(tenantUUID, paging, from_filter, until_filter, timestamp_filter, currenttime_filter, 
-            deviceUUID_filter, [](std::exception& e, json& j) {
+        EntityCollection<SetPoint> setpoints = BCAPI.getSetPointsCollection(tenantUUID, paging, from_filter, until_filter, timestamp_filter, currenttime_filter, deviceUUID_filter, createdFrom_filter, createdUntil_filter,
+            [](std::exception& e, json& j) {
                 throw e;
             });
         std::cout << "\t\tOK." << std::endl;

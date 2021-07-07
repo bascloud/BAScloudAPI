@@ -41,7 +41,7 @@ set(BUILD_TESTING OFF CACHE INTERNAL "" FORCE)
 set(CURL_DISABLE_TESTS ON)
 set(CPR_BUILD_TESTS OFF)
 set(CPR_BUILD_TESTS_SSL OFF)
-
+set(CURLOPT_ACCEPT_ENCODING ON) # to support compression
 
 # Build options
 option(BASCLOUDAPI_BUILD_TESTS "Build library tests" ON)
@@ -107,28 +107,29 @@ if(BASCLOUDAPI_BUILD_TESTS)
 endif()
 
 
+if(BASCLOUDAPI_BUILD_DOC)
+  # check if Doxygen is installed
+  find_package(Doxygen)
+  if(DOXYGEN_FOUND)
+      # set input and output files
+      set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in)
+      set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
 
-# check if Doxygen is installed
-find_package(Doxygen)
-if(DOXYGEN_FOUND)
-    # set input and output files
-    set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in)
-    set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
+      # request to configure the file
+      configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+      message("Doxygen build started")
 
-    # request to configure the file
-    configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
-    message("Doxygen build started")
+      # note the option ALL which allows to build the docs together with the application
+      add_custom_target(docs
+          COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+          WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+          COMMENT "Generating API documentation with Doxygen"
+          VERBATIM )
 
-    # note the option ALL which allows to build the docs together with the application
-    add_custom_target(docs
-        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        COMMENT "Generating API documentation with Doxygen"
-        VERBATIM )
-
-    install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/docs_doxygen/ DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/docs)
-else()
-  message("Doxygen need to be installed to generate the doxygen documentation. Documentation will not be generated.")
+      install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/docs_doxygen/ DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/docs)
+  else()
+    message("Doxygen need to be installed to generate the doxygen documentation. Documentation will not be generated.")
+  endif()
 endif()
 
 if(NOT CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
