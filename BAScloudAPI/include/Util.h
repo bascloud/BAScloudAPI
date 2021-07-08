@@ -5,6 +5,7 @@
 #include <map>
 #include <chrono>
 #include <iomanip>
+#include <sstream>
 
 namespace BAScloud {
 

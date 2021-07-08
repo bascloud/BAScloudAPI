@@ -362,7 +362,7 @@ PermissionData EntityContext::getUserPermissions(std::string API_user_UUID) {
     if(respond["data"]["type"] == "permissions") {
         try {
             PermissionData perm;
-            perm.role = respond["data"]["attributes"]["role"];
+            perm.role = respond["data"]["attributes"].value("role", "");
 
             for(auto it: respond["data"]["attributes"]["resources"].items()) {
                 std::cout << it.key() << " | " << it.value() << "\n";
@@ -639,11 +639,11 @@ EntityCollection<Property> EntityContext::getPropertiesCollection(std::string AP
                 // aksId and identifier may be null in response
                 std::string aksId = "";
                 if(!json_prop["data"]["attributes"]["aksId"].is_null())
-                    aksId = json_prop["data"]["attributes"]["aksId"];
+                    aksId = json_prop["data"]["attributes"].value("aksId", "");
                 
                 std::string identifier = "";
                 if(!json_prop["data"]["attributes"]["identifier"].is_null())
-                    identifier = json_prop["data"]["attributes"]["identifier"];
+                    identifier = json_prop["data"]["attributes"].value("identifier", "");
 
                 Property property(json_prop["id"], API_tenant_UUID, json_prop["attributes"]["name"], aksId, identifier, json_prop["attributes"]["street"], json_prop["attributes"]["postalCode"], json_prop["attributes"]["city"], json_prop["attributes"]["country"], Util::parseDateTimeString(json_prop["meta"]["createdAt"]), Util::parseDateTimeString(json_prop["meta"]["updatedAt"]), this);
 
@@ -1031,7 +1031,7 @@ PermissionData EntityContext::getConnectorPermissions(std::string API_tenant_UUI
     if(respond["data"]["type"] == "permissions") {
         try {
             PermissionData perm;
-            perm.role = respond["data"]["attributes"]["role"];
+            perm.role = respond["data"]["attributes"].value("role", "");
 
             for(auto it: respond["data"]["attributes"]["resources"].items()) {
                 std::cout << it.key() << " | " << it.value() << "\n";
