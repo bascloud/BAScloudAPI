@@ -57,6 +57,7 @@ class CMakeBuild(build_ext):
             "-DBASCLOUDAPI_BUILD_DOC=OFF",
             "-DBASCLOUDAPI_BUILD_CODE_COVERAGE=OFF",
             "-DBASCLOUDAPI_BUILD_EXAMPLES=OFF",
+            # "-DPy_DEBUG=ON",
             #"--log-level=VERBOSE",
         ]
 
@@ -117,7 +118,7 @@ class CMakeBuild(build_ext):
 # logic and declaration, and simpler if you include description/version in a file.
 setup(
     name="pyBAScloudAPI",
-    version="0.3.0",
+    version="0.3.1",
     author="ProFM Facility & Project Management GmbH",
     author_email="info@profm-gmbh.de",
     description="A Python package providing binding for the BAScloud API endpoints.",

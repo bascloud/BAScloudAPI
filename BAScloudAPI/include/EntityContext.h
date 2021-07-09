@@ -268,7 +268,7 @@ class EntityContext {
     * 
     * @return EntityCollection containing list of User entities and empty paging information (See note).
     */
-	EntityCollection<User> getUsersCollection(PagingOption paging={}, std::string email={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1, std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
+	EntityCollection<User> getUsersCollection(PagingOption paging={}, std::string email={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1, std::function<void (const std::string&, const std::string&)> errorHandler=[](const std::string& e, const std::string& j){});
 
    /**
     * Get a the associated Tenant entity of the User.
@@ -470,7 +470,7 @@ class EntityContext {
     * 
     * @return EntityCollection containing list of Tenant entities and empty paging information (See note).
     */
-	EntityCollection<Tenant> getTenantsCollection(PagingOption paging={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1, std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
+	EntityCollection<Tenant> getTenantsCollection(PagingOption paging={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1, std::function<void (const std::string&, const std::string&)> errorHandler=[](const std::string& e, const std::string& j){});
 
   /**
     * Get a collection of associated User entities of the Tenant.
@@ -491,7 +491,7 @@ class EntityContext {
     * 
     * @return EntityCollection containing list of User entities and paging information.
     */
-	EntityCollection<User> getAssociatedUsers(std::string API_tenant_UUID, PagingOption paging={}, std::string email={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1, std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
+	EntityCollection<User> getAssociatedUsers(std::string API_tenant_UUID, PagingOption paging={}, std::string email={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1, std::function<void (const std::string&, const std::string&)> errorHandler=[](const std::string& e, const std::string& j){});
 
    /**
     * Creates a new Tenant entity in the BAScloud. [Admin] 
@@ -651,7 +651,7 @@ class EntityContext {
     * @return EntityCollection containing list of Property entities matching the provided filters and paging information.
     */
    	EntityCollection<Property> getPropertiesCollection(std::string API_tenant_UUID, PagingOption paging={}, std::string name={}, std::string aksID={}, std::string identifier={}, std::string street={}, std::string postalCode={}, std::string city={}, std::string country={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1, 
-        std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
+        std::function<void (const std::string&, const std::string&)> errorHandler=[](const std::string& e, const std::string& j){});
 	
    /**
     * [Deprecated] Get a collection of associated Connector entities of a Property.
@@ -674,7 +674,7 @@ class EntityContext {
     * @return EntityCollection containing a list of Connector entities associated with the Property and paging information.
     */
 	EntityCollection<Connector> getAssociatedConnectors(std::string API_tenant_UUID, std::string API_property_UUID, PagingOption paging={}, 
-        std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
+        std::function<void (const std::string&, const std::string&)> errorHandler=[](const std::string& e, const std::string& j){});
 	
    /**
     * [Deprecated] Get a collection of associated Connector entities of a Property.
@@ -697,7 +697,7 @@ class EntityContext {
     * @return EntityCollection containing a list of Connector entities associated with the Property and paging information.
     */
     EntityCollection<Device> getAssociatedPropertyDevices(std::string API_tenant_UUID, std::string API_property_UUID, PagingOption paging={}, std::string aksID={}, std::string localAksID={}, std::string API_connector_UUID={}, std::string description={}, std::string unit={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1, std::time_t deletedUntil=-1,
-        std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
+        std::function<void (const std::string&, const std::string&)> errorHandler=[](const std::string& e, const std::string& j){});
 	
    /**
     * Create a new Property entity in the BAScloud.
@@ -819,7 +819,7 @@ class EntityContext {
     * @return EntityCollection containing list of Connector entities matching the provided filters and paging information.
     */
 	EntityCollection<Connector> getConnectorsCollection(std::string API_tenant_UUID, PagingOption paging={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1, 
-        std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
+        std::function<void (const std::string&, const std::string&)> errorHandler=[](const std::string& e, const std::string& j){});
 	
    /**
     * [Deprecated] Get the associated Property entity of the Connector.
@@ -866,7 +866,7 @@ class EntityContext {
     * @return EntityCollection containing list of Device entities associated with the Connector.
     */
 	EntityCollection<Device> getAssociatedConnectorDevices(std::string API_tenant_UUID, std::string API_connector_UUID, PagingOption paging={}, std::string aksID={}, std::string localAksID={}, std::string description={}, std::string unit={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1, std::time_t deletedUntil=-1,
-        std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
+        std::function<void (const std::string&, const std::string&)> errorHandler=[](const std::string& e, const std::string& j){});
 	
    /**
     * Create a new Connector entity in the BAScloud.
@@ -1027,7 +1027,7 @@ class EntityContext {
     * @return EntityCollection containing list of Device entities matching the provided filters and paging information.
     */
 	EntityCollection<Device> getDevicesCollection(std::string API_tenant_UUID, PagingOption paging={}, std::string aksID={}, std::string localAksID={}, std::string API_connector_UUID={}, std::string API_property_UUID={}, std::string description={}, std::string unit={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1, std::time_t deletedUntil=-1,
-        std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
+        std::function<void (const std::string&, const std::string&)> errorHandler=[](const std::string& e, const std::string& j){});
 	
    /**
     * Get the associated Connector entity of the Device.
@@ -1072,7 +1072,7 @@ class EntityContext {
     * @return EntityCollection containing list of Reading entities and paging information.
     */
 	EntityCollection<Reading> getAssociatedReadings(std::string API_tenant_UUID, std::string API_device_UUID, PagingOption paging={}, std::time_t from=-1, std::time_t until=-1, std::time_t timestamp=-1, double value=std::numeric_limits<double>::quiet_NaN(), std::time_t createdFrom=-1, std::time_t createdUntil=-1, 
-        std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
+        std::function<void (const std::string&, const std::string&)> errorHandler=[](const std::string& e, const std::string& j){});
 	
    /**
     * Get a collection of associated Setpoints entities of the Device.
@@ -1095,7 +1095,7 @@ class EntityContext {
     * @return EntityCollection containing list of SetPoint entities and paging information.
     */
 	EntityCollection<SetPoint> getAssociatedSetPoints(std::string API_tenant_UUID, std::string API_device_UUID, PagingOption paging={}, std::time_t from=-1, std::time_t until=-1, std::time_t timestamp=-1, std::time_t currentTime=-1, std::time_t createdFrom=-1, std::time_t createdUntil=-1,
-        std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
+        std::function<void (const std::string&, const std::string&)> errorHandler=[](const std::string& e, const std::string& j){});
 	
    /**
     * Create a new Device entity in the BAScloud.
@@ -1222,7 +1222,7 @@ class EntityContext {
     */
 	EntityCollection<Reading> getReadingsCollection(std::string API_tenant_UUID, PagingOption paging={}, std::time_t from=-1, std::time_t until=-1, 
 		std::time_t timestamp=-1, double value=std::numeric_limits<double>::quiet_NaN(), std::string API_device_UUID={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1,
-        std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
+        std::function<void (const std::string&, const std::string&)> errorHandler=[](const std::string& e, const std::string& j){});
 	
    /**
     * Get the associated Device entity of the Reading.
@@ -1312,7 +1312,7 @@ class EntityContext {
     * @return List of Reading entity objects representing the newly created BAScloud Readings.
     */
     std::vector<Reading> createReadings(std::string API_tenant_UUID, std::vector<ReadingSetData> readings,
-        std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
+        std::function<void (const std::string&, const std::string&, int)> errorHandler=[](const std::string& e, const std::string& j, int i){});
 
    /**
     * Updates a Reading entity in the BAScloud.
@@ -1413,7 +1413,7 @@ class EntityContext {
     */
 	EntityCollection<SetPoint> getSetPointsCollection(std::string API_tenant_UUID, PagingOption paging={}, std::time_t from=-1, std::time_t until=-1, 
 		std::time_t timestamp=-1, std::time_t currentTime=-1, std::string API_device_UUID={}, std::time_t createdFrom=-1, std::time_t createdUntil=-1, 
-        std::function<void (std::exception&, json&)> errorHandler=[](std::exception& e, json& j){});
+        std::function<void (const std::string&, const std::string&)> errorHandler=[](const std::string& e, const std::string& j){});
 	
    /**
     * Create a new SetPoint entity in the BAScloud.

@@ -902,8 +902,11 @@ cpr::Response APIContext::requestCreateDevice(std::string API_tenant_UUID, std::
         {"data", {
             {"type", "devices"},{"attributes", {{"aksId", aksID},{"description", description},{"unit", unit}}},
             {"relationships", 
-                {{"connector",{{"data", {{"type", "connectors"},{"id", API_connector_UUID}}}}}},
-                {{"property",{{"data", {{"type", "properties"},{"id", API_property_UUID}}}}}}}
+                {
+                    {"connector",{{"data", {{"type", "connectors"},{"id", API_connector_UUID}}}}},
+                    {"property",{{"data", {{"type", "properties"},{"id", API_property_UUID}}}}}
+                }
+            }
         }
         }});
 

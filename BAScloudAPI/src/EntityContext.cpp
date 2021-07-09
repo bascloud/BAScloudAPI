@@ -285,7 +285,7 @@ User EntityContext::getUser(std::string API_user_UUID) {
 }
 
 EntityCollection<User> EntityContext::getUsersCollection(PagingOption paging/*={}*/, std::string email/*={}*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/, 
-    std::function<void (std::exception&, json&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
+    std::function<void (const std::string&, const std::string&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
 
     checkAndRenewAuthentication();
 
@@ -318,7 +318,7 @@ EntityCollection<User> EntityContext::getUsersCollection(PagingOption paging/*={
 
                 users.push_back(user);
             } catch (std::exception& e) {
-                errorHandler(e, json_user);
+                errorHandler(std::string(e.what()), json_user.dump());
             }
         }
     }
@@ -408,7 +408,7 @@ Tenant EntityContext::getTenant(std::string API_tenant_UUID) {
     }
 }
 
-EntityCollection<Tenant> EntityContext::getTenantsCollection(PagingOption paging/*={}*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/, std::function<void (std::exception&, json&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
+EntityCollection<Tenant> EntityContext::getTenantsCollection(PagingOption paging/*={}*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/, std::function<void (const std::string&, const std::string&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
 
     checkAndRenewAuthentication();
 
@@ -424,7 +424,7 @@ EntityCollection<Tenant> EntityContext::getTenantsCollection(PagingOption paging
 
                 tenants.push_back(tenant);
             } catch (std::exception& e) {
-                errorHandler(e, json_tenant);
+                errorHandler(std::string(e.what()), json_tenant.dump());
             }
         } 
     }
@@ -432,7 +432,7 @@ EntityCollection<Tenant> EntityContext::getTenantsCollection(PagingOption paging
     return std::make_pair(tenants, PagingResult{});
 }
 
-EntityCollection<User> EntityContext::getAssociatedUsers(std::string API_tenant_UUID, PagingOption paging/*={}*/, std::string email/*={}*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/, std::function<void (std::exception&, json&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
+EntityCollection<User> EntityContext::getAssociatedUsers(std::string API_tenant_UUID, PagingOption paging/*={}*/, std::string email/*={}*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/, std::function<void (const std::string&, const std::string&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
 
     validateUUID(API_tenant_UUID);
     checkAndRenewAuthentication();
@@ -466,7 +466,7 @@ EntityCollection<User> EntityContext::getAssociatedUsers(std::string API_tenant_
 
                 users.push_back(user);
             } catch (std::exception& e) {
-                errorHandler(e, json_user);
+                errorHandler(std::string(e.what()), json_user.dump());
             }
         } 
     }
@@ -606,7 +606,7 @@ Property EntityContext::getProperty(std::string API_tenant_UUID, std::string API
 }
 
 EntityCollection<Property> EntityContext::getPropertiesCollection(std::string API_tenant_UUID, PagingOption paging/*={}*/, std::string name/*={}*/, std::string aksID/*={}*/, std::string identifier/*={}*/, std::string street/*={}*/, std::string postalCode/*={}*/, std::string city/*={}*/, std::string country/*={}*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/,
-     std::function<void (std::exception&, json&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
+     std::function<void (const std::string&, const std::string&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
 
     validateUUID(API_tenant_UUID);
     checkAndRenewAuthentication();
@@ -649,7 +649,7 @@ EntityCollection<Property> EntityContext::getPropertiesCollection(std::string AP
 
                 properties.push_back(property);
             } catch (std::exception& e) {
-                errorHandler(e, json_prop);
+                errorHandler(std::string(e.what()), json_prop.dump());
             }
         } 
     }
@@ -658,7 +658,7 @@ EntityCollection<Property> EntityContext::getPropertiesCollection(std::string AP
 }
 
 EntityCollection<Connector> EntityContext::getAssociatedConnectors(std::string API_tenant_UUID, std::string API_property_UUID, PagingOption paging/*={}*/, 
-    std::function<void (std::exception&, json&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
+    std::function<void (const std::string&, const std::string&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
 
     validateUUID(API_tenant_UUID);
     validateUUID(API_property_UUID);
@@ -693,7 +693,7 @@ EntityCollection<Connector> EntityContext::getAssociatedConnectors(std::string A
 
                 connectors.push_back(connector);
             } catch (std::exception& e) {
-                errorHandler(e, json_conn);
+                errorHandler(std::string(e.what()), json_conn.dump());
             }
         } 
     }
@@ -702,7 +702,7 @@ EntityCollection<Connector> EntityContext::getAssociatedConnectors(std::string A
 }
 
 EntityCollection<Device> EntityContext::getAssociatedPropertyDevices(std::string API_tenant_UUID, std::string API_property_UUID, PagingOption paging/*={}*/, std::string aksID/*={}*/, std::string localAksID/*={}*/, std::string API_connector_UUID/*={}*/, std::string description/*={}*/, std::string unit/*={}*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/, std::time_t deletedUntil/*=-1*/,
-    std::function<void (std::exception&, json&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
+    std::function<void (const std::string&, const std::string&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
     
     validateUUID(API_tenant_UUID);
     checkAndRenewAuthentication();
@@ -736,7 +736,7 @@ EntityCollection<Device> EntityContext::getAssociatedPropertyDevices(std::string
 
                 devices.push_back(device);
             } catch (std::exception& e) {
-                errorHandler(e, json_dev);
+                errorHandler(std::string(e.what()), json_dev.dump());
             }
         } 
     }
@@ -843,7 +843,7 @@ Connector EntityContext::getConnector(std::string API_tenant_UUID, std::string A
 }
 
 EntityCollection<Connector> EntityContext::getConnectorsCollection(std::string API_tenant_UUID, PagingOption paging/*={}*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/, 
-    std::function<void (std::exception&, json&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
+    std::function<void (const std::string&, const std::string&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
 
     validateUUID(API_tenant_UUID);
     checkAndRenewAuthentication();
@@ -877,7 +877,7 @@ EntityCollection<Connector> EntityContext::getConnectorsCollection(std::string A
 
                 connectors.push_back(conn);
             } catch (std::exception& e) {
-                errorHandler(e, json_conn);
+                errorHandler(std::string(e.what()), json_conn.dump());
             }
         } 
     }
@@ -911,7 +911,7 @@ Property EntityContext::getAssociatedProperty(std::string API_tenant_UUID, std::
 }
 
 EntityCollection<Device> EntityContext::getAssociatedConnectorDevices(std::string API_tenant_UUID, std::string API_connector_UUID, PagingOption paging/*={}*/, std::string aksID/*={}*/, std::string localAksID/*={}*/, std::string description/*={}*/, std::string unit/*={}*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/, std::time_t deletedUntil/*=-1*/,
-    std::function<void (std::exception&, json&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
+    std::function<void (const std::string&, const std::string&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
 
     validateUUID(API_tenant_UUID);
     validateUUID(API_connector_UUID);
@@ -946,7 +946,7 @@ EntityCollection<Device> EntityContext::getAssociatedConnectorDevices(std::strin
 
                 devices.push_back(device);
             } catch (std::exception& e) {
-                errorHandler(e, json_dev);
+                errorHandler(std::string(e.what()), json_dev.dump());
             }
         } 
     }
@@ -1102,7 +1102,7 @@ Device EntityContext::getDevice(std::string API_tenant_UUID, std::string API_dev
 }
 
 EntityCollection<Device> EntityContext::getDevicesCollection(std::string API_tenant_UUID, PagingOption paging/*={}*/, std::string aksID/*={}*/, std::string localAksID/*={}*/, std::string API_connector_UUID/*={}*/, std::string API_property_UUID/*={}*/, std::string description/*={}*/, std::string unit/*={}*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/, std::time_t deletedUntil/*=-1*/,
-    std::function<void (std::exception&, json&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
+    std::function<void (const std::string&, const std::string&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
     
     validateUUID(API_tenant_UUID);
     checkAndRenewAuthentication();
@@ -1136,7 +1136,7 @@ EntityCollection<Device> EntityContext::getDevicesCollection(std::string API_ten
 
                 devices.push_back(device);
             } catch (std::exception& e) {
-                errorHandler(e, json_dev);
+                errorHandler(std::string(e.what()), json_dev.dump());
             }
         } 
     }
@@ -1171,7 +1171,7 @@ Connector EntityContext::getAssociatedConnector(std::string API_tenant_UUID, std
 }
 
 EntityCollection<Reading> EntityContext::getAssociatedReadings(std::string API_tenant_UUID, std::string API_device_UUID, PagingOption paging/*={}*/, std::time_t from/*=-1*/, std::time_t until/*=-1*/, std::time_t timestamp/*=-1*/, double value/*=std::numeric_limits<double>::quiet_NaN()*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/, 
-    std::function<void (std::exception&, json&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
+    std::function<void (const std::string&, const std::string&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
     
     validateUUID(API_tenant_UUID);
     validateUUID(API_device_UUID);
@@ -1206,7 +1206,7 @@ EntityCollection<Reading> EntityContext::getAssociatedReadings(std::string API_t
 
                 readings.push_back(reading);
             } catch (std::exception& e) {
-                errorHandler(e, json_read);
+                errorHandler(std::string(e.what()), json_read.dump());
             }
         } 
     }
@@ -1215,7 +1215,7 @@ EntityCollection<Reading> EntityContext::getAssociatedReadings(std::string API_t
 }
 
 EntityCollection<SetPoint> EntityContext::getAssociatedSetPoints(std::string API_tenant_UUID, std::string API_device_UUID, PagingOption paging/*={}*/, std::time_t from/*=-1*/, std::time_t until/*=-1*/, std::time_t timestamp/*=-1*/, std::time_t currentTime/*=-1*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/,
-        std::function<void (std::exception&, json&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
+        std::function<void (const std::string&, const std::string&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
     
     validateUUID(API_tenant_UUID);
     validateUUID(API_device_UUID);
@@ -1250,7 +1250,7 @@ EntityCollection<SetPoint> EntityContext::getAssociatedSetPoints(std::string API
 
                 setpoints.push_back(setpoint);
             } catch (std::exception& e) {
-                errorHandler(e, json_read);
+                errorHandler(std::string(e.what()), json_read.dump());
             }
         } 
     }
@@ -1344,7 +1344,7 @@ Reading EntityContext::getReading(std::string API_tenant_UUID, std::string API_r
 
 EntityCollection<Reading> EntityContext::getReadingsCollection(std::string API_tenant_UUID, PagingOption paging/*={}*/, std::time_t from/*=-1*/, std::time_t until/*=-1*/, 
     std::time_t timestamp/*=-1*/, double value/*=std::numeric_limits<double>::quiet_NaN()*/, std::string API_device_UUID/*={}*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/,
-    std::function<void (std::exception&, json&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
+    std::function<void (const std::string&, const std::string&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
                 
     validateUUID(API_tenant_UUID);
     checkAndRenewAuthentication();
@@ -1378,7 +1378,7 @@ EntityCollection<Reading> EntityContext::getReadingsCollection(std::string API_t
 
                 readings.push_back(read);
             } catch (std::exception& e) {
-                errorHandler(e, json_read);
+                errorHandler(std::string(e.what()), json_read.dump());
             }
         } 
     }
@@ -1462,7 +1462,7 @@ Reading EntityContext::createReading(std::string API_tenant_UUID, std::string AP
 }
 
 std::vector<Reading> EntityContext::createReadings(std::string API_tenant_UUID, std::vector<ReadingSetData> readings,
-    std::function<void (std::exception&, json&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
+    std::function<void (const std::string&, const std::string&, int)> errorHandler/*=[](std::exception& e, json& j, int i){}*/) {
 
     validateUUID(API_tenant_UUID);
     checkAndRenewAuthentication();
@@ -1472,16 +1472,19 @@ std::vector<Reading> EntityContext::createReadings(std::string API_tenant_UUID, 
     json respond = parseResponse(r);
 
     std::vector<Reading> createdReadings;
-    for(json json_read: respond["data"]) {
-        if(json_read["type"] == "readings") {
-            try {
+    for(int i=0; i<respond["data"].size(); i++) {
+        json json_read = respond["data"][i];
+        try {
+            if(json_read["type"] == "readings") {
                 Reading read(json_read["id"], API_tenant_UUID, json_read["attributes"]["value"].get<double>(), Util::parseDateTimeString(json_read["attributes"]["timestamp"]), Util::parseDateTimeString(json_read["meta"]["createdAt"]), Util::parseDateTimeString(json_read["meta"]["updatedAt"]), this);
 
                 createdReadings.push_back(read);
-            } catch (std::exception& e) {
-                errorHandler(e, json_read);
+            } else if(json_read["type"] == "errors") {
+                throw InvalidResponse("Reading creation error encountered.");
             }
-        } 
+        } catch (std::exception& e) {
+            errorHandler(std::string(std::string(e.what())), json_read.dump(), i);
+        }
     }
 
     return createdReadings;
@@ -1552,7 +1555,7 @@ SetPoint EntityContext::getSetPoint(std::string API_tenant_UUID, std::string API
 
 EntityCollection<SetPoint> EntityContext::getSetPointsCollection(std::string API_tenant_UUID, PagingOption paging/*={}*/, std::time_t from/*=-1*/, std::time_t until/*=-1*/, 
     std::time_t timestamp/*=-1*/, std::time_t currentTime/*=-1*/, std::string API_device_UUID/*={}*/, std::time_t createdFrom/*=-1*/, std::time_t createdUntil/*=-1*/,
-    std::function<void (std::exception&, json&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
+    std::function<void (const std::string&, const std::string&)> errorHandler/*=[](std::exception& e, json& j){}*/) {
                     
     validateUUID(API_tenant_UUID);
     checkAndRenewAuthentication();
@@ -1586,7 +1589,7 @@ EntityCollection<SetPoint> EntityContext::getSetPointsCollection(std::string API
 
                 setpoints.push_back(setpoint);
             } catch (std::exception& e) {
-                errorHandler(e, json_set);
+                errorHandler(std::string(e.what()), json_set.dump());
             }
         } 
     }

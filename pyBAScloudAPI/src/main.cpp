@@ -1,10 +1,13 @@
 #include <string>
+#include <vector>
+#include <exception>
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/complex.h>
 #include <pybind11/functional.h>
 #include <pybind11/chrono.h>
+#include <pybind11/stl_bind.h>
 
 #include "Paging.h"
 #include "Util.h"
@@ -60,6 +63,16 @@ PYBIND11_MODULE(pyBAScloudAPI, m) {
         UnauthorizedRequest
         InvalidResponse
     )pbdoc";
+
+
+    py::register_exception<ServerError>(m, "ServerError", PyExc_RuntimeError);
+    py::register_exception<ConnectionError>(m, "ConnectionError", PyExc_RuntimeError);
+    py::register_exception<NotFoundRequest>(m, "NotFoundRequest", PyExc_RuntimeError);
+    py::register_exception<BadRequest>(m, "BadRequest", PyExc_RuntimeError);
+    py::register_exception<ConflictRequest>(m, "ConflictRequest", PyExc_RuntimeError);
+    py::register_exception<UnauthorizedRequest>(m, "UnauthorizedRequest", PyExc_RuntimeError);
+    py::register_exception<InvalidResponse>(m, "InvalidResponse", PyExc_RuntimeError);
+
 
     py::class_<EntityDateMixin>(m, "EntityDateMixin")
         // Constructor is protected
@@ -130,6 +143,15 @@ PYBIND11_MODULE(pyBAScloudAPI, m) {
                 User entity class.
             )pbdoc", py::arg("UUID"), py::arg("email"), py::arg("createdAt"), py::arg("updateAt"), py::arg("context"))
         .def_property_readonly("email", &User::getEmail);
+
+
+    py::class_<ReadingSetData>(m, "ReadingSetData")
+        .def(py::init<>(), R"pbdoc(
+                ReadingSetData.
+            )pbdoc")
+        .def_readwrite("deviceUUID", &ReadingSetData::API_device_UUID)
+        .def_readwrite("value", &ReadingSetData::value)
+        .def_readwrite("timestamp", &ReadingSetData::timestamp);
 
 
     py::class_<PagingResult>(m, "PagingResult")
@@ -291,7 +313,7 @@ PYBIND11_MODULE(pyBAScloudAPI, m) {
             )pbdoc", py::arg("tenantUUID"), py::arg("deviceUUID"))
         .def("getDevicesCollection", &EntityContext::getDevicesCollection, R"pbdoc(
                 Request a collection of Device entities grouped under the given Tenant.
-            )pbdoc", py::arg("tenantUUID"), py::arg("paging")=PagingOption(), py::arg("aksID")="", py::arg("localAksID")="", py::arg("API_connector_UUID")="", py::arg("API_property_UUID")="", py::arg("description")="", py::arg("unit")="", 
+            )pbdoc", py::arg("tenantUUID"), py::arg("paging")=PagingOption(), py::arg("aksID")="", py::arg("localAksID")="", py::arg("connectorUUID")="", py::arg("propertyUUID")="", py::arg("description")="", py::arg("unit")="", 
             py::arg("createdFrom")=-1, py::arg("createdUntil")=-1, py::arg("deletedUntil")=-1, py::arg("errorHandler")=py::cpp_function([](std::exception& e, json& j){},py::arg("e"), py::arg("json")))
         .def("getAssociatedConnector", &EntityContext::getAssociatedConnector, R"pbdoc(
                 Get the associated Connector entity of the Device.
@@ -306,7 +328,7 @@ PYBIND11_MODULE(pyBAScloudAPI, m) {
 
         .def("createDevice", &EntityContext::createDevice, R"pbdoc(
                 Create a new Device entity in the BAScloud.
-            )pbdoc", py::arg("tenantUUID"), py::arg("connectorUUID"), py::arg("propertyUUID"), py::arg("aksID"), py::arg("description"), py::arg("unit"), py::arg("localAksID"))
+            )pbdoc", py::arg("tenantUUID"), py::arg("connectorUUID"), py::arg("propertyUUID"), py::arg("aksID"), py::arg("description"), py::arg("unit"), py::arg("localAksID")="")
         .def("deleteDevice", &EntityContext::deleteDevice, R"pbdoc(
                 Deletes an existing Device in the BAScloud.
             )pbdoc", py::arg("tenantUUID"), py::arg("deviceUUID"))
@@ -327,6 +349,10 @@ PYBIND11_MODULE(pyBAScloudAPI, m) {
         .def("createReading", &EntityContext::createReading, R"pbdoc(
                 Create a new Reading entity in the BAScloud.
             )pbdoc", py::arg("tenantUUID"), py::arg("deviceUUID"), py::arg("value"), py::arg("timestamp"))
+        .def("createReadings", &EntityContext::createReadings, R"pbdoc(
+                Create a new set of Reading entities in the BAScloud.
+                On each failed creation of a reading, the error handler is called with its index.
+            )pbdoc", py::arg("tenantUUID"), py::arg("readings"), py::arg("errorHandler")=py::cpp_function([](std::exception& e, json& j, int i){},py::arg("e"), py::arg("json"), py::arg("index")))
         .def("deleteReading", &EntityContext::deleteReading, R"pbdoc(
                 Deletes an existing Reading in the BAScloud. [Admin] 
             )pbdoc", py::arg("tenantUUID"), py::arg("readingUUID"))
@@ -574,14 +600,6 @@ PYBIND11_MODULE(pyBAScloudAPI, m) {
         .def_static("parseURLParameter", &Util::parseURLParameter, R"pbdoc(
                 Parses a URL and returns a dict of parameter key-value pairs. 
             )pbdoc", py::arg("url"));
-
-    py::register_exception<ServerError>(m, "ServerError", PyExc_RuntimeError);
-    py::register_exception<ConnectionError>(m, "ConnectionError", PyExc_RuntimeError);
-    py::register_exception<NotFoundRequest>(m, "NotFoundRequest", PyExc_RuntimeError);
-    py::register_exception<BadRequest>(m, "BadRequest", PyExc_RuntimeError);
-    py::register_exception<ConflictRequest>(m, "ConflictRequest", PyExc_RuntimeError);
-    py::register_exception<UnauthorizedRequest>(m, "UnauthorizedRequest", PyExc_RuntimeError);
-    py::register_exception<InvalidResponse>(m, "InvalidResponse", PyExc_RuntimeError);
 
     // py::class_<ServerError>(m, "ServerError")
     //     .def(py::init<const std::string&>(), R"pbdoc(
