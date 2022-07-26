@@ -164,7 +164,7 @@ jobs:
         name: artifact
         path: wheelhouse
 
-    - uses: pypa/gh-action-pypi-publish@v1.4.2
+    - uses: pypa/gh-action-pypi-publish@v1.5.1
       with:
         packages_dir: wheelhouse/
         user: __token__
