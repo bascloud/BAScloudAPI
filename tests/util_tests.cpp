@@ -27,12 +27,12 @@ TEST(BasicTests, ParseCurrentDateTimeTest) {
     std::cerr <<"CURRENT DATETIME: "<<currentDateTime<<std::endl;
 
     // "2020-03-09T13:09:41.640Z"
-    std::string currentDateTimeString = fmt::format("{:%FT%T.000Z}", fmt::localtime(currentDateTime));
+    std::string currentDateTimeString = fmt::format("{:%FT%T.000Z}", fmt::gmtime(currentDateTime));
 
     std::cerr <<"CURRENT DATETIME: "<<currentDateTimeString<<std::endl;
 
     std::time_t parsedDateTime = BAScloud::Util::parseDateTimeString(currentDateTimeString);
-    std::string parsedDateTimeString = fmt::format("{:%FT%T.000Z}", fmt::localtime(parsedDateTime));
+    std::string parsedDateTimeString = fmt::format("{:%FT%T.000Z}", fmt::gmtime(parsedDateTime));
 
     std::cerr <<"PARSED DATETIME: "<<parsedDateTime<<std::endl;
     std::cerr <<"PARSED DATETIME: "<<parsedDateTimeString<<std::endl;
@@ -48,7 +48,7 @@ TEST(BasicTests, ParseFixedDateTimeTest) {
     std::cerr <<"FIXED DATETIME: "<<fixedDateTimeString<<std::endl;
 
     std::time_t parsedDateTime = BAScloud::Util::parseDateTimeString(fixedDateTimeString);
-    std::string parsedDateTimeString = fmt::format("{:%FT%T.819Z}", fmt::localtime(parsedDateTime));
+    std::string parsedDateTimeString = fmt::format("{:%FT%T.819Z}", fmt::gmtime(parsedDateTime));
 
     std::cerr <<"PARSED DATETIME: "<<parsedDateTime<<std::endl;
     std::cerr <<"PARSED DATETIME: "<<parsedDateTimeString<<std::endl;

@@ -168,10 +168,10 @@ cpr::Response APIContext::requestUserCollection(std::string email/*={}*/, std::t
         params.Add({"email", email});
     }
     if(createdFrom >= 0) {
-        params.Add({"createdFrom", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdFrom))});
+        params.Add({"createdFrom", fmt::format("{:%FT%T.000Z}", fmt::gmtime(createdFrom))});
     }
     if(createdUntil >= 0) {
-        params.Add({"createdUntil", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdUntil))});
+        params.Add({"createdUntil", fmt::format("{:%FT%T.000Z}", fmt::gmtime(createdUntil))});
     }
     if(page_size>0) {
         params.Add({"page[size]", fmt::format("{}", page_size)});
@@ -224,10 +224,10 @@ cpr::Response APIContext::requestTenantCollection(std::time_t createdFrom/*=-1*/
     cpr::Parameters params = cpr::Parameters{};
 
     if(createdFrom >= 0) {
-        params.Add({"createdFrom", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdFrom))});
+        params.Add({"createdFrom", fmt::format("{:%FT%T.000Z}", fmt::gmtime(createdFrom))});
     }
     if(createdUntil >= 0) {
-        params.Add({"createdUntil", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdUntil))});
+        params.Add({"createdUntil", fmt::format("{:%FT%T.000Z}", fmt::gmtime(createdUntil))});
     }
 
     cpr::Response r = cpr::Get(cpr::Url(API_server_URL + API_TENANT_COLLECTION_PATH),
@@ -252,10 +252,10 @@ cpr::Response APIContext::requestTenantAssociatedUsers(std::string API_tenant_UU
         params.Add({"email", email});
     }
     if(createdFrom >= 0) {
-        params.Add({"createdFrom", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdFrom))});
+        params.Add({"createdFrom", fmt::format("{:%FT%T.000Z}", fmt::gmtime(createdFrom))});
     }
     if(createdUntil >= 0) {
-        params.Add({"createdUntil", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdUntil))});
+        params.Add({"createdUntil", fmt::format("{:%FT%T.000Z}", fmt::gmtime(createdUntil))});
     }
     if(page_size>0) {
         params.Add({"page[size]", fmt::format("{}", page_size)});
@@ -406,10 +406,10 @@ cpr::Response APIContext::requestPropertyCollection(std::string API_tenant_UUID,
         params.Add({"country", country});
     }
     if(createdFrom >= 0) {
-        params.Add({"createdFrom", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdFrom))});
+        params.Add({"createdFrom", fmt::format("{:%FT%T.000Z}", fmt::gmtime(createdFrom))});
     }
     if(createdUntil >= 0) {
-        params.Add({"createdUntil", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdUntil))});
+        params.Add({"createdUntil", fmt::format("{:%FT%T.000Z}", fmt::gmtime(createdUntil))});
     }
     if(page_size>0) {
         params.Add({"page[size]", fmt::format("{}", page_size)});
@@ -475,13 +475,13 @@ cpr::Response APIContext::requestPropertyAssociatedDevices(std::string API_tenan
         params.Add({"unit", unit});
     }
     if(createdFrom >= 0) {
-        params.Add({"createdFrom", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdFrom))});
+        params.Add({"createdFrom", fmt::format("{:%FT%T.000Z}", fmt::gmtime(createdFrom))});
     }
     if(createdUntil >= 0) {
-        params.Add({"createdUntil", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdUntil))});
+        params.Add({"createdUntil", fmt::format("{:%FT%T.000Z}", fmt::gmtime(createdUntil))});
     }
     if(deletedUntil >= 0) {
-        params.Add({"deletedUntil", fmt::format("{:%FT%T.000Z}", fmt::localtime(deletedUntil))});
+        params.Add({"deletedUntil", fmt::format("{:%FT%T.000Z}", fmt::gmtime(deletedUntil))});
     }
     if(page_size>0) {
         params.Add({"page[size]", fmt::format("{}", page_size)});
@@ -662,13 +662,13 @@ cpr::Response APIContext::requestConnectorAssociatedDevices(std::string API_tena
         params.Add({"unit", unit});
     }
     if(createdFrom >= 0) {
-        params.Add({"createdFrom", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdFrom))});
+        params.Add({"createdFrom", fmt::format("{:%FT%T.000Z}", fmt::gmtime(createdFrom))});
     }
     if(createdUntil >= 0) {
-        params.Add({"createdUntil", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdUntil))});
+        params.Add({"createdUntil", fmt::format("{:%FT%T.000Z}", fmt::gmtime(createdUntil))});
     }
     if(deletedUntil >= 0) {
-        params.Add({"deletedUntil", fmt::format("{:%FT%T.000Z}", fmt::localtime(deletedUntil))});
+        params.Add({"deletedUntil", fmt::format("{:%FT%T.000Z}", fmt::gmtime(deletedUntil))});
     }
     if(page_size>0) {
         params.Add({"page[size]", fmt::format("{}", page_size)});
@@ -783,13 +783,13 @@ cpr::Response APIContext::requestDeviceCollection(std::string API_tenant_UUID, s
         params.Add({"unit", unit});
     }
     if(createdFrom >= 0) {
-        params.Add({"createdFrom", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdFrom))});
+        params.Add({"createdFrom", fmt::format("{:%FT%T.000Z}", fmt::gmtime(createdFrom))});
     }
     if(createdUntil >= 0) {
-        params.Add({"createdUntil", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdUntil))});
+        params.Add({"createdUntil", fmt::format("{:%FT%T.000Z}", fmt::gmtime(createdUntil))});
     }
     if(deletedUntil >= 0) {
-        params.Add({"deletedUntil", fmt::format("{:%FT%T.000Z}", fmt::localtime(deletedUntil))});
+        params.Add({"deletedUntil", fmt::format("{:%FT%T.000Z}", fmt::gmtime(deletedUntil))});
     }
     if(page_size>0) {
         params.Add({"page[size]", fmt::format("{}", page_size)});
@@ -862,22 +862,22 @@ cpr::Response APIContext::requestDeviceAssociatedSetPoints(std::string API_tenan
     cpr::Parameters params = cpr::Parameters{};
     
     if(from >= 0) {
-        params.Add({"from", fmt::format("{:%FT%T.000Z}", fmt::localtime(from))});
+        params.Add({"from", fmt::format("{:%FT%T.000Z}", fmt::gmtime(from))});
     }
     if(until >= 0) {
-        params.Add({"until", fmt::format("{:%FT%T.000Z}", fmt::localtime(until))});
+        params.Add({"until", fmt::format("{:%FT%T.000Z}", fmt::gmtime(until))});
     }
     if(timestamp >= 0) {
-        params.Add({"timestamp", fmt::format("{:%FT%T.000Z}", fmt::localtime(timestamp))});
+        params.Add({"timestamp", fmt::format("{:%FT%T.000Z}", fmt::gmtime(timestamp))});
     }
     if(currentTime >= 0) {
-        params.Add({"currentTime", fmt::format("{:%FT%T.000Z}", fmt::localtime(currentTime))});
+        params.Add({"currentTime", fmt::format("{:%FT%T.000Z}", fmt::gmtime(currentTime))});
     }
     if(createdFrom >= 0) {
-        params.Add({"createdFrom", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdFrom))});
+        params.Add({"createdFrom", fmt::format("{:%FT%T.000Z}", fmt::gmtime(createdFrom))});
     }
     if(createdUntil >= 0) {
-        params.Add({"createdUntil", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdUntil))});
+        params.Add({"createdUntil", fmt::format("{:%FT%T.000Z}", fmt::gmtime(createdUntil))});
     }
     if(page_size>0) {
         params.Add({"page[size]", fmt::format("{}", page_size)});
@@ -981,13 +981,13 @@ cpr::Response APIContext::requestReadingCollection(std::string API_tenant_UUID, 
     
     cpr::Parameters params = cpr::Parameters{};
     if(from >= 0) {
-        params.Add({"from", fmt::format("{:%FT%T.000Z}", fmt::localtime(from))});
+        params.Add({"from", fmt::format("{:%FT%T.000Z}", fmt::gmtime(from))});
     }
     if(until >= 0) {
-        params.Add({"until", fmt::format("{:%FT%T.000Z}", fmt::localtime(until))});
+        params.Add({"until", fmt::format("{:%FT%T.000Z}", fmt::gmtime(until))});
     }
     if(timestamp >= 0) {
-        params.Add({"timestamp", fmt::format("{:%FT%T.000Z}", fmt::localtime(timestamp))});
+        params.Add({"timestamp", fmt::format("{:%FT%T.000Z}", fmt::gmtime(timestamp))});
     }
     if(!std::isnan(value)) {
         params.Add({"value", fmt::format("{}", value)});
@@ -996,10 +996,10 @@ cpr::Response APIContext::requestReadingCollection(std::string API_tenant_UUID, 
         params.Add({"deviceId", API_device_UUID});
     }
     if(createdFrom >= 0) {
-        params.Add({"createdFrom", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdFrom))});
+        params.Add({"createdFrom", fmt::format("{:%FT%T.000Z}", fmt::gmtime(createdFrom))});
     }
     if(createdUntil >= 0) {
-        params.Add({"createdUntil", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdUntil))});
+        params.Add({"createdUntil", fmt::format("{:%FT%T.000Z}", fmt::gmtime(createdUntil))});
     }
     if(page_size>0) {
         params.Add({"page[size]", fmt::format("{}", page_size)});
@@ -1036,7 +1036,7 @@ cpr::Response APIContext::requestCreateReading(std::string API_tenant_UUID, std:
 
     std::string request_body = json::object({
         {"data", {
-            {"type", "readings"},{"attributes", {{"value", value}, {"timestamp", fmt::format("{:%FT%T.000Z}", fmt::localtime(timestamp))}}},
+            {"type", "readings"},{"attributes", {{"value", value}, {"timestamp", fmt::format("{:%FT%T.000Z}", fmt::gmtime(timestamp))}}},
             {"relationships", {{"device",{{"data", {{"type", "devices"},{"id", API_device_UUID}}}}}}}
         }
         }}).dump();
@@ -1059,7 +1059,7 @@ cpr::Response APIContext::requestCreateReadingsSet(std::string API_tenant_UUID, 
 
     for(int i=0; i<readings.size(); i++) {
         request_json["data"].push_back(json::object({
-                        {"type", "readings"},{"attributes", {{"value", readings[i].value}, {"timestamp", fmt::format("{:%FT%T.000Z}", fmt::localtime(readings[i].timestamp))}}},
+                        {"type", "readings"},{"attributes", {{"value", readings[i].value}, {"timestamp", fmt::format("{:%FT%T.000Z}", fmt::gmtime(readings[i].timestamp))}}},
                         {"relationships", {{"device",{{"data", {{"type", "devices"},{"id", readings[i].API_device_UUID}}}}}}}
                         }));
     }
@@ -1091,7 +1091,7 @@ cpr::Response APIContext::requestUpdateReading(std::string API_tenant_UUID, std:
         request_json["data"]["attributes"].push_back(json::object_t::value_type("value", value));
     }
     if(timestamp >= 0) {
-        request_json["data"]["attributes"].push_back(json::object_t::value_type("timestamp", fmt::format("{:%FT%T.000Z}", fmt::localtime(timestamp))));
+        request_json["data"]["attributes"].push_back(json::object_t::value_type("timestamp", fmt::format("{:%FT%T.000Z}", fmt::gmtime(timestamp))));
     }
     if(!API_device_UUID.empty()) {
         request_json["data"].push_back(json::object({"relationships", {{"device",{{"data", {{"type", "devices"},{"id", API_device_UUID}}}}}}}));
@@ -1128,25 +1128,25 @@ cpr::Response APIContext::requestSetPointCollection(std::string API_tenant_UUID,
     
     cpr::Parameters params = cpr::Parameters{};
     if(from >= 0) {
-        params.Add({"from", fmt::format("{:%FT%T.000Z}", fmt::localtime(from))});
+        params.Add({"from", fmt::format("{:%FT%T.000Z}", fmt::gmtime(from))});
     }
     if(until >= 0) {
-        params.Add({"until", fmt::format("{:%FT%T.000Z}", fmt::localtime(until))});
+        params.Add({"until", fmt::format("{:%FT%T.000Z}", fmt::gmtime(until))});
     }
     if(timestamp >= 0) {
-        params.Add({"timestamp", fmt::format("{:%FT%T.000Z}", fmt::localtime(timestamp))});
+        params.Add({"timestamp", fmt::format("{:%FT%T.000Z}", fmt::gmtime(timestamp))});
     }
     if(currentTime >= 0) {
-        params.Add({"currentTime", fmt::format("{:%FT%T.000Z}", fmt::localtime(currentTime))});
+        params.Add({"currentTime", fmt::format("{:%FT%T.000Z}", fmt::gmtime(currentTime))});
     }
     if(!API_device_UUID.empty()) {
         params.Add({"deviceId", API_device_UUID});
     }
     if(createdFrom >= 0) {
-        params.Add({"createdFrom", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdFrom))});
+        params.Add({"createdFrom", fmt::format("{:%FT%T.000Z}", fmt::gmtime(createdFrom))});
     }
     if(createdUntil >= 0) {
-        params.Add({"createdUntil", fmt::format("{:%FT%T.000Z}", fmt::localtime(createdUntil))});
+        params.Add({"createdUntil", fmt::format("{:%FT%T.000Z}", fmt::gmtime(createdUntil))});
     }
     if(page_size>0) {
         params.Add({"page[size]", fmt::format("{}", page_size)});
@@ -1169,7 +1169,7 @@ cpr::Response APIContext::requestCreateSetPoint(std::string API_tenant_UUID, std
     
     std::string request_body = json::object({
         {"data", {
-            {"type", "setpoints"},{"attributes", {{"value", value}, {"timestamp", fmt::format("{:%FT%T.000Z}", fmt::localtime(timestamp))}}},
+            {"type", "setpoints"},{"attributes", {{"value", value}, {"timestamp", fmt::format("{:%FT%T.000Z}", fmt::gmtime(timestamp))}}},
             {"relationships", {{"device",{{"data", {{"type", "devices"},{"id", API_device_UUID}}}}}}}
         }
         }}).dump();
@@ -1206,7 +1206,7 @@ cpr::Response APIContext::requestUpdateSetPoint(std::string API_tenant_UUID, std
         request_json["data"]["attributes"].push_back(json::object_t::value_type("value", value));
     }
     if(timestamp >= 0) {
-        request_json["data"]["attributes"].push_back(json::object_t::value_type("timestamp", fmt::format("{:%FT%T.000Z}", fmt::localtime(timestamp))));
+        request_json["data"]["attributes"].push_back(json::object_t::value_type("timestamp", fmt::format("{:%FT%T.000Z}", fmt::gmtime(timestamp))));
     }
     if(!API_device_UUID.empty()) {
         request_json["data"].push_back(json::object({"relationships", {{"device",{{"data", {{"type", "devices"},{"id", API_device_UUID}}}}}}}));

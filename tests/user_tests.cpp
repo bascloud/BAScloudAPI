@@ -32,7 +32,7 @@ TEST(BasicTests, UserCollectionTest) {
 
     std::cout << "\tRequesting all users..." << std::endl;
 
-    EntityCollection<User> users = BCAPI.getUsersCollection({}, {}, -1, -1, [](std::exception& e, json& j) {
+    EntityCollection<User> users = BCAPI.getUsersCollection({}, {}, -1, -1, [](const std::string& e, const std::string& j) {
             throw e;
         });
 

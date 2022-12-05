@@ -32,7 +32,7 @@ TEST(BasicTests, TenantCollectionTest) {
 
     std::cout << "\tRequesting all tenants..." << std::endl;
 
-    EntityCollection<Tenant> tenants = BCAPI.getTenantsCollection({}, -1, -1, [](std::exception& e, json& j) {
+    EntityCollection<Tenant> tenants = BCAPI.getTenantsCollection({}, -1, -1, [](const std::string& e, const std::string& j) {
             throw e;
         });
     std::cout << "\t\tOK." << std::endl;
@@ -67,7 +67,7 @@ TEST(BasicTests, AssociatedUserTest) {
 
     std::cout << "\tRequesting associated users of tenant..." << std::endl;
 
-    EntityCollection<User> tenant_user = BCAPI.getAssociatedUsers(BASCLOUD_TEST_TENANT_UUID, {}, {}, -1, -1, [](std::exception& e, json& j) {
+    EntityCollection<User> tenant_user = BCAPI.getAssociatedUsers(BASCLOUD_TEST_TENANT_UUID, {}, {}, -1, -1, [](const std::string& e, const std::string& j) {
             throw e;
         });
     std::cout << "\t\tOK." << std::endl;
@@ -85,7 +85,7 @@ TEST(BasicTests, AssignUserTest) {
     BCAPI.assignTenantUsers(BASCLOUD_TEST_TENANT_UUID, users, roles);
     std::cout << "\t\tOK." << std::endl;
 
-    EntityCollection<User> tenant_user = BCAPI.getAssociatedUsers(BASCLOUD_TEST_TENANT_UUID, {}, {}, -1, -1, [](std::exception& e, json& j) {
+    EntityCollection<User> tenant_user = BCAPI.getAssociatedUsers(BASCLOUD_TEST_TENANT_UUID, {}, {}, -1, -1, [](const std::string& e, const std::string& j) {
             throw e;
         });
 
@@ -107,7 +107,7 @@ TEST(BasicTests, AssignUserTest) {
     BCAPI.removeTenantUsers(BASCLOUD_TEST_TENANT_UUID, users);
     std::cout << "\t\tOK." << std::endl;
 
-    EntityCollection<User> tenant_user2 = BCAPI.getAssociatedUsers(BASCLOUD_TEST_TENANT_UUID, {}, {}, -1, -1, [](std::exception& e, json& j) {
+    EntityCollection<User> tenant_user2 = BCAPI.getAssociatedUsers(BASCLOUD_TEST_TENANT_UUID, {}, {}, -1, -1, [](const std::string& e, const std::string& j) {
             throw e;
         });
 

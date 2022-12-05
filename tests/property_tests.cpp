@@ -32,7 +32,7 @@ TEST(BasicTests, PropertyCollectionTest) {
 
     std::cout << "\tRequesting all properties..." << std::endl;
 
-    EntityCollection<Property> props = BCAPI.getPropertiesCollection(BASCLOUD_TEST_TENANT_UUID, {}, {}, {}, {}, {}, {}, {}, {}, -1, -1, [](std::exception& e, json& j) {
+    EntityCollection<Property> props = BCAPI.getPropertiesCollection(BASCLOUD_TEST_TENANT_UUID, {}, {}, {}, {}, {}, {}, {}, {}, -1, -1, [](const std::string& e, const std::string& j) {
             throw e;
         });
     std::cout << "\t\tOK." << std::endl;

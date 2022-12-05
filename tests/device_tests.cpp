@@ -32,7 +32,7 @@ TEST(BasicTests, DeviceCollectionTest) {
 
     std::cout << "\tRequesting all devices..." << std::endl;
 
-    EntityCollection<Device> devices = BCAPI.getDevicesCollection(BASCLOUD_TEST_TENANT_UUID, {}, {}, {}, {}, {}, {}, {}, -1, -1, -1, [](std::exception& e, json& j) {
+    EntityCollection<Device> devices = BCAPI.getDevicesCollection(BASCLOUD_TEST_TENANT_UUID, {}, {}, {}, {}, {}, {}, {}, -1, -1, -1, [](const std::string& e, const std::string& j) {
             throw e;
         });
     std::cout << "\t\tOK." << std::endl;
@@ -77,7 +77,7 @@ TEST(BasicTests, AssociatedConnectorTest) {
 
 TEST(BasicTests, AssociatedReadingsTest) {
 
-    EntityCollection<Reading> device_readings = BCAPI.getAssociatedReadings(BASCLOUD_TEST_TENANT_UUID, BASCLOUD_TEST_DEVICE_UUID, {}, -1, -1, -1, std::numeric_limits<double>::quiet_NaN(), -1, -1, [](std::exception& e, json& j) {
+    EntityCollection<Reading> device_readings = BCAPI.getAssociatedReadings(BASCLOUD_TEST_TENANT_UUID, BASCLOUD_TEST_DEVICE_UUID, {}, -1, -1, -1, std::numeric_limits<double>::quiet_NaN(), -1, -1, [](const std::string& e, const std::string& j) {
             throw e;
         });
 
@@ -88,7 +88,7 @@ TEST(BasicTests, AssociatedReadingsTest) {
 
 TEST(BasicTests, AssociatedSetPointsTest) {
 
-    EntityCollection<SetPoint> device_setpoint = BCAPI.getAssociatedSetPoints(BASCLOUD_TEST_TENANT_UUID, BASCLOUD_TEST_DEVICE_UUID, {}, -1, -1, -1, -1, -1, -1, [](std::exception& e, json& j) {
+    EntityCollection<SetPoint> device_setpoint = BCAPI.getAssociatedSetPoints(BASCLOUD_TEST_TENANT_UUID, BASCLOUD_TEST_DEVICE_UUID, {}, -1, -1, -1, -1, -1, -1, [](const std::string& e, const std::string& j) {
             throw e;
         });
 

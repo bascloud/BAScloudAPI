@@ -32,7 +32,7 @@ TEST(BasicTests, ReadingCollectionTest) {
 
     std::cout << "\tRequesting all readings..." << std::endl;
 
-    EntityCollection<Reading> readings = BCAPI.getReadingsCollection(BASCLOUD_TEST_TENANT_UUID, {}, -1, -1, -1, std::numeric_limits<double>::quiet_NaN(), {}, -1, -1, [](std::exception& e, json& j) {
+    EntityCollection<Reading> readings = BCAPI.getReadingsCollection(BASCLOUD_TEST_TENANT_UUID, {}, -1, -1, -1, std::numeric_limits<double>::quiet_NaN(), {}, -1, -1, [](const std::string& e, const std::string& j) {
             throw e;
         });
     std::cout << "\t\tOK." << std::endl;
@@ -46,7 +46,7 @@ TEST(BasicTests, ReadingCollectionPagingTest) {
 
     std::cout << "\tRequesting paged readings..." << std::endl;
 
-    EntityCollection<Reading> readings = BCAPI.getReadingsCollection(BASCLOUD_TEST_TENANT_UUID, PagingOption(1000), -1, -1, -1, std::numeric_limits<double>::quiet_NaN(), BASCLOUD_TEST_DEVICE_UUID, -1, -1, [](std::exception& e, json& j) {
+    EntityCollection<Reading> readings = BCAPI.getReadingsCollection(BASCLOUD_TEST_TENANT_UUID, PagingOption(1000), -1, -1, -1, std::numeric_limits<double>::quiet_NaN(), BASCLOUD_TEST_DEVICE_UUID, -1, -1, [](const std::string& e, const std::string& j) {
             throw e;
         });
     std::cout << "\t\tOK." << std::endl;
@@ -58,7 +58,7 @@ TEST(BasicTests, ReadingCollectionPagingTest) {
 
     int page_cnt = 1;
     while(!readings.second.nextPagePointer.empty()) {
-        readings = BCAPI.getReadingsCollection(BASCLOUD_TEST_TENANT_UUID, PagingOption(1000, PagingOption::Direction::NEXT, readings.second.nextPagePointer), -1, -1, -1, std::numeric_limits<double>::quiet_NaN(), BASCLOUD_TEST_DEVICE_UUID, -1, -1, [](std::exception& e, json& j) {
+        readings = BCAPI.getReadingsCollection(BASCLOUD_TEST_TENANT_UUID, PagingOption(1000, PagingOption::Direction::NEXT, readings.second.nextPagePointer), -1, -1, -1, std::numeric_limits<double>::quiet_NaN(), BASCLOUD_TEST_DEVICE_UUID, -1, -1, [](const std::string& e, const std::string& j) {
             throw e;
         });
 

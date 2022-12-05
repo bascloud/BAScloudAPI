@@ -132,7 +132,7 @@ std::time_t EntityContext::getTokenExpirationDate() {
 bool EntityContext::isAuthenticated() {
     std::time_t currentDateTime = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     
-    return !API_token.empty() && API_token_valid_until > currentDateTime;
+    return !API_token.empty() && (API_token_valid_until < 0 || API_token_valid_until > currentDateTime);
 }
 
 void EntityContext::authenticateWithUserLogin(std::string API_email, std::string API_password) {
@@ -173,9 +173,7 @@ void EntityContext::authenticateWithConnectorToken(std::string API_connector_tok
     API_token = API_connector_token;
     api_context.setToken(API_token);
     
-    struct tm never = {};
-    never.tm_year=10000;
-    API_token_valid_until = mktime(&never);
+    API_token_valid_until = -1; // ML: represent never as -1
 }
 
 
